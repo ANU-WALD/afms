@@ -6,7 +6,6 @@ install:
   - npm install
   - gem install compass
 script:
-  - npm list
   - node --version
   - ng version
   - npm run build
