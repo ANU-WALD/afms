@@ -2,10 +2,13 @@ sudo: false
 language: node_js
 node_js: stable
 install:
+  - npm install '@angular/cli' -g
   - npm install
   - gem install compass
 script:
   - npm list
+  - node --version
+  - ng version
   - npm run build
 deploy:
   # deploy to "wenfo.org/afms" (Aus. Flammability Monitoring System)
