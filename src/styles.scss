@@ -1,1 +1,52 @@
 /* You can add global styles to this file, and also import other style files */
+
+$crc-red:rgb(221,34,28);
+$crc-orange:rgb(240,128,0);
+$crc-yellow:rgb(255,209,0);
+
+
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+.navbar-inverse {
+  background:$crc-orange;
+
+  .navbar-brand{
+    color:black;
+  }
+}
+
+$the-col:#00F;
+
+h1{
+    color:$the-col;
+}
+
+.main-map{
+  height:400px;
+  position:relative;
+  top:0px;
+}
+
+.sebm-google-map-container{
+  width:100%;
+  height:100%;
+}
+
+/*
+@media screen and (min-width:($screen-xs-max+1)) {
+ */
+
+@include media-breakpoint-up(sm) {
+  h1{
+    color:#0F0;
+  }
+
+  .main-map {
+    position:fixed;
+    left:0px;
+    top:50px; /* $navbar-height */
+    bottom:0px;
+    width:100%;
+    height:auto;
+  }
+}

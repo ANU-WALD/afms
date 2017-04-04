@@ -1,3 +1,38 @@
-<h1>
-  {{title}}
-</h1>
+<div class="container-fluid">
+  <nav class="navbar navbar-fixed-top navbar-inverse">
+      <div class="navbar-header">
+<!--
+        <button type="button" class="navbar-toggle collapsed" ng-click="selection.navbarCollapsed = !selection.navbarCollapsed" collapse="selection.navbarCollapsed" data-toggle="collapse" data-target="#navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+-->
+        <a class="navbar-brand" href="#/">
+<!--
+          <img class="visible-lg main-logo navbar-icon pull-left" src="images/2x_anu_logo_small.png">
+          <img class="hidden-lg main-logo navbar-icon pull-left" src="images/2x_anu_logo_only.png">
+-->
+
+          <span>Fuel Moisture Content</span>
+        </a>
+      </div>
+      <div ng-if="!embedded" id="navbar" class="navbar-collapse collapse" ng-class="{'in':!selection.navbarCollapsed}">
+          <form class="hidden-xs fullscreen-form navbar-form navbar-right">
+            <button ngsf-toggle-fullscreen class="btn btn-primary" uib-tooltip="Toggle Fullscreen"
+                    tooltip-placement="bottom" tooltip-append-to-body="true">
+              <i show-if-fullscreen=false class="fa fa-expand"></i>
+              <i show-if-fullscreen=true class="fa fa-compress"></i>
+            </button>
+          </form>
+
+<!--
+          <div ng-include="'views/navbar/themes.html'" ng-controller="ThemeswitcherCtrl"></div>
+-->
+      </div>
+  </nav>
+  <div class="row">
+    <app-main-map></app-main-map>
+  </div>
+</div>

@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app works!';
+
+  constructor(){
+//    this.p = Proj(defs('EPSG:3857'));
+  }
+
+  p:any;
+
 }

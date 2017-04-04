@@ -1,0 +1,21 @@
+sudo: false
+language: node_js
+node_js: stable
+install:
+  - npm install
+  - gem install compass
+script:
+  - npm list
+  - npm run build
+deploy:
+  # deploy to "wenfo.org/afms" (Aus. Flammability Monitoring System)
+  skip_cleanup: true
+  provider: script
+  script: bash -c "cd dist && find . -type f -exec curl -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org{} \;"
+  on:
+      branch: master
+notifications:
+  email: false
+  slack:
+    rooms: wenfo:N1YfzQWaJ8wfjvrYarrh33PZ
+    on_success: always
