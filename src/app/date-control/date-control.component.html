@@ -1,0 +1,8 @@
+<div class="date-control">
+ <input type=number [(ngModel)]="selection.year">
+ <input type=number [(ngModel)]="selection.month">
+ <input type=number [(ngModel)]="selection.day">
+ <br/>
+ <button (click)="move(-8)">-8 days</button>
+ <button (click)="move(8)">+8 days</button>
+</div>

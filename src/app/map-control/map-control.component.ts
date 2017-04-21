@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
 import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core/services';
 
 @Component({
@@ -8,6 +8,7 @@ import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core/services';
 })
 export class MapControlComponent implements OnInit,AfterViewInit {
   @ViewChild('mapControl') mapControl: Component;
+  @Input() position:string = 'TOP_RIGHT';
 
   constructor(private _el:ElementRef, public _wrapper:GoogleMapsAPIWrapper) { }
 
@@ -24,7 +25,7 @@ export class MapControlComponent implements OnInit,AfterViewInit {
       var controlDiv = document.createElement('div');
       controlDiv.appendChild(content);
       //controlDiv.onclick = () => { this.controlClick.next(null); };
-      (<any>m).controls[(<any>window).google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);
+      (<any>m).controls[(<any>window).google.maps.ControlPosition[this.position]].push(controlDiv);
     });
   }
 

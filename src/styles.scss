@@ -8,17 +8,11 @@ $crc-yellow:rgb(255,209,0);
 @import '../node_modules/bootstrap/scss/bootstrap';
 
 .navbar-inverse {
-  background:$crc-orange;
+  background:$crc-yellow;
 
   .navbar-brand{
     color:black;
   }
-}
-
-$the-col:#00F;
-
-h1{
-    color:$the-col;
 }
 
 .main-map{

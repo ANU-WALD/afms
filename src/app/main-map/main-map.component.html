@@ -7,9 +7,14 @@
       <app-wms-layer>
       </app-wms-layer>
 
-      <app-map-control>
+      <app-map-control [position]="'TOP_RIGHT'">
         <app-charts></app-charts>
       </app-map-control>
+
+      <app-map-control [position]="'TOP_LEFT'">
+        <app-date-control></app-date-control>
+      </app-map-control>
+
     </sebm-google-map>
     <!--
 
