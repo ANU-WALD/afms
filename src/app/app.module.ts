@@ -14,6 +14,8 @@ import { MapControlComponent } from './map-control/map-control.component';
 import { ChartsComponent } from './charts/charts.component';
 import { DateControlComponent } from './date-control/date-control.component';
 
+var key='WENFO_GOOGLE_MAPS_API_KEY';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +30,9 @@ import { DateControlComponent } from './date-control/date-control.component';
     FormsModule,
     HttpModule,
     NgbModule.forRoot(),
-    AgmCoreModule.forRoot(),
+    AgmCoreModule.forRoot({
+      apiKey: key
+    }),
     SampleModule.forRoot()
   ],
   providers: [SelectionService],

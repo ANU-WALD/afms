@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 9001 --aot false",
-    "build": "ng build --base-href /afms/",
+    "build": "ng build --prod --aot=false --base-href /afms/ && cp node_modules/plotly.js/dist/plotly.js dist",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
