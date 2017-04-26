@@ -1,10 +1,13 @@
 <div class="main-map">
-    <sebm-google-map [latitude]="lat"
+    <agm-map [latitude]="lat"
       [longitude]="lng"
       [zoom]="zoom"
       [disableDefaultUI]="false"
       [zoomControl]="false">
-      <app-wms-layer>
+      <app-wms-layer #wms
+        [url]="wmsURL"
+        [params]="wmsParameters"
+        [opacity]="1.0">
       </app-wms-layer>
 
       <app-map-control [position]="'TOP_RIGHT'">
@@ -15,7 +18,7 @@
         <app-date-control></app-date-control>
       </app-map-control>
 
-    </sebm-google-map>
+    </agm-map>
     <!--
 
       (mapClick)="mapClicked($event)">

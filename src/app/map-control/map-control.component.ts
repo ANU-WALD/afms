@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
-import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core/services';
+import {GoogleMapsAPIWrapper} from '@agm/core/services';
 
 @Component({
   selector: 'app-map-control',

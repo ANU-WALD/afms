@@ -17,9 +17,19 @@ export class SelectionService {
   set month(v:number) { this._month=v; this._fireDateChange();}
   set day(v:number) { this._day=v; this._fireDateChange();}
 
+  leading0(n:number):string {
+    if(n<10){
+      return '0'+n;
+    }
+    return ''+n;
+  }
+
+  dateText():string {
+    return `${this._year}-${this.leading0(this._month)}-${this.leading0(this.day)}`;
+  }
+
   _fireDateChange() {
-    var txt = `${this._year}-${this._month}-${this.day}`;
-    this.dateChange.emit(txt);
+    this.dateChange.emit(this.dateText());
   }
 
   move(n:number){

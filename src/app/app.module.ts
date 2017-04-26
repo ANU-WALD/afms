@@ -4,12 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
-import {AgmCoreModule} from 'angular2-google-maps/core/core-module';
-import { SampleModule } from 'map-wald';
+import {AgmCoreModule} from '@agm/core';
+import { MapWaldModule } from 'map-wald';
 import {SelectionService} from './selection.service';
 
 import { MainMapComponent } from './main-map/main-map.component';
-import { WMSLayerComponent } from './wms-layer/wms-layer.component';
 import { MapControlComponent } from './map-control/map-control.component';
 import { ChartsComponent } from './charts/charts.component';
 import { DateControlComponent } from './date-control/date-control.component';
@@ -20,7 +19,6 @@ var key='WENFO_GOOGLE_MAPS_API_KEY';
   declarations: [
     AppComponent,
     MainMapComponent,
-    WMSLayerComponent,
     MapControlComponent,
     ChartsComponent,
     DateControlComponent
@@ -33,7 +31,7 @@ var key='WENFO_GOOGLE_MAPS_API_KEY';
     AgmCoreModule.forRoot({
       apiKey: key
     }),
-    SampleModule.forRoot()
+    MapWaldModule.forRoot()
   ],
   providers: [SelectionService],
   bootstrap: [AppComponent]
