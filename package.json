@@ -27,6 +27,7 @@
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.23",
     "@types/googlemaps": "^3.26.7",
     "@types/proj4": "^2.3.3",
+    "bootstrap": "^4.0.0-alpha.6",
     "core-js": "^2.4.1",
     "map-wald": "ANU-WALD/map-wald",
     "plotly.js": "^1.25.1",
