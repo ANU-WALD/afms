@@ -1,7 +1,13 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
+import { Http, Response } from '@angular/http';
 import {GoogleMapsAPIWrapper} from '@agm/core/services';
 import {WMSService,WMSLayerComponent} from 'map-wald';
 import {SelectionService} from '../selection.service';
+
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/observable/throw';
 
 const BASE_URL='http://gsky-dev.nci.org.au/ows';
 //'http://dapds00.nci.org.au/thredds';
@@ -14,7 +20,8 @@ const BASE_URL='http://gsky-dev.nci.org.au/ows';
 export class MainMapComponent implements OnInit {
 
     constructor(private _wmsService:WMSService,
-                private selection:SelectionService) {
+                private selection:SelectionService,
+                private http:Http) {
       this.selection.dateChange.subscribe((dateTxt:string)=>{
         this.dateChanged(dateTxt);
       });
@@ -28,6 +35,12 @@ export class MainMapComponent implements OnInit {
         tiled:true,
         feature_count:101
       }
+      var component = this;
+      this.http.get('assets/selection_layers/HR_Regions_river_region.json')
+        .map((r)=>r.json())
+        .subscribe((data)=>{
+          component.geoJsonObject=data;
+        });
     }
 
     map: any;
@@ -40,6 +53,20 @@ export class MainMapComponent implements OnInit {
     // initial center position for the map
     lat: number = -17.673858;
     lng: number = 120.815982;
+
+    geoJsonObject:Object=null;
+
+    clicked(clickEvent) {
+      console.log(clickEvent);
+    }
+
+    styleFunc(feature) {
+     return ({
+       clickable: true,
+       fillColor: '#80F090',
+       strokeWeight: 1
+     });
+    }
 
     @ViewChild('mapDiv') mapDiv: Component;
     @ViewChild('wms') wmsLayer: WMSLayerComponent;

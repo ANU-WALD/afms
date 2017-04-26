@@ -4,11 +4,18 @@
       [zoom]="zoom"
       [disableDefaultUI]="false"
       [zoomControl]="false">
+
       <app-wms-layer #wms
         [url]="wmsURL"
         [params]="wmsParameters"
         [opacity]="1.0">
       </app-wms-layer>
+
+      <agm-data-layer *ngIf="geoJsonObject"
+                      [geoJson]="geoJsonObject"
+                      (layerClick)="clicked($event)"
+                      [style]="styleFunc">
+      </agm-data-layer>
 
       <app-map-control [position]="'TOP_RIGHT'">
         <app-charts></app-charts>
