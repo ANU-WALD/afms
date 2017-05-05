@@ -2,7 +2,7 @@
 
 $crc-red:rgb(221,34,28);
 $crc-orange:rgb(240,128,0);
-$crc-yellow:rgb(255,209,0);
+$crc-yellow:rgb(245,221,37);
 
 
 @import '../node_modules/bootstrap/scss/bootstrap';
@@ -39,8 +39,24 @@ $crc-yellow:rgb(255,209,0);
     position:fixed;
     left:0px;
     top:50px; /* $navbar-height */
-    bottom:0px;
+    bottom:50px;
     width:100%;
     height:auto;
+  }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0px;
+  left:0px;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 50px;
+  line-height: 50px; /* Vertically center the text there */
+  background-color:$crc-yellow;
+
+  .container-fluid{
+    padding-left:0px;
+    padding-right:0px;
   }
 }
