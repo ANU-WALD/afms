@@ -13,13 +13,9 @@ import { MainMapComponent } from './main-map/main-map.component';
 import { MapControlComponent } from './map-control/map-control.component';
 import { ChartsComponent } from './charts/charts.component';
 import { DateControlComponent } from './date-control/date-control.component';
-
+import {routes,routeParameters} from './router-config';
 
 export var key=null;//'WENFO_GOOGLE_MAPS_API_KEY';
-
-
-let mapParameters = ['layer','vector','lat','lng','zm','dd','mm','yyyy'];
-var viewMapper = new MapViewParameterService(mapParameters);
 
 @NgModule({
   declarations: [
@@ -37,8 +33,8 @@ var viewMapper = new MapViewParameterService(mapParameters);
     AgmCoreModule.forRoot({
       apiKey: key
     }),
-    MapWaldModule.forRoot({paths:mapParameters}),
-    RouterModule.forRoot(viewMapper.routerPaths(MainMapComponent))
+    MapWaldModule.forRoot({paths:routeParameters}),
+    RouterModule.forRoot(routes)
   ],
   providers: [SelectionService],
   bootstrap: [AppComponent]

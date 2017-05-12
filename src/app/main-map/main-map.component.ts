@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import { Http, Response } from '@angular/http';
 import {GoogleMapsAPIWrapper} from '@agm/core/services';
-import {MapViewParameterService,CSVService,WMSService,WMSLayerComponent} from 'map-wald';
+import {CSVService,WMSService,WMSLayerComponent} from 'map-wald';
 import {SelectionService} from '../selection.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -23,7 +23,6 @@ export class MainMapComponent implements OnInit {
                 _activatedRoute: ActivatedRoute,
                 private _csv:CSVService,
                 private selection:SelectionService,
-                private mapView:MapViewParameterService,
                 private http:Http) {
       this.selection.loadFromURL(_activatedRoute);
       this.selection.dateChange.subscribe((dateTxt:string)=>{
