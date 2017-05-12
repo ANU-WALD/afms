@@ -15,7 +15,7 @@ import { ChartsComponent } from './charts/charts.component';
 import { DateControlComponent } from './date-control/date-control.component';
 import {routes,routeParameters} from './router-config';
 
-export var key=null;//'WENFO_GOOGLE_MAPS_API_KEY';
+export var key='WENFO_GOOGLE_MAPS_API_KEY';
 
 @NgModule({
   declarations: [
