@@ -34,7 +34,7 @@ export var key='WENFO_GOOGLE_MAPS_API_KEY';
       apiKey: key
     }),
     MapWaldModule.forRoot({paths:routeParameters}),
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes,{ useHash: true })
   ],
   providers: [SelectionService],
   bootstrap: [AppComponent]
