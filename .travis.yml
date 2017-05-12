@@ -6,6 +6,7 @@ install:
   - npm install
   - gem install compass
 script:
+  - cd node_modules/map-wald && npm run build && cd ../..
   - node --version
   - ng version
   - SCRIPTS_FN=src/app/app.module.ts
