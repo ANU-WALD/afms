@@ -19,9 +19,6 @@ export class MapControlComponent implements OnInit,AfterViewInit {
     this._wrapper.getNativeMap().then((m)=>{
       var content:Node = this._el.nativeElement.querySelector('.map-control-content');
 
-      console.log(content);
-      console.log(this._wrapper);
-      console.log(m);
       var controlDiv = document.createElement('div');
       controlDiv.appendChild(content);
       //controlDiv.onclick = () => { this.controlClick.next(null); };

@@ -1,9 +1,9 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import { Http, Response } from '@angular/http';
 import {GoogleMapsAPIWrapper} from '@agm/core/services';
-import {WMSService,WMSLayerComponent} from 'map-wald';
+import {MapViewParameterService,CSVService,WMSService,WMSLayerComponent} from 'map-wald';
 import {SelectionService} from '../selection.service';
-
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
@@ -20,14 +20,18 @@ const BASE_URL='http://gsky-dev.nci.org.au/ows';
 export class MainMapComponent implements OnInit {
 
     constructor(private _wmsService:WMSService,
+                _activatedRoute: ActivatedRoute,
+                private _csv:CSVService,
                 private selection:SelectionService,
+                private mapView:MapViewParameterService,
                 private http:Http) {
+      this.selection.loadFromURL(_activatedRoute);
       this.selection.dateChange.subscribe((dateTxt:string)=>{
         this.dateChanged(dateTxt);
       });
       this.wmsURL = BASE_URL;
       this.wmsParameters = {
-        colorscalerange:"0.0001,100",
+//        colorscalerange:"0.0001,100",
         layers:"Fenner%3AFMC",
         time:`${this.selection.dateText()}T00%3A00%3A00.000Z`,
         styles:"",
@@ -57,14 +61,16 @@ export class MainMapComponent implements OnInit {
     geoJsonObject:Object=null;
 
     clicked(clickEvent) {
-      console.log(clickEvent);
+//      console.log(clickEvent);
     }
 
     styleFunc(feature) {
      return ({
        clickable: true,
-       fillColor: '#80F090',
-       strokeWeight: 1
+       fillOpacity:0,
+       fillColor: null,//'#80F090',
+       strokeWeight: 0.5,
+       strokeColor:'#444'
      });
     }
 
