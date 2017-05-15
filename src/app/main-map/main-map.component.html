@@ -25,6 +25,15 @@
         <app-date-control></app-date-control>
       </app-map-control>
 
+      <app-map-control [position]="'LEFT_BOTTOM'">
+        <map-legend [title]="mapTitle"
+                    [mapUnits]="mapUnits"
+                    [cbPalette]="wmsPalette"
+                    [cbCount]="wmsColourCount"
+                    [cbReverse]="wmsReverse"
+                    [cbRange]="wmsRange"></map-legend>
+      </app-map-control>
+
     </agm-map>
     <!--
 

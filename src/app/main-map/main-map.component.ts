@@ -52,6 +52,12 @@ export class MainMapComponent implements OnInit {
 
     wmsURL:string;
     wmsParameters:any = {};
+    wmsPalette:string='RdYlBu';
+    wmsColourCount:number=11;
+    wmsReverse:boolean=true;
+    wmsRange:Array<number>=[0,255];
+    mapUnits:string='units';
+    mapTitle:string='Fuel Moisture Content';
 
     // initial center position for the map
     lat: number = -17.673858;
