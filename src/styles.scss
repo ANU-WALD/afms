@@ -1,3 +1,4 @@
+$fa-font-path: "../node_modules/font-awesome/fonts";
 /* You can add global styles to this file, and also import other style files */
 
 $crc-red:rgb(221,34,28);
@@ -5,6 +6,7 @@ $crc-orange:rgb(240,128,0);
 $crc-yellow:rgb(245,221,37);
 
 
+@import "../node_modules/font-awesome/scss/font-awesome.scss";
 @import '../node_modules/bootstrap/scss/bootstrap';
 
 .navbar-inverse {

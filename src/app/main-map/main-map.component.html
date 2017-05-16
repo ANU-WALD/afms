@@ -17,15 +17,19 @@
                       [style]="styleFunc">
       </agm-data-layer>
 
-      <app-map-control [position]="'TOP_RIGHT'">
+      <app-map-control position="RIGHT_BOTTOM">
         <app-charts></app-charts>
       </app-map-control>
 
-      <app-map-control [position]="'TOP_LEFT'">
+      <app-map-control position="TOP_LEFT">
         <app-date-control></app-date-control>
       </app-map-control>
 
-      <app-map-control [position]="'LEFT_BOTTOM'">
+      <app-map-control position="TOP_RIGHT">
+        <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
+      </app-map-control>
+
+      <app-map-control position="LEFT_BOTTOM">
         <map-legend [title]="mapTitle"
                     [mapUnits]="mapUnits"
                     [cbPalette]="wmsPalette"

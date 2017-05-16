@@ -19,6 +19,8 @@ const BASE_URL='http://gsky-dev.nci.org.au/ows';
 })
 export class MainMapComponent implements OnInit {
 
+  layerVariable:string;
+
     constructor(private _wmsService:WMSService,
                 _activatedRoute: ActivatedRoute,
                 private _csv:CSVService,
@@ -31,7 +33,7 @@ export class MainMapComponent implements OnInit {
       this.wmsURL = BASE_URL;
       this.wmsParameters = {
 //        colorscalerange:"0.0001,100",
-        layers:"Fenner%3AFMC",
+        layers:this.layerVariable,
         time:`${this.selection.dateText()}T00%3A00%3A00.000Z`,
         styles:"",
         transparent:true,
@@ -60,8 +62,8 @@ export class MainMapComponent implements OnInit {
     mapTitle:string='Fuel Moisture Content';
 
     // initial center position for the map
-    lat: number = -17.673858;
-    lng: number = 120.815982;
+    lat: number = -22.673858;
+    lng: number = 129.815982;
 
     geoJsonObject:Object=null;
 
@@ -94,4 +96,18 @@ export class MainMapComponent implements OnInit {
   ngOnInit() {
   }
 
+  layerChanged(layer){
+    this.layerVariable = layer.variable;
+    this.wmsParameters.layers = this.layerVariable;
+    this.mapTitle = layer.name;
+    this.mapUnits = layer.units;
+    this.wmsPalette = layer.palette.name;
+    this.wmsColourCount = layer.palette.count;
+    this.wmsReverse = layer.palette.reverse;
+    this.wmsRange = layer.range;
+
+    this.wmsLayer.buildMap();
+
+//    console.log(layer);
+  }
 }

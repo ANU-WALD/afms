@@ -1,0 +1,12 @@
+<div>
+  <div *ngFor="let l of layers" class="form-group">
+    <label>
+      <input name="layerRadios"
+             type="radio"
+             [(ngModel)]="selectedLayer"
+             [value]="l"
+             (ngModelChange)="layerChange($event)">
+      <i [ngClass]="l.icon" class="fa"></i> {{l.name}}
+    </label>
+  </div>
+</div>
