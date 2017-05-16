@@ -7,17 +7,17 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class LayerControlComponent implements OnInit {
   layers:Array<FMCLayer>=[
-    new FMCLayer('Fuel Moisture Content','fa-tint','Fenner%3AFMC',{
+    new FMCLayer('Fuel Moisture Content','%','fa-tint','Fenner%3AFMC',{
       name:'RdYlBu',
       count:11,
       reverse:false
     },[0,255]),
-    new FMCLayer('Flammability','fa-fire','unknown',{
+    new FMCLayer('Flammability','units','fa-fire','unknown',{
       name:'RdYlBu',
       count:11,
       reverse:false
     },[]),
-    new FMCLayer('Uncertainty','fa-percent','Fenner%3AFMC%3AUncertainty',{
+    new FMCLayer('Uncertainty','%','fa-percent','Fenner%3AFMC%3AUncertainty',{
       name:'RdYlBu',
       count:11,
       reverse:true
@@ -49,12 +49,12 @@ class FMCLayer{
   range:Array<number>;
   units:string;
 
-  constructor(name:string,icon:string,variable:string,palette:any,range:Array<number>){
+  constructor(name:string,units:string,icon:string,variable:string,palette:any,range:Array<number>){
     this.name=name;
+    this.units=units;
     this.icon=icon;
     this.variable=variable;
     this.palette=palette;
     this.range=range;
-    this.units='units';
   }
 }
