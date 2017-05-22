@@ -26,7 +26,10 @@
       </app-map-control>
 
       <app-map-control position="TOP_RIGHT">
-        <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
+        <div>
+          <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
+          <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
+        </div>
       </app-map-control>
 
       <app-map-control position="LEFT_BOTTOM">

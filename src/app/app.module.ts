@@ -14,6 +14,7 @@ import { LayerControlComponent } from './layer-control/layer-control.component';
 import { ChartsComponent } from './charts/charts.component';
 import { DateControlComponent } from './date-control/date-control.component';
 import {routes,routeParameters} from './router-config';
+import { VectorLayerSelectionComponent } from './vector-layer-selection/vector-layer-selection.component';
 
 //export var key=null;//'WENFO_GOOGLE_MAPS_API_KEY';
 
@@ -23,7 +24,8 @@ import {routes,routeParameters} from './router-config';
     MainMapComponent,
     ChartsComponent,
     DateControlComponent,
-    LayerControlComponent
+    LayerControlComponent,
+    VectorLayerSelectionComponent
   ],
   imports: [
     BrowserModule,
