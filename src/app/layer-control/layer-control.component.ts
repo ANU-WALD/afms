@@ -7,11 +7,21 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class LayerControlComponent implements OnInit {
   layers:Array<FMCLayer>=[
-    new FMCLayer('Fuel Moisture Content','%','fa-tint','Fenner%3AFMC%3ANonInterp',{
+    new FMCLayer('Fuel Moisture Content (9 Colours)','%','fa-tint','Fenner%3AFMC',{
       name:'RdYlBu',
-      count:11,
+      count:9,
       reverse:false
-    },[0,255]),
+    },[0,140]),
+    new FMCLayer('Fuel Moisture Content (5 Colours)','%','fa-tint','Fenner%3AFMC%3A5C',{
+      name:'RdYlBu',
+      count:5,
+      reverse:false
+    },[0,140]),
+    new FMCLayer('Fuel Moisture Content (5 Colours, Interpolated)','%','fa-tint','Fenner%3AFMC%3A5C%3AI',{
+      name:'RdYlBu',
+      count:5,
+      reverse:false
+    },[0,140]),
     new FMCLayer('Flammability','units','fa-fire','unknown',{
       name:'RdYlBu',
       count:11,

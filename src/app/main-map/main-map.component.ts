@@ -12,7 +12,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 
 //const BASE_URL='http://gsky-dev.nci.org.au/ows';
-const BASE_URL='http://130.56.242.21/ows';
+const BASE_URL = 'http://130.56.242.21/ows';
 //'http://dapds00.nci.org.au/thredds';
 
 @Component({

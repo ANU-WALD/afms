@@ -14,7 +14,7 @@
       <agm-data-layer *ngIf="geoJsonObject"
                       [geoJson]="geoJsonObject"
                       (layerClick)="clicked($event)"
-                      [style]="styleFunc">
+                      [style]="staticStyles">
       </agm-data-layer>
 
       <app-map-control position="RIGHT_BOTTOM">
