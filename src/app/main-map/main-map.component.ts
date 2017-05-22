@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import { Http, Response } from '@angular/http';
 import {GoogleMapsAPIWrapper} from '@agm/core/services';
-import {CSVService,WMSService,WMSLayerComponent} from 'map-wald';
+import {WMSService,WMSLayerComponent} from 'map-wald';
 import {SelectionService} from '../selection.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -24,7 +24,7 @@ export class MainMapComponent implements OnInit {
 
     constructor(private _wmsService:WMSService,
                 _activatedRoute: ActivatedRoute,
-                private _csv:CSVService,
+                //private _csv:CSVService,
                 private selection:SelectionService,
                 private http:Http) {
       this.selection.loadFromURL(_activatedRoute);

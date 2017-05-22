@@ -10,19 +10,17 @@ import { MapWaldModule, MapViewParameterService } from 'map-wald';
 import {SelectionService} from './selection.service';
 
 import { MainMapComponent } from './main-map/main-map.component';
-import { MapControlComponent } from './map-control/map-control.component';
 import { LayerControlComponent } from './layer-control/layer-control.component';
 import { ChartsComponent } from './charts/charts.component';
 import { DateControlComponent } from './date-control/date-control.component';
 import {routes,routeParameters} from './router-config';
 
-export var key='WENFO_GOOGLE_MAPS_API_KEY';
+//export var key=null;//'WENFO_GOOGLE_MAPS_API_KEY';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainMapComponent,
-    MapControlComponent,
     ChartsComponent,
     DateControlComponent,
     LayerControlComponent
