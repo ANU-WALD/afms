@@ -16,8 +16,7 @@ export class LayerControlComponent implements OnInit {
   @Output() layerChanged: EventEmitter<FMCLayer> = new EventEmitter<FMCLayer>();
 
   constructor(private _http:Http,
-              private mapView:MapViewParameterService,
-              activatedRoute: ActivatedRoute,) {
+              private mapView:MapViewParameterService) {
     _http.get("assets/config/layers.json").toPromise().then(resp=>{
       var json = resp.json();
       var layers:Array<any> = json.layers;
