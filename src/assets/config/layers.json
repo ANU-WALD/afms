@@ -1,0 +1,58 @@
+{
+  "layers": [{
+    "name": "Fuel Moisture Content (9 Colours)",
+    "units": "%",
+    "icon": "fa-tint",
+    "wms_layer": "Fenner%3AFMC",
+    "palette": {
+      "name": "RdYlBu",
+      "count": 9,
+      "reverse": false
+    },
+    "range": [0, 140]
+  }, {
+    "name": "Fuel Moisture Content (5 Colours)",
+    "units": "%",
+    "icon": "fa-tint",
+    "wms_layer": "Fenner%3AFMC%3A5C",
+    "palette": {
+      "name": "RdYlBu",
+      "count": 5,
+      "reverse": false
+    },
+    "range": [0, 140]
+  }, {
+    "name": "Fuel Moisture Content (5 Colours, Interpolated)",
+    "units": "%",
+    "icon": "fa-tint",
+    "wms_layer": "Fenner%3AFMC%3A5CI",
+    "palette": {
+      "name": "RdYlBu",
+      "count": 5,
+      "reverse": false
+    },
+    "range": [0, 140]
+  }, {
+    "name": "Flammability",
+    "units": "units",
+    "icon": "fa-fire",
+    "wms_layer": "unknown",
+    "palette": {
+      "name": "RdYlBu",
+      "count": 11,
+      "reverse": false
+    },
+    "range": []
+  }, {
+    "name": "Uncertainty",
+    "units": "%",
+    "icon": "fa-percent",
+    "wms_layer": "Fenner%3AFMC%3AUncertainty",
+    "palette": {
+      "name": "RdYlBu",
+      "count": 11,
+      "reverse": true
+    },
+    "range": [0, 90]
+  }]
+}
