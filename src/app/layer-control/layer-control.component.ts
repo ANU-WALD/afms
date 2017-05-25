@@ -1,4 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Http, Response } from '@angular/http';
+import {MapViewParameterService} from 'map-wald';
 
 @Component({
   selector: 'fmc-layer-control',
@@ -6,48 +9,38 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./layer-control.component.scss']
 })
 export class LayerControlComponent implements OnInit {
-  layers:Array<FMCLayer>=[
-    new FMCLayer('Fuel Moisture Content (9 Colours)','%','fa-tint','Fenner%3AFMC',{
-      name:'RdYlBu',
-      count:9,
-      reverse:false
-    },[0,140]),
-    new FMCLayer('Fuel Moisture Content (5 Colours)','%','fa-tint','Fenner%3AFMC%3A5C',{
-      name:'RdYlBu',
-      count:5,
-      reverse:false
-    },[0,140]),
-    new FMCLayer('Fuel Moisture Content (5 Colours, Interpolated)','%','fa-tint','Fenner%3AFMC%3A5C%3AI',{
-      name:'RdYlBu',
-      count:5,
-      reverse:false
-    },[0,140]),
-    new FMCLayer('Flammability','units','fa-fire','unknown',{
-      name:'RdYlBu',
-      count:11,
-      reverse:false
-    },[]),
-    new FMCLayer('Uncertainty','%','fa-percent','Fenner%3AFMC%3AUncertainty',{
-      name:'RdYlBu',
-      count:11,
-      reverse:true
-    },[0,90])
-  ];
+  layers:Array<FMCLayer>;
 
   selectedLayer:FMCLayer;
 
   @Output() layerChanged: EventEmitter<FMCLayer> = new EventEmitter<FMCLayer>();
 
-  constructor() {
+  constructor(private _http:Http,
+              private mapView:MapViewParameterService,
+              activatedRoute: ActivatedRoute,) {
+    _http.get("assets/config/layers.json").toPromise().then(resp=>{
+      var json = resp.json();
+      var layers:Array<any> = json.layers;
+      this.layers = layers.map(l=>new FMCLayer(l.name,l.units,l.icon,l.wms_layer,l.palette,l.range));
+
+      var params = this.mapView.current();
+      if(params.layer&&params.layer!=='_'){
+        this.selectedLayer=this.layers.find(l=>decodeURIComponent(l.variable)===decodeURIComponent(params.layer));
+      }
+
+      if(!this.selectedLayer){
+        this.selectedLayer=this.layers[0];
+      }
+      this.layerChange(null);
+    });
   }
 
   ngOnInit() {
-    this.selectedLayer=this.layers[0];
-    this.layerChanged.emit(this.selectedLayer);
   }
 
   layerChange(event){
     this.layerChanged.emit(this.selectedLayer);
+    this.mapView.update({layer:this.selectedLayer.variable});
   }
 }
 

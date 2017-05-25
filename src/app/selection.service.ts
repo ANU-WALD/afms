@@ -51,8 +51,9 @@ export class SelectionService {
       dd:this.day
     };
 
-    var newURL=this.mapView.constructRoute(params);
-    this._location.go(newURL);
+    this.mapView.update(params);
+//    var newURL=this.mapView.constructRoute(params);
+//    this._location.go(newURL);
   }
   move(n:number){
     var d = new Date(this._year,this._month-1,this._day+n);
