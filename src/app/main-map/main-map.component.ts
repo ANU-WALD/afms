@@ -69,13 +69,10 @@ export class MainMapComponent implements OnInit {
   selectedCoordinates:Array<number>;
 
   mapClick(clickEvent){
-    console.log(clickEvent.coords);
     this.selectedCoordinates=[clickEvent.coords.lng,clickEvent.coords.lat];
   }
 
   clicked(clickEvent) {
-    console.log(clickEvent.latLng);
-    console.log(clickEvent.feature.getProperty(this.vectorLayer.nameField));
     this.selectedCoordinates=[clickEvent.latLng.lng(),clickEvent.latLng.lat()];
   }
 

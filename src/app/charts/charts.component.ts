@@ -1,7 +1,10 @@
 import { Component, ElementRef, AfterViewInit,Input, OnChanges } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { SelectionService } from '../selection.service';
 import { Http } from '@angular/http';
 import * as proj4 from 'proj4';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/map';
 //const Plotly = require('plotly.js');
 declare var Plotly:any;
 
@@ -122,38 +125,53 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
      }
 
      var year = this._selection.year;
+     var prevYear = year-1;
 
      var fn = this.files.find(f=>(f.tile===tileMatch.tile)&&(f.year===year)).filename;
+     var fnPrev = this.files.find(f=>(f.tile===tileMatch.tile)&&(f.year===prevYear)).filename;
      var [r,c]=tileMatch.cell;
-     var url = `${DAP_SERVER}${fn}.ascii?lfmc_mean[0:1:45][${r}:1:${r}][${c}:1:${c}]`;
-     this.http.get(url).map(r=>r.text())
-       .map(txt=>dap.parseData(txt,this.dasCache[tileMatch.tile]))
-       .map(dap.simplify)
-       .forEach((data:any)=>{
-         this.buildChart(data.lfmc_mean,data.time);
-       })
+
+     var observables = [fn,fnPrev].map(f=>{
+       var url = `${DAP_SERVER}${f}.ascii?lfmc_mean[0:1:45][${r}:1:${r}][${c}:1:${c}]`;
+       return this.http.get(url).map(r=>r.text())
+         .map(txt=>dap.parseData(txt,this.dasCache[tileMatch.tile]))
+         .map(dap.simplify);
+     });
+     Observable.forkJoin(observables).forEach((data:any)=>{
+       var [current,prev]=data;
+       prev.time = prev.time.map(d=>new Date(d.setFullYear(year)));
+
+       this.buildChart([
+       {
+         x:current.time,
+         y:current.lfmc_mean,
+         name:''+year
+       },
+       {
+         x:prev.time,
+         y:prev.lfmc_mean,
+         name:''+prevYear
+       }
+      ]);
+     })
    }
 
   ngAfterViewInit() {
   }
 
-  buildChart(values:Array<number>,dates:Array<Date>){
+  buildChart(series:Array<any>){
     var node = this._element.nativeElement.querySelector('.our-chart');
 
     Plotly.purge(node);
 
-    Plotly.plot( node, [
-      {
-        x: dates,
-        y: values
-      }], {
+    Plotly.plot( node, series, {
       margin: {
         t: 0,
         l:20,
         r:10,
         b:20
       },
-      width:'100%'
+      width:'300'
      } );
   }
 
