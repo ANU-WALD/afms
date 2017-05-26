@@ -3,7 +3,8 @@
       [longitude]="lng"
       [zoom]="zoom"
       [disableDefaultUI]="false"
-      [zoomControl]="false">
+      [zoomControl]="false"
+      (mapClick)="mapClick($event)">
 
       <app-wms-layer #wms
         [url]="wmsURL"
@@ -18,7 +19,7 @@
       </agm-data-layer>
 
       <app-map-control position="RIGHT_BOTTOM">
-        <app-charts></app-charts>
+        <app-charts [coordinates]="selectedCoordinates"></app-charts>
       </app-map-control>
 
       <app-map-control position="TOP_LEFT">

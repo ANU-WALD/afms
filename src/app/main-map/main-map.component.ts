@@ -45,25 +45,8 @@ export class MainMapComponent implements OnInit {
       feature_count: 101
     }
 
-    this.http.get(this.wpsRequest)
-      .map((r) => r.text())
-      .subscribe((txt) => {
-        var data = (new DOMParser()).parseFromString(txt, 'text/xml');
-        //          console.log(data);
-        //          var d2:Element = data.getElementsByTagName('ExecuteResponse')[0];console.log(d2);
-        //          d2 = d2.getElementsByTagName('ProcessOutputs')[0];console.log(d2);
-        //          d2 = d2.getElementsByTagName('Output')[0];console.log(d2);
-        //          d2 = d2.getElementsByTagName('Data')[0];console.log(d2);
-        //          d2 = d2.getElementsByTagName('ComplexData')[0];
-
-        var d2 = data.getElementsByTagName('ComplexData');
-        //          console.log(d2);
-        var result = Array.prototype.slice.call(d2).map((d) => d.textContent).map(JSON.parse);
-        //          console.log(result);
-      });
   }
 
-  wpsRequest: string = 'http://gsky-dev.nci.org.au/ows?service=WPS&request=Execute&version=1.0.0&Identifier=geometryDrill&DataInputs=geometry%3D%7B%22type%22%3A%22FeatureCollection%22%2C%22features%22%3A%5B%7B%22type%22%3A%22Feature%22%2C%22geometry%22%3A%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B%2035.0000%2C%2055.5000%5D%2C%5B%2035.5000%2C%2055.5000%5D%2C%5B%2035.5000%2C%2055.0000%5D%2C%5B%2035.0000%2C%2055.0000%5D%2C%5B%2035.0000%2C%2055.5000%5D%5D%5D%7D%7D%5D%7D&status=true&storeExecuteResponse=true';
   map: any;
   // google maps zoom level
   zoom: number = 4;
@@ -82,9 +65,18 @@ export class MainMapComponent implements OnInit {
   lng: number = 129.815982;
 
   geoJsonObject: Object = null;
+  vectorLayer:VectorLayer;
+  selectedCoordinates:Array<number>;
+
+  mapClick(clickEvent){
+    console.log(clickEvent.coords);
+    this.selectedCoordinates=[clickEvent.coords.lng,clickEvent.coords.lat];
+  }
 
   clicked(clickEvent) {
-    console.log(clickEvent.feature.getProperty('PR_NAME'));
+    console.log(clickEvent.latLng);
+    console.log(clickEvent.feature.getProperty(this.vectorLayer.nameField));
+    this.selectedCoordinates=[clickEvent.latLng.lng(),clickEvent.latLng.lat()];
   }
 
   staticStyles:any={
@@ -142,6 +134,7 @@ export class MainMapComponent implements OnInit {
     this.changeCount++;
     var component = this;
     this.geoJsonObject=null;
+    this.vectorLayer=layer;
     this.http.get(`assets/selection_layers/${layer.jsonFilename}`)
       .map((r) => r.json())
       .subscribe((data) => {
