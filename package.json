@@ -31,7 +31,6 @@
     "core-js": "^2.4.1",
     "dap-query-js": "github:flowmatters/dap-query-js",
     "font-awesome": "^4.7.0",
-    "proj4": "^2.3.17",
     "map-wald": "ANU-WALD/map-wald",
     "plotly.js": "^1.25.1",
     "rxjs": "^5.1.0",

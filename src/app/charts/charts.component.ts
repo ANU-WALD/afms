@@ -1,8 +1,9 @@
 import { Component, ElementRef, AfterViewInit,Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { ProjectionService } from 'map-wald';
 import { SelectionService } from '../selection.service';
 import { Http } from '@angular/http';
-import * as proj4 from 'proj4';
+//import * as proj4 from 'proj4';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
 //const Plotly = require('plotly.js');
@@ -30,6 +31,7 @@ export class GeoTransform{
   }
 }
 
+
 const DAP_SERVER='http://dapds00.nci.org.au/thredds/dodsC/ub8/au/FMC/sinusoidal/';
 @Component({
   selector: 'app-charts',
@@ -45,9 +47,11 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
   dasCache:{[key:string]:any}={};
   ddxCache:{[key:string]:any}={};
   geoTransforms:{[key:string]:GeoTransform}={};
-  projection:proj4.Static;
+  projection:any;
 
-  constructor(private http:Http, private _element:ElementRef,private _selection:SelectionService) {
+  constructor(private http:Http, private _element:ElementRef,private _selection:SelectionService,
+    ps:ProjectionService) {
+    var proj4 = ps.proj4();
 
     //defs['SR-ORG:6842']="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs";
 //    var p = Proj('EPSG:4326','PROJCS["unnamed",GEOGCS["Unknown datum based upon the custom spheroid",DATUM["Not specified (based on custom spheroid)",SPHEROID["Custom spheroid",6371007.181,0]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]],PROJECTION["Sinusoidal"],PARAMETER["longitude_of_center",0],PARAMETER["false_easting",0],PARAMETER["false_northing",0],UNIT["Meter",1]]')
