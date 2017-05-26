@@ -167,7 +167,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
     Plotly.plot( node, series, {
       margin: {
         t: 0,
-        l:20,
+        l:25,
         r:10,
         b:20
       },
