@@ -77,14 +77,11 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
             var tmp = das.variables.sinusoidal;
             var geo = tmp.GeoTransform.trim().split(' ').map(s=>+s);
             this.geoTransforms[tileLoc]=new GeoTransform(geo);
-
-            this.findTile(lng,lat);
         });
 
         http.get(`${DAP_SERVER}${fn}.ddx`).map(resp=>resp.text())
           .map(dap.parseDDX).forEach(ddx=>{
             this.ddxCache[tileLoc]=ddx;
-            this.findTile(lng,lat);
         });
       });
     });
