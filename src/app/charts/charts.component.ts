@@ -149,12 +149,21 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
        {
          x:current.time,
          y:current.lfmc_mean,
-         name:''+year
+         name:''+year,
+         mode:'lines+markers',
+         marker:{
+           size:3
+         }
        },
        {
          x:prev.time,
          y:prev.lfmc_mean,
-         name:''+prevYear
+         name:''+prevYear,
+         mode:'lines+markers',
+         marker:{
+           size:3
+         }
+
        }
       ]);
      })
