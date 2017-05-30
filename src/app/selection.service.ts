@@ -13,8 +13,6 @@ export class SelectionService {
   timeStep:number=8;
   MILLISECONDS_PER_DAY=24*60*60*1000;
 
-  referenceDate:Date = new Date(2010,8,22);
-
   constructor(private mapView:MapViewParameterService,
               private _location: Location) {
   }
@@ -105,7 +103,7 @@ export class SelectionService {
   effectiveDate():Date{
     var d = new Date(this._year,this._month-1,this._day);
     var newT = d.getTime();
-    var refT = this.referenceDate.getTime();
+    var refT = new Date(this._year,0,1).getTime();
     var deltaT = newT-refT;
     var timeStep=(this.timeStep*this.MILLISECONDS_PER_DAY);
     var offset=+((deltaT/timeStep).toFixed());
