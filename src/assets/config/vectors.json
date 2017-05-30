@@ -15,5 +15,9 @@
     "filename":"NatParks.json",
     "title":"National Parks",
     "name_field":"NAME"
+  }, {
+    "filename":"NRMR_2011_AUST_1.json",
+    "title":"NRM Regions",
+    "name_field":"NRMR_NAME"
   }]
 }

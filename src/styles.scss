@@ -18,9 +18,20 @@ $crc-yellow:rgb(245,221,37);
 }
 
 .main-map{
-  height:400px;
+  position:fixed;
+  left:0px;
+  top:50px; /* $navbar-height */
+  width:100%;
+  height:auto;
+/*  height:400px;
   position:relative;
   top:0px;
+*/
+}
+
+.main-chart {
+  position:fixed;
+  width:100%;
 }
 
 .sebm-google-map-container{
@@ -41,7 +52,8 @@ $crc-yellow:rgb(245,221,37);
     position:fixed;
     left:0px;
     top:50px; /* $navbar-height */
-    bottom:50px;
+/*    bottom:50px;*/
+
     width:100%;
     height:auto;
   }

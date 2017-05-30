@@ -1,4 +1,4 @@
-<div class="main-map">
+<div class="main-map" [style.bottom]="(50+chartHeight)+'px'">
     <agm-map [latitude]="lat"
       [longitude]="lng"
       [zoom]="zoom"
@@ -6,6 +6,10 @@
       [zoomControl]="false"
       (mapClick)="mapClick($event)">
 
+      <agm-marker *ngIf="selectedCoordinates"
+                              [longitude]="selectedCoordinates[0]"
+                              [latitude]="selectedCoordinates[1]">
+      </agm-marker>
       <app-wms-layer #wms
         [url]="wmsURL"
         [params]="wmsParameters"
@@ -18,10 +22,10 @@
                       [style]="staticStyles">
       </agm-data-layer>
 
+<!--
       <app-map-control position="RIGHT_BOTTOM">
-        <app-charts [coordinates]="selectedCoordinates"></app-charts>
       </app-map-control>
-
+-->
       <app-map-control position="TOP_LEFT">
         <app-date-control></app-date-control>
       </app-map-control>
@@ -69,4 +73,11 @@
           [editable]="true">
       </sebm-google-map-circle>
     -->
+</div>
+
+<div class="main-chart"
+     [style.bottom]="'50px'"
+     [style.height]="chartHeight+'px'">
+  <app-charts [coordinates]="selectedCoordinates"
+              [height]="chartHeight"></app-charts>
 </div>

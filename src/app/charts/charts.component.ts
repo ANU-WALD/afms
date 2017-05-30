@@ -40,7 +40,9 @@ const DAP_SERVER='http://dapds00.nci.org.au/thredds/dodsC/ub8/au/FMC/sinusoidal/
 })
 export class ChartsComponent implements AfterViewInit, OnChanges {
   @Input() coordinates:Array<number>;
+  @Input() height:number;
 
+  havePlot:boolean=false;
   wpsRequest: string = 'http://gsky-dev.nci.org.au/ows?service=WPS&request=Execute&version=1.0.0&Identifier=geometryDrill&DataInputs=geometry%3D%7B%22type%22%3A%22FeatureCollection%22%2C%22features%22%3A%5B%7B%22type%22%3A%22Feature%22%2C%22geometry%22%3A%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B%2035.0000%2C%2055.5000%5D%2C%5B%2035.5000%2C%2055.5000%5D%2C%5B%2035.5000%2C%2055.0000%5D%2C%5B%2035.0000%2C%2055.0000%5D%2C%5B%2035.0000%2C%2055.5000%5D%5D%5D%7D%7D%5D%7D&status=true&storeExecuteResponse=true';
   files:Array<FmcTile>;
 
@@ -116,6 +118,11 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
 //        //          console.log(result);
 //      });
 
+    var component=this;
+    window.onresize = function(e) {
+      component.resizePlot();
+    };
+
    }
 
    ngOnChanges(event){
@@ -174,18 +181,30 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
 
   buildChart(series:Array<any>){
     var node = this._element.nativeElement.querySelector('.our-chart');
-
+    var width:number=this._element.nativeElement.parentNode.clientWidth;
     Plotly.purge(node);
 
     Plotly.plot( node, series, {
       margin: {
-        t: 0,
+        t:30,
         l:25,
         r:10,
         b:20
       },
-      width:'300'
-     } );
+      height:this.height,
+      width:width,
+      title:`${this.coordinates[1]},${this.coordinates[0]}`
+    } );
+    this.havePlot=true;
+  }
+
+  resizePlot(){
+    if(!this.havePlot){
+      return;
+    }
+    var node = this._element.nativeElement.querySelector('.our-chart');
+
+    Plotly.Plots.resize(node);
   }
 
   findTile(lng:number,lat:number):{tile:string,cell:Array<number>}{

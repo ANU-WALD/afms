@@ -24,6 +24,7 @@ const BASE_URL='http://gsky-test.nci.org.au/ows';
 export class MainMapComponent implements OnInit {
 
   layerVariable: string;
+  chartHeight:number = 0;
 
   constructor(private _wmsService: WMSService,
     _activatedRoute: ActivatedRoute,
@@ -70,10 +71,12 @@ export class MainMapComponent implements OnInit {
 
   mapClick(clickEvent){
     this.selectedCoordinates=[clickEvent.coords.lng,clickEvent.coords.lat];
+    this.chartHeight=150;
   }
 
   clicked(clickEvent) {
     this.selectedCoordinates=[clickEvent.latLng.lng(),clickEvent.latLng.lat()];
+    this.chartHeight=150;
   }
 
   staticStyles:any={
