@@ -50,7 +50,7 @@ export class MainMapComponent implements OnInit {
     var view = mapView.current();
 
     var coords = decodeURIComponent(view.coords)
-    if(coords!=='_'){
+    if(coords&&(coords!=='_')){
       console.log(coords);
       this.selectLocation(coords.split(',').map(s=>+s));
     }
