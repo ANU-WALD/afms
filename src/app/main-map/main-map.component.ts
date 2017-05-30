@@ -55,7 +55,7 @@ export class MainMapComponent implements OnInit {
       this.selectLocation(coords.split(',').map(s=>+s));
     }
 
-    if(!(view.lat==='_')||(view.lng==='_')||(view.zm==='_')){
+    if(!((view.lat==='_')||(view.lng==='_')||(view.zm==='_'))){
       this.lat=+view.lat;
       this.lng=+view.lng;
       this.zoom=+view.zm;
@@ -95,10 +95,16 @@ export class MainMapComponent implements OnInit {
     if(event.lat){
       this.lat=event.lat;
       this.lng=event.lng;
+//      this.mapView.update({lat:event.lat.toFixed(2),lng:event.lng.toFixed(2)});
     } else {
       this.zoom = event;
+//      this.mapView.update({zm:event});
     }
-    this.mapView.update({lat:this.lat.toFixed(2),lng:this.lng.toFixed(2),zm:this.zoom});
+    this.mapView.update({
+      lat:this.lat.toFixed(2),
+      lng:this.lng.toFixed(2),
+      zm:this.zoom
+    });
   }
 
   selectLocation(coords:Array<number>){

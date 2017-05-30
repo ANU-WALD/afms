@@ -8,6 +8,12 @@ export class SelectionService {
   _year:number = 2010;
   _month:number = 9;
   _day:number = 22;
+  _struct:any;
+
+  timeStep:number=8;
+  MILLISECONDS_PER_DAY=24*60*60*1000;
+
+  referenceDate:Date = new Date(2010,8,22);
 
   constructor(private mapView:MapViewParameterService,
               private _location: Location) {
@@ -18,15 +24,32 @@ export class SelectionService {
     this.year = +params.yyyy||this.year;
     this.month = +params.mm||this.month;
     this.day = +params.dd||this.day;
+    this._fireDateChange();
   }
 
   get year():number {return this._year;}
   get month():number {return this._month;}
   get day():number {return this._day;}
 
-  set year(v:number) { this._year=v; this._fireDateChange();}
-  set month(v:number) { this._month=v; this._fireDateChange();}
-  set day(v:number) { this._day=v; this._fireDateChange();}
+  set year(v:number) { this._year=v; this._buildStruct(); this._fireDateChange();}
+  set month(v:number) { this._month=v; this._buildStruct(); this._fireDateChange();}
+  set day(v:number) { this._day=v; this._buildStruct(); this._fireDateChange();}
+
+  get date():any{
+    if(!this._struct){
+      this._buildStruct();
+    }
+    return this._struct;
+  }
+
+  set date(d:any){
+    console.log(d);
+    this._struct=d;
+    this._year = d.year;
+    this._month = d.month;
+    this._day = d.day;
+    this._fireDateChange();
+  }
 
   leading0(n:number):string {
     if(n<10){
@@ -36,7 +59,16 @@ export class SelectionService {
   }
 
   dateText():string {
-    return `${this._year}-${this.leading0(this._month)}-${this.leading0(this.day)}`;
+    var d = this.effectiveDate();
+    return `${d.getFullYear()}-${this.leading0(d.getMonth()+1)}-${this.leading0(d.getDate())}`;
+  }
+
+  _buildStruct(){
+    this._struct = {
+      year:this._year,
+      month:this._month,
+      day:this.day
+    };
   }
 
   _fireDateChange() {
@@ -60,9 +92,24 @@ export class SelectionService {
     this._year = d.getFullYear();
     this._month = d.getMonth()+1;
     this._day = d.getDate();
+    d = this.effectiveDate();
+    this._year = d.getFullYear();
+    this._month = d.getMonth()+1;
+    this._day = d.getDate();
+
+    this._buildStruct();
     this._fireDateChange();
   }
   dateChange: EventEmitter<string> = new EventEmitter<string>();
 
+  effectiveDate():Date{
+    var d = new Date(this._year,this._month-1,this._day);
+    var newT = d.getTime();
+    var refT = this.referenceDate.getTime();
+    var deltaT = newT-refT;
+    var timeStep=(this.timeStep*this.MILLISECONDS_PER_DAY);
+    var offset=+((deltaT/timeStep).toFixed());
 
+    return new Date(refT+offset*timeStep);
+  }
 }
