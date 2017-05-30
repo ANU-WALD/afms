@@ -1,6 +1,6 @@
 {
   "layers": [{
-    "name": "Fuel Moisture Content (9 Colours)",
+    "name": "Fuel Moisture Content",
     "units": "%",
     "icon": "fa-tint",
     "wms_layer": "Fenner%3AFMC",

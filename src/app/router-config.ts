@@ -1,7 +1,7 @@
 import {MapViewParameterService} from 'map-wald';
 import { MainMapComponent } from './main-map/main-map.component';
 
-export let routeParameters = ['layer','vector','lat','lng','zm','dd','mm','yyyy'];
+export let routeParameters = ['layer','vector','lat','lng','zm','dd','mm','yyyy','coords'];
 MapViewParameterService.parameterNames=routeParameters;
 
 var viewMapper = new MapViewParameterService();

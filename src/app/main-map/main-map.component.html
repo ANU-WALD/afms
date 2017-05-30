@@ -1,10 +1,12 @@
 <div class="main-map" [style.bottom]="(50+chartHeight)+'px'">
-    <agm-map [latitude]="lat"
-      [longitude]="lng"
-      [zoom]="zoom"
+    <agm-map [(latitude)]="lat"
+      [(longitude)]="lng"
+      [(zoom)]="zoom"
       [disableDefaultUI]="false"
       [zoomControl]="false"
-      (mapClick)="mapClick($event)">
+      (mapClick)="mapClick($event)"
+      (centerChange)="moved($event)"
+      (zoomChange)="moved($event)">
 
       <agm-marker *ngIf="selectedCoordinates"
                               [longitude]="selectedCoordinates[0]"

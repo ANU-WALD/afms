@@ -86,11 +86,19 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
             var tmp = das.variables.sinusoidal;
             var geo = tmp.GeoTransform.trim().split(' ').map(s=>+s);
             this.geoTransforms[tileLoc]=new GeoTransform(geo);
+
+            if(this.coordinates){
+              this.coordsChanged();
+            }
         });
 
         http.get(`${DAP_SERVER}${fn}.ddx`).map(resp=>resp.text())
           .map(dap.parseDDX).forEach(ddx=>{
             this.ddxCache[tileLoc]=ddx;
+
+            if(this.coordinates){
+              this.coordsChanged();
+            }
         });
       });
     });
@@ -130,8 +138,12 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
        return;
      }
 
+     this.coordsChanged();
+   }
+
+   coordsChanged(){
      var tileMatch = this.findTile(this.coordinates[0],this.coordinates[1]);
-     if(!tileMatch.tile){
+     if(!tileMatch||!tileMatch.tile){
        return;
      }
 
@@ -196,7 +208,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
       },
       height:this.height,
       width:width,
-      title:`${this.coordinates[1]},${this.coordinates[0]}`
+      title:`Fuel Moisture Content at ${this.coordinates[1]},${this.coordinates[0]}`
     } );
     this.havePlot=true;
   }

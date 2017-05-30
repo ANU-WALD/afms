@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http, Response } from '@angular/http';
 import { GoogleMapsAPIWrapper } from '@agm/core/services';
-import { WMSService, WMSLayerComponent } from 'map-wald';
+import { WMSService, WMSLayerComponent, MapViewParameterService } from 'map-wald';
 import { SelectionService } from '../selection.service';
 import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.component';
 
@@ -30,6 +30,7 @@ export class MainMapComponent implements OnInit {
     _activatedRoute: ActivatedRoute,
     //private _csv:CSVService,
     private selection: SelectionService,
+    private mapView:MapViewParameterService,
     private http: Http) {
     this.selection.loadFromURL(_activatedRoute);
     this.selection.dateChange.subscribe((dateTxt: string) => {
@@ -46,6 +47,19 @@ export class MainMapComponent implements OnInit {
       feature_count: 101
     }
 
+    var view = mapView.current();
+
+    var coords = decodeURIComponent(view.coords)
+    if(coords!=='_'){
+      console.log(coords);
+      this.selectLocation(coords.split(',').map(s=>+s));
+    }
+
+    if(!(view.lat==='_')||(view.lng==='_')||(view.zm==='_')){
+      this.lat=+view.lat;
+      this.lng=+view.lng;
+      this.zoom=+view.zm;
+    }
   }
 
   map: any;
@@ -70,14 +84,29 @@ export class MainMapComponent implements OnInit {
   selectedCoordinates:Array<number>;
 
   mapClick(clickEvent){
-    this.selectedCoordinates=[clickEvent.coords.lng,clickEvent.coords.lat];
-    this.chartHeight=150;
+    this.selectLocation([clickEvent.coords.lng,clickEvent.coords.lat]);
   }
 
   clicked(clickEvent) {
-    this.selectedCoordinates=[clickEvent.latLng.lng(),clickEvent.latLng.lat()];
+    this.selectLocation([clickEvent.latLng.lng(),clickEvent.latLng.lat()]);
+  }
+
+  moved(event){
+    if(event.lat){
+      this.lat=event.lat;
+      this.lng=event.lng;
+    } else {
+      this.zoom = event;
+    }
+    this.mapView.update({lat:this.lat.toFixed(2),lng:this.lng.toFixed(2),zm:this.zoom});
+  }
+
+  selectLocation(coords:Array<number>){
+    this.selectedCoordinates=coords;
+    this.mapView.update({coords:`${coords[0].toFixed(3)},${coords[1].toFixed(3)}`});
     this.chartHeight=150;
   }
+
 
   staticStyles:any={
       clickable: true,
