@@ -11,28 +11,6 @@
     },
     "range": [0, 140]
   }, {
-    "name": "Fuel Moisture Content (5 Colours)",
-    "units": "%",
-    "icon": "fa-tint",
-    "wms_layer": "Fenner%3AFMC%3A5C",
-    "palette": {
-      "name": "RdYlBu",
-      "count": 5,
-      "reverse": false
-    },
-    "range": [0, 140]
-  }, {
-    "name": "Fuel Moisture Content (5 Colours, Interpolated)",
-    "units": "%",
-    "icon": "fa-tint",
-    "wms_layer": "Fenner%3AFMC%3A5CI",
-    "palette": {
-      "name": "RdYlBu",
-      "count": 5,
-      "reverse": false
-    },
-    "range": [0, 140]
-  }, {
     "name": "Flammability",
     "units": "units",
     "icon": "fa-fire",
