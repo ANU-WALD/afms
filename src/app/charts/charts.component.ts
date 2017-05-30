@@ -191,6 +191,9 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
         r:10,
         b:20
       },
+      xaxis:{
+        tickformat:'%d/%b'
+      },
       height:this.height,
       width:width,
       title:`${this.coordinates[1]},${this.coordinates[0]}`
