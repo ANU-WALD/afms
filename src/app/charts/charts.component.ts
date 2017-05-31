@@ -167,7 +167,6 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
      Observable.forkJoin(observables).forEach((data:any)=>{
        var [current,prev]=data;
        prev.time = prev.time.map(d=>new Date(d.setFullYear(year)));
-       console.log(current);
 
        this.buildChart([
        {

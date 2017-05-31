@@ -45,10 +45,8 @@ export class SearchComponent implements OnInit {
       .concatMap((r)=>{
         var possibleLatLon = r.split(/[,\/]/);
         if(possibleLatLon.length===2){
-          console.log(possibleLatLon);
           var [lat,lng] = possibleLatLon.map(s=>+s.trim());
           if((lat<-7)&&(lat>-45)&&(lng>110)&&(lng<170)){
-            console.log('Good coords');
             return Observable.of([{
               formatted_address:r,
               coords:[lng,lat]
@@ -56,10 +54,6 @@ export class SearchComponent implements OnInit {
           }
         }
         return this._geocoder.geocode(r);
-      })
-      .map(res=>{
-        console.log(res);
-        return res;
       });
   }
 //      .map(term => term.length < 2 ? []
@@ -86,7 +80,6 @@ export class SearchComponent implements OnInit {
     }
 
     if(coords){
-      console.log('GOTO:', coords);
       this.coordinatesSelected.emit({
         lng:coords[0],
         lat:coords[1]
