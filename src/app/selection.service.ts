@@ -85,8 +85,9 @@ export class SelectionService {
 //    var newURL=this.mapView.constructRoute(params);
 //    this._location.go(newURL);
   }
+
   move(n:number){
-    var d = new Date(this._year,this._month-1,this._day+n);
+    var d = new Date(this._year,this._month-1,this._day+n,12);
     this._year = d.getFullYear();
     this._month = d.getMonth()+1;
     this._day = d.getDate();
@@ -101,9 +102,9 @@ export class SelectionService {
   dateChange: EventEmitter<string> = new EventEmitter<string>();
 
   effectiveDate():Date{
-    var d = new Date(this._year,this._month-1,this._day);
+    var d = new Date(this._year,this._month-1,this._day,12);
     var newT = d.getTime();
-    var refT = new Date(this._year,0,1).getTime();
+    var refT = new Date(this._year,0,1,12).getTime();
     var deltaT = newT-refT;
     var timeStep=(this.timeStep*this.MILLISECONDS_PER_DAY);
     var offset=+((deltaT/timeStep).toFixed());
