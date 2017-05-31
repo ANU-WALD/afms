@@ -1,0 +1,18 @@
+<div class="form-group row">
+  <label for="location" class="col-sm-2 col-form-label">Search</label>
+  <div class="col-10">
+    <div class="input-group input-group-sm">
+      <input id="location"
+             class="form-control form-control-sm"
+             name="location"
+             [(ngModel)]="address"
+             placeholder="lat/lng or address"
+             [ngbTypeahead]="search"
+             [resultFormatter]="formatter"
+             [inputFormatter]="formatter"/>
+      <div class="input-group-addon" (click)="gotoLocation()">
+        <i class="fa fa-search"></i>
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,8 +9,8 @@
       (zoomChange)="moved($event)">
 
       <agm-marker *ngIf="selectedCoordinates"
-                              [longitude]="selectedCoordinates[0]"
-                              [latitude]="selectedCoordinates[1]">
+                              [longitude]="selectedCoordinates.lng"
+                              [latitude]="selectedCoordinates.lat">
       </agm-marker>
       <app-wms-layer #wms
         [url]="wmsURL"
@@ -28,25 +28,26 @@
       <app-map-control position="RIGHT_BOTTOM">
       </app-map-control>
 -->
-      <app-map-control position="TOP_LEFT">
+      <map-control position="TOP_LEFT">
         <app-date-control></app-date-control>
-      </app-map-control>
+        <fmc-search (coordinatesSelected)="moveAndZoom($event)"></fmc-search>
+      </map-control>
 
-      <app-map-control position="TOP_RIGHT">
+      <map-control position="TOP_RIGHT">
         <div>
           <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
           <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
         </div>
-      </app-map-control>
+      </map-control>
 
-      <app-map-control position="LEFT_BOTTOM">
+      <map-control position="LEFT_BOTTOM">
         <map-legend [title]="mapTitle"
                     [mapUnits]="mapUnits"
                     [cbPalette]="wmsPalette"
                     [cbCount]="wmsColourCount"
                     [cbReverse]="wmsReverse"
                     [cbRange]="wmsRange"></map-legend>
-      </app-map-control>
+      </map-control>
 
     </agm-map>
     <!--

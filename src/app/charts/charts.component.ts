@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { ProjectionService } from 'map-wald';
 import { SelectionService } from '../selection.service';
 import { Http } from '@angular/http';
+import {LatLng} from '../latlng';
 //import * as proj4 from 'proj4';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
@@ -39,7 +40,7 @@ const DAP_SERVER='http://dapds00.nci.org.au/thredds/dodsC/ub8/au/FMC/sinusoidal/
   styleUrls: ['./charts.component.scss']
 })
 export class ChartsComponent implements AfterViewInit, OnChanges {
-  @Input() coordinates:Array<number>;
+  @Input() coordinates:LatLng;
   @Input() height:number;
 
   havePlot:boolean=false;
@@ -62,7 +63,10 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
 
     this.projection = proj4(def);
     var alice=[-23.6980,133.8807];
-    this.coordinates=alice;
+    this.coordinates={
+      lat:alice[0],
+      lng:alice[1]
+    };
 
     http.get('assets/config/fmc_filelist.json').map(r=>r.json()).forEach(val=>{
       var fileList = val.files;
@@ -142,7 +146,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
    }
 
    coordsChanged(){
-     var tileMatch = this.findTile(this.coordinates[0],this.coordinates[1]);
+     var tileMatch = this.findTile(this.coordinates);
      if(!tileMatch||!tileMatch.tile){
        return;
      }
@@ -163,6 +167,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
      Observable.forkJoin(observables).forEach((data:any)=>{
        var [current,prev]=data;
        prev.time = prev.time.map(d=>new Date(d.setFullYear(year)));
+       console.log(current);
 
        this.buildChart([
        {
@@ -208,7 +213,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
       },
       height:this.height,
       width:width,
-      title:`Fuel Moisture Content at ${this.coordinates[1]},${this.coordinates[0]}`
+      title:`Fuel Moisture Content at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`
     } );
     this.havePlot=true;
   }
@@ -222,8 +227,8 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
     Plotly.Plots.resize(node);
   }
 
-  findTile(lng:number,lat:number):{tile:string,cell:Array<number>}{
-    var projected = this.projection.forward([lng,lat]);
+  findTile(ll:LatLng):{tile:string,cell:Array<number>}{
+    var projected = this.projection.forward([ll.lng,ll.lat]);
 
     var candidateTiles = Object.keys(this.dasCache).map(tile=>{
       var das = this.dasCache[tile];

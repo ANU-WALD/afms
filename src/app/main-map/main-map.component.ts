@@ -5,6 +5,7 @@ import { GoogleMapsAPIWrapper } from '@agm/core/services';
 import { WMSService, WMSLayerComponent, MapViewParameterService } from 'map-wald';
 import { SelectionService } from '../selection.service';
 import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.component';
+import {LatLng} from '../latlng';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -51,15 +52,27 @@ export class MainMapComponent implements OnInit {
 
     var coords = decodeURIComponent(view.coords)
     if(coords&&(coords!=='_')){
-      console.log(coords);
-      this.selectLocation(coords.split(',').map(s=>+s));
+//      console.log(coords);
+      var coordArray = coords.split(',').map(s=>+s);
+      this.selectLocation(this.constrain({
+        lat:coordArray[0],
+        lng:coordArray[1]
+      }));
     }
 
     if(!((view.lat==='_')||(view.lng==='_')||(view.zm==='_'))){
-      this.lat=+view.lat;
-      this.lng=+view.lng;
+      var ll = this.constrain(<LatLng>view);
+      this.lat=ll.lat;
+      this.lng=ll.lng;
       this.zoom=+view.zm;
     }
+  }
+
+  constrain(ll:LatLng){
+    return{
+      lat:Math.min(-7,Math.max(-45,+ll.lat)),
+      lng:Math.min(170,Math.max(110,+ll.lng))
+    };
   }
 
   map: any;
@@ -81,14 +94,28 @@ export class MainMapComponent implements OnInit {
 
   geoJsonObject: Object = null;
   vectorLayer:VectorLayer;
-  selectedCoordinates:Array<number>;
+  selectedCoordinates:LatLng;
 
   mapClick(clickEvent){
-    this.selectLocation([clickEvent.coords.lng,clickEvent.coords.lat]);
+    this.selectLocation({
+      lng:clickEvent.coords.lng,
+      lat:clickEvent.coords.lat
+    });
   }
 
   clicked(clickEvent) {
-    this.selectLocation([clickEvent.latLng.lng(),clickEvent.latLng.lat()]);
+    this.selectLocation({
+      lng:clickEvent.latLng.lng(),
+      lat:clickEvent.latLng.lat()
+    });
+  }
+
+  moveAndZoom(coords:LatLng){
+    this.selectLocation(coords);
+    this.moved(coords);
+    this.moved(12);
+
+    // Zoom
   }
 
   moved(event){
@@ -107,9 +134,9 @@ export class MainMapComponent implements OnInit {
     });
   }
 
-  selectLocation(coords:Array<number>){
+  selectLocation(coords:LatLng){
     this.selectedCoordinates=coords;
-    this.mapView.update({coords:`${coords[0].toFixed(3)},${coords[1].toFixed(3)}`});
+    this.mapView.update({coords:`${coords.lat.toFixed(3)},${coords.lng.toFixed(3)}`});
     this.chartHeight=150;
   }
 
