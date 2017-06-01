@@ -8,7 +8,7 @@ install:
 script:
   - node --version
   - ng version
-  - SCRIPTS_FN=src/app/app.module.ts
+  - SCRIPTS_FN=src/environments/environment.prod.ts
   - sed "s/WENFO_GOOGLE_MAPS_API_KEY/$GOOGLE_MAPS_API_KEY/g" < $SCRIPTS_FN > tmp
   - mv tmp $SCRIPTS_FN
   - npm run build

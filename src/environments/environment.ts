@@ -4,5 +4,6 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  google_maps_api_key: 'WENFO_GOOGLE_MAPS_API_KEY'
 };
