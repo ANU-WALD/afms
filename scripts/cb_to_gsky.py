@@ -11,10 +11,13 @@
 import sys
 import json
 from collections import OrderedDict
+import colorsys
+
+palettes = json.load(open('colorbrewer.json'))
 
 def show_usage():
   print('Usage:')
-  print('\t%s <palette> <n> [-r] [-<m>]'%sys.argv[0])
+  print('\t%s <palette> <n> [-r] [-<m>] -s<pc>'%sys.argv[0])
   print()
 
 def group_by(nested,key):
@@ -45,6 +48,7 @@ def process_args(palettes):
   lower_keys = {k.lower():k for k in palettes.keys()}
   rev=False
   repeat=1
+  saturation=0
   try:
     pal = sys.argv[1]
     n = int(sys.argv[2])
@@ -52,17 +56,27 @@ def process_args(palettes):
     for opt in other_options:
       if opt=='-r':
         rev=True
+      elif opt[:2]=='-s':
+        saturation = int(opt[2:])
       else:
         repeat = int(opt[1:])
 
     if (pal.lower() in lower_keys) and (str(n) in palettes[lower_keys[pal.lower()]]):
-      return lower_keys[pal.lower()],n,rev,repeat
+      return lower_keys[pal.lower()],n,rev,repeat,saturation
   except:pass
-  return '',0,False,0
+  return '',0,False,0,0
 
-def col_to_gsky(rgb_string):
+def col_to_gsky(rgb_string,saturation=0):
   stripped = rgb_string[4:-1]
   vals = [int(val) for val in stripped.split(',')]
+
+  if saturation>0:
+    RGB_SCALE=255.0
+    saturation = saturation/100.0
+    vals = [v/RGB_SCALE for v in vals]
+    h,s,v = colorsys.rgb_to_hsv(*vals)
+    vals = [int(RGB_SCALE*v) for v in list(colorsys.hsv_to_rgb(h,max(0.0,s-saturation),min(1.0,v+saturation)))]
+
   result = OrderedDict()
   result['R']=vals[0]
   result['G']=vals[1]
@@ -70,24 +84,26 @@ def col_to_gsky(rgb_string):
   result['A']=255
   return result
 
-def gsky_palette(palette,reverse=False,repeat=1):
+def gsky_palette(palette,reverse=False,repeat=1,saturation=0):
   if reverse:
     palette = palette[::-1]
 
   # replication factor (to reduce interpolation)
   result = []
   for col in palette:
-    result += [col_to_gsky(col)]*repeat
+    result += [col_to_gsky(col,saturation)]*repeat
 
 #  result = {'palette':result}
-  print(json.dumps(result,indent=2))
+  return json.dumps(result,indent=2)
+
+def cb_palette(name,num):
+  return palettes[name][str(num)]
 
 if __name__ == '__main__':
-  palettes = json.load(open('colorbrewer.json'))
-  pal, n, reverse, repeat = process_args(palettes)
+  pal, n, reverse, repeat,saturation = process_args(palettes)
 
   if n:
-    gsky_palette(palettes[pal][str(n)],reverse,repeat)
+    print(gsky_palette(cb_palette(pal,n),reverse,repeat,saturation))
   else:
     show_usage()
     summarise_options(palettes)
