@@ -20,7 +20,7 @@
       "count": 11,
       "reverse": false
     },
-    "range": []
+    "range": [0,100]
   }, {
     "name": "Uncertainty",
     "units": "%",
