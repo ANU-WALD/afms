@@ -168,27 +168,29 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
        var [current,prev]=data;
        prev.time = prev.time.map(d=>new Date(d.setFullYear(year)));
 
-       this.buildChart([
-       {
+       var currentSeries = {
          x:current.time,
          y:current.lfmc_mean,
          name:''+year,
          mode:'lines+markers',
+         connectgaps: true,
          marker:{
            size:3
          }
-       },
-       {
+       };
+
+       var previousSeries = {
          x:prev.time,
          y:prev.lfmc_mean,
          name:''+prevYear,
          mode:'lines+markers',
+         connectgaps: true,
          marker:{
            size:3
          }
+       };
 
-       }
-      ]);
+       this.buildChart([currentSeries, previousSeries]);
      })
    }
 
