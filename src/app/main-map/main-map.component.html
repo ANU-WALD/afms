@@ -82,5 +82,6 @@
      [style.bottom]="'50px'"
      [style.height]="chartHeight+'px'">
   <app-charts [coordinates]="selectedCoordinates"
+              [year] = "selection.year"
               [height]="chartHeight"></app-charts>
 </div>

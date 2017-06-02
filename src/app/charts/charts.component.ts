@@ -4,6 +4,7 @@ import { ProjectionService } from 'map-wald';
 import { SelectionService } from '../selection.service';
 import { Http } from '@angular/http';
 import { LatLng } from '../latlng';
+import { GeoTransform } from './geotransform'
 //import * as proj4 from 'proj4';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
@@ -12,7 +13,8 @@ declare var Plotly:any;
 
 let dap = require('dap-query-js');
 
-const CHART_YEARS = 2;
+const CHART_YEARS = 4;
+const DAP_SERVER='http://dapds00.nci.org.au/thredds/dodsC/ub8/au/FMC/sinusoidal/';
 
 export interface FmcTile{
   filename:string;
@@ -20,21 +22,12 @@ export interface FmcTile{
   tile:string;
 }
 
-export class GeoTransform{
-  affine:Array<number>;
-
-  constructor(points:Array<number>){
-    this.affine=points;
-  }
-
-  toRowColumn(x:number,y:number):Array<number>{
-    var col = Math.round((x-this.affine[0])/this.affine[1]);
-    var row = Math.round((y-this.affine[3])/this.affine[5]);
-    return [row,col];
-  }
+export interface TileCell{
+  tile: string;
+  cell: Array<number>;
 }
 
-const DAP_SERVER='http://dapds00.nci.org.au/thredds/dodsC/ub8/au/FMC/sinusoidal/';
+
 @Component({
   selector: 'app-charts',
   templateUrl: './charts.component.html',
@@ -43,6 +36,7 @@ const DAP_SERVER='http://dapds00.nci.org.au/thredds/dodsC/ub8/au/FMC/sinusoidal/
 export class ChartsComponent implements AfterViewInit, OnChanges {
   @Input() coordinates:LatLng;
   @Input() height:number;
+  @Input() year: number;
 
   havePlot:boolean=false;
   wpsRequest: string = 'http://gsky-dev.nci.org.au/ows?service=WPS&request=Execute&version=1.0.0&Identifier=geometryDrill&DataInputs=geometry%3D%7B%22type%22%3A%22FeatureCollection%22%2C%22features%22%3A%5B%7B%22type%22%3A%22Feature%22%2C%22geometry%22%3A%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B%2035.0000%2C%2055.5000%5D%2C%5B%2035.5000%2C%2055.5000%5D%2C%5B%2035.5000%2C%2055.0000%5D%2C%5B%2035.0000%2C%2055.0000%5D%2C%5B%2035.0000%2C%2055.5000%5D%5D%5D%7D%7D%5D%7D&status=true&storeExecuteResponse=true';
@@ -53,7 +47,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
   geoTransforms:{[key:string]:GeoTransform}={};
   projection:any;
 
-  constructor(private http:Http, private _element:ElementRef,private _selection:SelectionService,
+  constructor(private http:Http, private _element:ElementRef, private _selection:SelectionService,
     ps:ProjectionService) {
     var proj4 = ps.proj4();
 
@@ -146,13 +140,8 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
     this.coordsChanged(CHART_YEARS);
   }
 
-  coordsChanged(chartYears: number){
-    var tileMatch = this.findTile(this.coordinates);
-    if(!tileMatch||!tileMatch.tile){
-      return;
-    }
-
-    var selectedYear = this._selection.year;
+  updateChart(yearCount: number, tileMatch: TileCell){
+    var selectedYear = this.year;
     var dataSeries = [];
     var [r,c] = tileMatch.cell;
 
@@ -205,6 +194,17 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
       this.buildChart(traces);
 
     })
+
+  }
+
+  coordsChanged(chartYears: number){
+    var tileMatch = this.findTile(this.coordinates);
+    if(!tileMatch||!tileMatch.tile){
+      return;
+    }
+
+    this.updateChart(chartYears, tileMatch);
+
   }
 
   ngAfterViewInit() {
@@ -241,7 +241,8 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
     Plotly.Plots.resize(node);
   }
 
-  findTile(ll:LatLng):{tile:string,cell:Array<number>}{
+
+  findTile(ll:LatLng):TileCell{
     var projected = this.projection.forward([ll.lng,ll.lat]);
 
     var candidateTiles = Object.keys(this.dasCache).map(tile=>{
