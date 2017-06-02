@@ -228,6 +228,11 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
       height:this.height,
       width:width,
       title:`Fuel Moisture Content at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`
+    },
+    {
+      displaylogo: false,
+      modeBarButtonsToRemove: ['hoverCompareCartesian','hoverClosestCartesian',
+        'lasso2d','select2d', 'toggleSpikelines']
     } );
     this.havePlot=true;
   }
