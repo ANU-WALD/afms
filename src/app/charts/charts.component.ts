@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { ProjectionService } from 'map-wald';
 import { SelectionService } from '../selection.service';
 import { Http } from '@angular/http';
-import {LatLng} from '../latlng';
+import { LatLng } from '../latlng';
 //import * as proj4 from 'proj4';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
@@ -11,6 +11,8 @@ import 'rxjs/add/operator/map';
 declare var Plotly:any;
 
 let dap = require('dap-query-js');
+
+const CHART_YEARS = 2;
 
 export interface FmcTile{
   filename:string;
@@ -31,7 +33,6 @@ export class GeoTransform{
     return [row,col];
   }
 }
-
 
 const DAP_SERVER='http://dapds00.nci.org.au/thredds/dodsC/ub8/au/FMC/sinusoidal/';
 @Component({
@@ -57,7 +58,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
     var proj4 = ps.proj4();
 
     //defs['SR-ORG:6842']="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs";
-//    var p = Proj('EPSG:4326','PROJCS["unnamed",GEOGCS["Unknown datum based upon the custom spheroid",DATUM["Not specified (based on custom spheroid)",SPHEROID["Custom spheroid",6371007.181,0]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]],PROJECTION["Sinusoidal"],PARAMETER["longitude_of_center",0],PARAMETER["false_easting",0],PARAMETER["false_northing",0],UNIT["Meter",1]]')
+    //    var p = Proj('EPSG:4326','PROJCS["unnamed",GEOGCS["Unknown datum based upon the custom spheroid",DATUM["Not specified (based on custom spheroid)",SPHEROID["Custom spheroid",6371007.181,0]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]],PROJECTION["Sinusoidal"],PARAMETER["longitude_of_center",0],PARAMETER["false_easting",0],PARAMETER["false_northing",0],UNIT["Meter",1]]')
     // TODO Read from DAS
     var def ="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs";
 
@@ -92,107 +93,119 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
             this.geoTransforms[tileLoc]=new GeoTransform(geo);
 
             if(this.coordinates){
-              this.coordsChanged();
+              this.coordsChanged(CHART_YEARS);
             }
-        });
+          });
 
         http.get(`${DAP_SERVER}${fn}.ddx`).map(resp=>resp.text())
           .map(dap.parseDDX).forEach(ddx=>{
             this.ddxCache[tileLoc]=ddx;
 
             if(this.coordinates){
-              this.coordsChanged();
+              this.coordsChanged(CHART_YEARS);
             }
-        });
+          });
       });
     });
 
-//    http.get(`${DAP_SERVER}${fn}.ddx`).toPromise().then(resp=>{
-//      var txt = resp.text();
-//      var parsed = dap.parseDDX(txt);
-//      console.log('DDX',parsed);
-//    });
+    //    http.get(`${DAP_SERVER}${fn}.ddx`).toPromise().then(resp=>{
+    //      var txt = resp.text();
+    //      var parsed = dap.parseDDX(txt);
+    //      console.log('DDX',parsed);
+    //    });
 
-//    this.http.get(this.wpsRequest)
-//      .map((r) => r.text())
-//      .subscribe((txt) => {
-//        var data = (new DOMParser()).parseFromString(txt, 'text/xml');
-//        //          console.log(data);
-//        //          var d2:Element = data.getElementsByTagName('ExecuteResponse')[0];console.log(d2);
-//        //          d2 = d2.getElementsByTagName('ProcessOutputs')[0];console.log(d2);
-//        //          d2 = d2.getElementsByTagName('Output')[0];console.log(d2);
-//        //          d2 = d2.getElementsByTagName('Data')[0];console.log(d2);
-//        //          d2 = d2.getElementsByTagName('ComplexData')[0];
-//
-//        var d2 = data.getElementsByTagName('ComplexData');
-//        //          console.log(d2);
-//        var result = Array.prototype.slice.call(d2).map((d) => d.textContent).map(JSON.parse);
-//        //          console.log(result);
-//      });
+    //    this.http.get(this.wpsRequest)
+    //      .map((r) => r.text())
+    //      .subscribe((txt) => {
+    //        var data = (new DOMParser()).parseFromString(txt, 'text/xml');
+    //        //          console.log(data);
+    //        //          var d2:Element = data.getElementsByTagName('ExecuteResponse')[0];console.log(d2);
+    //        //          d2 = d2.getElementsByTagName('ProcessOutputs')[0];console.log(d2);
+    //        //          d2 = d2.getElementsByTagName('Output')[0];console.log(d2);
+    //        //          d2 = d2.getElementsByTagName('Data')[0];console.log(d2);
+    //        //          d2 = d2.getElementsByTagName('ComplexData')[0];
+    //
+    //        var d2 = data.getElementsByTagName('ComplexData');
+    //        //          console.log(d2);
+    //        var result = Array.prototype.slice.call(d2).map((d) => d.textContent).map(JSON.parse);
+    //        //          console.log(result);
+    //      });
 
     var component=this;
     window.onresize = function(e) {
       component.resizePlot();
     };
 
-   }
+  }
 
-   ngOnChanges(event){
-     if(!this.coordinates){
-       return;
-     }
+  ngOnChanges(event){
+    if(!this.coordinates){
+      return;
+    }
 
-     this.coordsChanged();
-   }
+    this.coordsChanged(CHART_YEARS);
+  }
 
-   coordsChanged(){
-     var tileMatch = this.findTile(this.coordinates);
-     if(!tileMatch||!tileMatch.tile){
-       return;
-     }
+  coordsChanged(chartYears: number){
+    var tileMatch = this.findTile(this.coordinates);
+    if(!tileMatch||!tileMatch.tile){
+      return;
+    }
 
-     var year = this._selection.year;
-     var prevYear = year-1;
+    var selectedYear = this._selection.year;
+    var dataSeries = [];
+    var [r,c] = tileMatch.cell;
 
-     var fn = this.files.find(f=>(f.tile===tileMatch.tile)&&(f.year===year)).filename;
-     var fnPrev = this.files.find(f=>(f.tile===tileMatch.tile)&&(f.year===prevYear)).filename;
-     var [r,c]=tileMatch.cell;
+    for (var i = 0; i < CHART_YEARS; i++) {
+      var year = selectedYear - i;
+      var filename = this.files.find(f=>(f.tile===tileMatch.tile)&&(f.year===year)).filename;
+      var url = `${DAP_SERVER}${filename}.ascii?lfmc_mean[0:1:45][${r}:1:${r}][${c}:1:${c}]`;
+      var observable = this.http.get(url).map(r=>r.text())
+        .map(txt=>dap.parseData(txt,this.dasCache[tileMatch.tile]))
+        .map(dap.simplify);
 
-     var observables = [fn,fnPrev].map(f=>{
-       var url = `${DAP_SERVER}${f}.ascii?lfmc_mean[0:1:45][${r}:1:${r}][${c}:1:${c}]`;
-       return this.http.get(url).map(r=>r.text())
-         .map(txt=>dap.parseData(txt,this.dasCache[tileMatch.tile]))
-         .map(dap.simplify);
-     });
-     Observable.forkJoin(observables).forEach((data:any)=>{
-       var [current,prev]=data;
-       prev.time = prev.time.map(d=>new Date(d.setFullYear(year)));
+      var newDataSeries = {
+        year: year,
+        filename: filename,
+        observable: observable
+      }
 
-       var currentSeries = {
-         x:current.time,
-         y:current.lfmc_mean,
-         name:''+year,
-         mode:'lines+markers',
-         connectgaps: true,
-         marker:{
-           size:3
-         }
-       };
+      dataSeries.push(newDataSeries);
 
-       var previousSeries = {
-         x:prev.time,
-         y:prev.lfmc_mean,
-         name:''+prevYear,
-         mode:'lines+markers',
-         connectgaps: true,
-         marker:{
-           size:3
-         }
-       };
+    }
 
-       this.buildChart([currentSeries, previousSeries]);
-     })
-   }
+    var observables = dataSeries.map(s=>s.observable);
+
+    Observable.forkJoin(observables).forEach((data:any)=>{
+
+      var traces = [];
+
+      for (let index in data) {
+        var dataset = data[index];
+
+        // Set all datasets to the same year so that they are overlayed with
+        // each other rather than shown sequentially
+        dataset.time = dataset.time.map(d=>new Date(d.setFullYear(selectedYear)));
+
+        var trace = {
+          x: dataset.time,
+          y: dataset.lfmc_mean,
+          name: ''+dataSeries[index].year,
+          mode: 'lines+markers',
+          connectgaps: true,
+          marker:{
+            size:3
+          }
+        };
+
+        traces.push(trace);
+
+      }
+
+      this.buildChart(traces);
+
+    })
+  }
 
   ngAfterViewInit() {
   }
@@ -242,7 +255,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
       var [row,col] = geo.toRowColumn(projected[0],projected[1]);
 
       if((row<0)||(row>=+ddx.variables.x.dimensions[0].size)||
-         (col<0)||(col>=+ddx.variables.y.dimensions[0].size)){
+        (col<0)||(col>=+ddx.variables.y.dimensions[0].size)){
         return null;
       }
 
