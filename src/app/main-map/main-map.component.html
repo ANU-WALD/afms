@@ -12,10 +12,30 @@
                               [longitude]="selectedCoordinates.lng"
                               [latitude]="selectedCoordinates.lat">
       </agm-marker>
+
+<!-- UNCOMMENT TO ENABLE UNDERLAY LAYER
+      <app-wms-layer *ngIf="wmsParametersSat" #wmsSat
+        [url]="wmsURL"
+        [params]="wmsParametersSat"
+        [opacity]="1.0"
+        [position]="0">
+      </app-wms-layer>
+
       <app-wms-layer #wms
         [url]="wmsURL"
         [params]="wmsParameters"
-        [opacity]="1.0">
+        [opacity]="1.0"
+        [position]="1">
+      </app-wms-layer>
+
+  AND REMOVE NEXT ELEMENT
+-->
+
+      <app-wms-layer #wms
+        [url]="wmsURL"
+        [params]="wmsParameters"
+        [opacity]="1.0"
+        [position]="0">
       </app-wms-layer>
 
       <agm-data-layer *ngIf="geoJsonObject"

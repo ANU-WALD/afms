@@ -27,6 +27,17 @@ export class MainMapComponent implements OnInit {
   layerVariable: string;
   chartHeight:number = 0;
 
+  initLayer(sat?:boolean):any{
+    return {
+      layers: this.layerVariable+(sat?'%3ASaturated':''),
+      time: `${this.selection.dateText(this.selection.effectiveDate())}T00%3A00%3A00.000Z`,
+      styles: "",
+      transparent: true,
+      tiled: true,
+      feature_count: 101
+    };
+  }
+
   constructor(private _wmsService: WMSService,
     _activatedRoute: ActivatedRoute,
     //private _csv:CSVService,
@@ -38,15 +49,8 @@ export class MainMapComponent implements OnInit {
       this.dateChanged(dateTxt);
     });
     this.wmsURL = BASE_URL;
-    this.wmsParameters = {
-      //        colorscalerange:"0.0001,100",
-      layers: this.layerVariable,
-      time: `${this.selection.dateText()}T00%3A00%3A00.000Z`,
-      styles: "",
-      transparent: true,
-      tiled: true,
-      feature_count: 101
-    }
+    this.wmsParameters = this.initLayer();
+    this.wmsParametersSat = this.initLayer(true);
 
     var view = mapView.current();
 
@@ -81,6 +85,7 @@ export class MainMapComponent implements OnInit {
 
   wmsURL: string;
   wmsParameters: any = {};
+  wmsParametersSat: any = null;
   wmsPalette: string = 'RdYlBu';
   wmsColourCount: number = 11;
   wmsReverse: boolean = true;
@@ -163,10 +168,21 @@ export class MainMapComponent implements OnInit {
 
   @ViewChild('mapDiv') mapDiv: Component;
   @ViewChild('wms') wmsLayer: WMSLayerComponent;
+  // UNCOMMENT to enable underlay layer
+  //  @ViewChild('wmsSat') wmsLayerSat: WMSLayerComponent;
+
+  updateLayers(){
+    this.wmsLayer.buildMap();
+
+    // UNCOMMENT to enable underlay layer
+    // this.wmsLayerSat.buildMap();
+  }
 
   dateChanged(dateText: string) {
     this.wmsParameters.time = `${dateText}T00%3A00%3A00.000Z`;
-    this.wmsLayer.buildMap();
+    this.wmsParametersSat.time = this.selection.dateText(this.selection.previousTimeStep());
+
+    this.updateLayers();
   }
 
   ngAfterViewInit() {
@@ -179,6 +195,7 @@ export class MainMapComponent implements OnInit {
   layerChanged(layer) {
     this.layerVariable = layer.variable;
     this.wmsParameters.layers = this.layerVariable;
+    this.wmsParametersSat.layers = this.layerVariable+'%3ASaturated';
     this.mapTitle = layer.name;
     this.mapUnits = layer.units;
     this.wmsPalette = layer.palette.name;
@@ -186,9 +203,7 @@ export class MainMapComponent implements OnInit {
     this.wmsReverse = layer.palette.reverse;
     this.wmsRange = layer.range;
 
-    this.wmsLayer.buildMap();
-
-    //    console.log(layer);
+    this.updateLayers();
   }
 
   changeCount:number =0;

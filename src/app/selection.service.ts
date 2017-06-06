@@ -3,6 +3,8 @@ import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {MapViewParameterService} from 'map-wald';
 
+const MILLISECONDS_PER_DAY=24*60*60*1000;
+
 @Injectable()
 export class SelectionService {
   _year:number = 2010;
@@ -11,7 +13,7 @@ export class SelectionService {
   _struct:any;
 
   timeStep:number=8;
-  MILLISECONDS_PER_DAY=24*60*60*1000;
+
 
   constructor(private mapView:MapViewParameterService,
               private _location: Location) {
@@ -56,8 +58,7 @@ export class SelectionService {
     return ''+n;
   }
 
-  dateText():string {
-    var d = this.effectiveDate();
+  dateText(d:Date):string {
     return `${d.getFullYear()}-${this.leading0(d.getMonth()+1)}-${this.leading0(d.getDate())}`;
   }
 
@@ -71,7 +72,7 @@ export class SelectionService {
 
   _fireDateChange() {
     this.updateURL();
-    this.dateChange.emit(this.dateText());
+    this.dateChange.emit(this.dateText(this.effectiveDate()));
   }
 
   updateURL(){
@@ -102,12 +103,21 @@ export class SelectionService {
   dateChange: EventEmitter<string> = new EventEmitter<string>();
 
   effectiveDate():Date{
-    var d = new Date(this._year,this._month-1,this._day,12);
+    return this.mostRecentTimestep(new Date(this._year,this._month-1,this._day,12));
+  }
+
+  previousTimeStep():Date{
+    var now = this.effectiveDate();
+    now.setDate(now.getDate()-1);
+    return this.mostRecentTimestep(now);
+  }
+
+  mostRecentTimestep(d:Date):Date{
     var newT = d.getTime();
-    var refT = new Date(this._year,0,1,12).getTime();
-    var deltaT = newT-refT;
-    var timeStep=(this.timeStep*this.MILLISECONDS_PER_DAY);
-    var offset=+((deltaT/timeStep).toFixed());
+    var refT = new Date(d.getFullYear(),0,1,12).getTime();
+    var deltaT = MILLISECONDS_PER_DAY/2 + newT-refT;
+    var timeStep=(this.timeStep*MILLISECONDS_PER_DAY);
+    var offset=+Math.floor(deltaT/timeStep);
 
     return new Date(refT+offset*timeStep);
   }
