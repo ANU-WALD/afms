@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "ng serve --port 9001 --aot false --proxy-config proxy.conf.json",
     "remote": "ng serve --port 9001 --host 0.0.0.0 --aot false --proxy-config proxy.conf.json",
-    "build":"if [[ $BRANCH == 'production' ]]; then export PREFIX='/afms/'; else export PREFIX='/afms/staging'; fi; npm run build-with-prefix",
+    "build":"if [[ $BRANCH == 'production' ]]; then export PREFIX='/afms/'; else export PREFIX='/afms/staging/'; fi; npm run build-with-prefix",
     "build-with-prefix": "ng build --prod --no-aot --base-href $PREFIX && npm run fix-plotly",
     "fix-plotly":"cp node_modules/plotly.js/dist/plotly.min.js dist/plotly.js && sed 's-../node_modules/plotly.js/dist-.-g' < dist/index.html > tmp && mv tmp dist/index.html",
     "test": "ng test",
