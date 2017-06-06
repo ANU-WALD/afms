@@ -26,13 +26,8 @@ describe('SelectionService', () => {
   }));
 
   it('should find the previous date', inject([SelectionService], (service: SelectionService) => {
-    service._year=2012;
-    service._month=1;
-    service._day=17;
-    expect(service.previousTimeStep()).toMatchDate(new Date(2012,0,9));
-
-    service._day=1;
-    expect(service.previousTimeStep()).toMatchDate(new Date(2011,11,27));
+    expect(service.previousTimeStep(new Date(2012,0,17))).toMatchDate(new Date(2012,0,9));
+    expect(service.previousTimeStep(new Date(2012,0,1))).toMatchDate(new Date(2011,11,27));
   }));
 
 });

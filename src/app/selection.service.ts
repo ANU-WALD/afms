@@ -106,8 +106,7 @@ export class SelectionService {
     return this.mostRecentTimestep(new Date(this._year,this._month-1,this._day,12));
   }
 
-  previousTimeStep():Date{
-    var now = this.effectiveDate();
+  previousTimeStep(now:Date):Date{
     now.setDate(now.getDate()-1);
     return this.mostRecentTimestep(now);
   }

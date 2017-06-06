@@ -177,7 +177,8 @@ export class MainMapComponent implements OnInit {
 
   dateChanged(dateText: string) {
     this.wmsParameters.time = `${dateText}T00%3A00%3A00.000Z`;
-    this.wmsParametersSat.time = this.selection.dateText(this.selection.previousTimeStep());
+    this.wmsParametersSat.time =
+      this.selection.dateText(this.selection.previousTimeStep(this.selection.date));
 
     this.updateLayers();
   }
