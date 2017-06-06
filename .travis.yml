@@ -11,7 +11,7 @@ script:
   - SCRIPTS_FN=src/environments/environment.prod.ts
   - sed "s/WENFO_GOOGLE_MAPS_API_KEY/$GOOGLE_MAPS_API_KEY/g" < $SCRIPTS_FN > tmp
   - mv tmp $SCRIPTS_FN
-  - $BRANCH=$TRAVIS_BRANCH npm run build
+  - BRANCH=$TRAVIS_BRANCH npm run build
 deploy:
   # deploy to "wenfo.org/afms/staging" on branch master
   - skip_cleanup: true
