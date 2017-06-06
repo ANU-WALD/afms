@@ -40,7 +40,6 @@ export class MainMapComponent implements OnInit {
 
   constructor(private _wmsService: WMSService,
     _activatedRoute: ActivatedRoute,
-    //private _csv:CSVService,
     private selection: SelectionService,
     private mapView:MapViewParameterService,
     private http: Http) {
@@ -155,8 +154,6 @@ export class MainMapComponent implements OnInit {
     };
 
   styleFunc(feature) {
-    //console.log(this.changeCount);
-    console.log(feature);
     return {
       clickable: true,
       fillOpacity: 0,
