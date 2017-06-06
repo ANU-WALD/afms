@@ -13,12 +13,18 @@ script:
   - mv tmp $SCRIPTS_FN
   - npm run build
 deploy:
-  # deploy to "wenfo.org/afms" (Aus. Flammability Monitoring System)
-  skip_cleanup: true
-  provider: script
-  script: bash -c "cd dist && find . -type f -exec curl -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org{} \;"
-  on:
+  # deploy to "wenfo.org/staging/afms" on branch master
+  - skip_cleanup: true
+    provider: script
+    script: bash -c "cd dist && find . -type f -exec curl -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org/staging/{} \;"
+    on:
       branch: master
+  # deploy to "wenfo.org/afms" on branch production
+  - skip_cleanup: true
+    provider: script
+    script: bash -c "cd dist && find . -type f -exec curl -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org{} \;"
+    on:
+      branch: production
 notifications:
   email: false
   slack:
