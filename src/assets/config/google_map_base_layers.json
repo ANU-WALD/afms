@@ -1,0 +1,14 @@
+{
+
+  "base_layers" : [
+    {
+      "map_type_id" : "roadmap",
+      "label" : "Road Map"
+    },
+    {
+      "map_type_id" : "satellite",
+      "label" : "Satellite"
+    }
+  ]
+  
+}

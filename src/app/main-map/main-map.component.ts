@@ -6,6 +6,7 @@ import { WMSService, WMSLayerComponent, MapViewParameterService } from 'map-wald
 import { SelectionService } from '../selection.service';
 import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.component';
 import {LatLng} from '../latlng';
+import { BaseLayer } from '../base-layer.service';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -26,6 +27,8 @@ export class MainMapComponent implements OnInit {
 
   layerVariable: string;
   chartHeight:number = 0;
+  baseLayer: BaseLayer;
+  testMapType: string = null;
 
   initLayer(sat?:boolean):any{
     return {
@@ -185,7 +188,6 @@ export class MainMapComponent implements OnInit {
 
   ngAfterViewInit() {
   }
-  theMap: any
 
   ngOnInit() {
   }
@@ -215,5 +217,9 @@ export class MainMapComponent implements OnInit {
       .subscribe((data) => {
         component.geoJsonObject = data;
       });
+  }
+
+  baseLayerChanged(layer: BaseLayer){
+    this.baseLayer = layer;
   }
 }

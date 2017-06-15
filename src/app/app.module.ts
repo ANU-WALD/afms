@@ -18,6 +18,7 @@ import { DateControlComponent } from './date-control/date-control.component';
 import { routes, routeParameters } from './router-config';
 import { VectorLayerSelectionComponent } from './vector-layer-selection/vector-layer-selection.component';
 import { SearchComponent } from './search/search.component';
+import { BaseLayerSelectionComponent } from './base-layer-selection/base-layer-selection.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { SearchComponent } from './search/search.component';
     DateControlComponent,
     LayerControlComponent,
     VectorLayerSelectionComponent,
-    SearchComponent
+    SearchComponent,
+    BaseLayerSelectionComponent
   ],
   imports: [
     BrowserModule,

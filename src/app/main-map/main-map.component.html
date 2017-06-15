@@ -3,6 +3,7 @@
       [(longitude)]="lng"
       [(zoom)]="zoom"
       [disableDefaultUI]="false"
+      [mapTypeId]="baseLayer?baseLayer.map_type_id : null"
       [zoomControl]="false"
       (mapClick)="mapClick($event)"
       (centerChange)="moved($event)"
@@ -13,24 +14,21 @@
                               [latitude]="selectedCoordinates.lat">
       </agm-marker>
 
-<!-- UNCOMMENT TO ENABLE UNDERLAY LAYER
       <app-wms-layer *ngIf="wmsParametersSat" #wmsSat
         [url]="wmsURL"
         [params]="wmsParametersSat"
-        [opacity]="1.0"
+        [opacity]="0.5"
         [position]="0">
       </app-wms-layer>
 
       <app-wms-layer #wms
         [url]="wmsURL"
         [params]="wmsParameters"
-        [opacity]="1.0"
+        [opacity]="0.5"
         [position]="1">
       </app-wms-layer>
 
-  AND REMOVE NEXT ELEMENT
--->
-
+<!--
       <app-wms-layer #wms
         [url]="wmsURL"
         [params]="wmsParameters"
@@ -43,6 +41,7 @@
                       (layerClick)="clicked($event)"
                       [style]="staticStyles">
       </agm-data-layer>
+-->
 
 <!--
       <app-map-control position="RIGHT_BOTTOM">
@@ -57,6 +56,7 @@
         <div>
           <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
           <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
+          <fmc-base-layer-selection (baseLayerChanged)="baseLayerChanged($event)"></fmc-base-layer-selection>
         </div>
       </map-control>
 

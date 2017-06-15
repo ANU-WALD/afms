@@ -1,0 +1,5 @@
+<div>
+  <select [(ngModel)]="selectedLayer" (ngModelChange)="layerChange($event)">
+    <option *ngFor="let layer of layers" [ngValue]="layer">{{layer.label}}</option>
+  </select>
+</div>
