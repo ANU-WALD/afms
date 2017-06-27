@@ -6,8 +6,9 @@ export class GeoTransform{
   }
 
   toRowColumn(x:number,y:number):Array<number>{
-    var col = Math.round((x-this.affine[0])/this.affine[1]);
-    var row = Math.round((y-this.affine[3])/this.affine[5]);
+    var col = (x-this.affine[0])/this.affine[1];
+    var row = (y-this.affine[3])/this.affine[5];
     return [row,col];
+//    return [Math.floor(row),Math.floor(col)];
   }
 }

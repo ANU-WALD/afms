@@ -104,17 +104,18 @@ export class TimeseriesService {
       .map(([allDAS,allGeo,allDDX])=>{
         return Observable.from(allGeo.map(([tileID,geotransform],i)=>{
           var [row,col] = geotransform.toRowColumn(projected[0],projected[1]);
+          col -= 0.5;
           var ddx = allDDX[i][1];
 
-          if((row<0)||(row>=+ddx.variables.x.dimensions[0].size)||
-            (col<0)||(col>=+ddx.variables.y.dimensions[0].size)){
+          if((row<0)||(Math.floor(row)>=+ddx.variables.x.dimensions[0].size)||
+            (col<0)||(Math.floor(col)>=+ddx.variables.y.dimensions[0].size)){
             return null;
           }
 
-          console.log('MATCH: '+tileID);
+//          console.log('MATCH: '+tileID,row,col);
           return {
             tile:tileID,
-            cell:[row,col]
+            cell:[Math.floor(row),Math.floor(col)]
           };
         }));
       }).switch().first(tc=>tc!==null);
