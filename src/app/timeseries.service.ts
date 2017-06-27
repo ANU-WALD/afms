@@ -52,6 +52,8 @@ export class TimeseriesService {
     }))
       .switch()
       .toArray()
+      .publishReplay()
+      .refCount();
   }
 
   constructor(private http:Http, ps:ProjectionService) { 
@@ -90,7 +92,7 @@ export class TimeseriesService {
         var geo = tmp.GeoTransform.trim().split(' ').map(s=>+s);
         return [tileID,new GeoTransform(geo)];
       });
-    });
+    }).publishReplay().refCount();
 
     this.ddx$ = this.getAllMetadata(pathsToTiles$,'ddx',dap.parseDDX);
   }
