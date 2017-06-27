@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
-import { ProjectionService } from "../../../map-wald/index";
+import { ProjectionService } from "map-wald/index";
 import { GeoTransform } from "app/charts/geotransform";
 import { LatLng } from "app/latlng";
 
@@ -119,7 +119,6 @@ export class TimeseriesService {
   }
 
   _match(key:string,pairs:Array<[string,any]>):any{
-    console.log(key,pairs);
     return pairs.find(([k,o])=>key===k)[1];
   }
 
