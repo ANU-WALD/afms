@@ -19,6 +19,7 @@ import { routes, routeParameters } from './router-config';
 import { VectorLayerSelectionComponent } from './vector-layer-selection/vector-layer-selection.component';
 import { SearchComponent } from './search/search.component';
 import { BaseLayerSelectionComponent } from './base-layer-selection/base-layer-selection.component';
+import { TimeseriesService } from './timeseries.service';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,7 @@ import { BaseLayerSelectionComponent } from './base-layer-selection/base-layer-s
     MapWaldModule.forRoot({paths:routeParameters}),
     RouterModule.forRoot(routes,{ useHash: true })
   ],
-  providers: [SelectionService],
+  providers: [SelectionService,TimeseriesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
