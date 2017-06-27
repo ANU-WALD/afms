@@ -18,6 +18,7 @@
         </agm-info-window>
       </agm-marker>
 
+<!--
       <app-wms-layer *ngIf="wmsParametersSat" #wmsSat
         [url]="wmsURL"
         [params]="wmsParametersSat"
@@ -31,8 +32,7 @@
         [opacity]="0.5"
         [position]="1">
       </app-wms-layer>
-
-<!--
+-->
       <app-wms-layer #wms
         [url]="wmsURL"
         [params]="wmsParameters"
@@ -45,7 +45,6 @@
                       (layerClick)="clicked($event)"
                       [style]="staticStyles">
       </agm-data-layer>
--->
 
 <!--
       <app-map-control position="RIGHT_BOTTOM">
