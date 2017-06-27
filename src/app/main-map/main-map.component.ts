@@ -7,6 +7,7 @@ import { SelectionService } from '../selection.service';
 import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.component';
 import {LatLng} from '../latlng';
 import { BaseLayer } from '../base-layer.service';
+import { TimeseriesService } from "../timeseries.service";
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -45,7 +46,9 @@ export class MainMapComponent implements OnInit {
     _activatedRoute: ActivatedRoute,
     private selection: SelectionService,
     private mapView:MapViewParameterService,
-    private http: Http) {
+    private http: Http,
+    private timeseries:TimeseriesService) {
+
     this.selection.loadFromURL(_activatedRoute);
     this.selection.dateChange.subscribe((dateTxt: string) => {
       this.dateChanged(dateTxt);
@@ -58,7 +61,6 @@ export class MainMapComponent implements OnInit {
 
     var coords = decodeURIComponent(view.coords)
     if(coords&&(coords!=='_')){
-//      console.log(coords);
       var coordArray = coords.split(',').map(s=>+s);
       this.selectLocation(this.constrain({
         lat:coordArray[0],
@@ -102,6 +104,8 @@ export class MainMapComponent implements OnInit {
   geoJsonObject: Object = null;
   vectorLayer:VectorLayer;
   selectedCoordinates:LatLng;
+  currentYearDataForLocation:any;
+  currentValue:any;
 
   mapClick(clickEvent){
     this.selectLocation({
@@ -145,8 +149,42 @@ export class MainMapComponent implements OnInit {
     this.selectedCoordinates=coords;
     this.mapView.update({coords:`${coords.lat.toFixed(3)},${coords.lng.toFixed(3)}`});
     this.chartHeight=150;
+
+    this.updateTimeSeries();
   }
 
+  updateTimeSeries(){
+    if(this.currentYearDataForLocation&&(this.currentYearDataForLocation.coords===this.selectedCoordinates)&&
+       (this.currentYearDataForLocation.year===this.selection.year)){
+      this.updateMarker();
+      return;
+    }
+    this.currentValue=null;
+
+    var coords = this.selectedCoordinates;
+    var year = this.selection.year;
+    this.timeseries.getTimeSeries(coords,year)
+
+      .subscribe(dapData=>{
+        if((year!==this.selection.year)||(coords!==this.selectedCoordinates)){
+          return; // Reject the data
+        }
+        this.currentYearDataForLocation=dapData;
+        this.currentYearDataForLocation.year = year;
+        this.currentYearDataForLocation.coords = coords;
+        this.updateMarker();
+      });
+  }
+
+  updateMarker(){
+    var now = this.selection.effectiveDate();
+    var deltas = this.currentYearDataForLocation.time.map(t=>Math.abs(t.getTime()-now.getTime()));
+    var closest = deltas.indexOf(Math.min(...deltas));
+    this.currentValue = this.currentYearDataForLocation.lfmc_mean[closest];
+    if(this.currentValue===null){
+      this.currentValue='-';
+    }
+  }
 
   staticStyles:any={
       clickable: true,
@@ -181,7 +219,7 @@ export class MainMapComponent implements OnInit {
   dateChanged(dateText: string) {
     this.wmsParameters.time = `${dateText}T00%3A00%3A00.000Z`;
     this.wmsParametersSat.time =
-      this.selection.dateText(this.selection.previousTimeStep(this.selection.date));
+      this.selection.dateText(this.selection.previousTimeStep(this.selection.effectiveDate()));
 
     this.updateLayers();
   }
