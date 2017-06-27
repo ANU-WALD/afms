@@ -11,7 +11,11 @@
 
       <agm-marker *ngIf="selectedCoordinates"
                               [longitude]="selectedCoordinates.lng"
-                              [latitude]="selectedCoordinates.lat">
+                              [latitude]="selectedCoordinates.lat"
+                              [openInfoWindow]="true">
+        <agm-info-window [disableAutoPan]="true" [isOpen]="true">
+          <strong>{{currentValue}}</strong>
+        </agm-info-window>
       </agm-marker>
 
       <app-wms-layer *ngIf="wmsParametersSat" #wmsSat
