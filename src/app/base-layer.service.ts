@@ -14,7 +14,7 @@ export class BaseLayerService {
   constructor(private http: Http) { 
     this.layers = http.get("assets/config/google_map_base_layers.json")
                       .toPromise()
-                      .then(response => response.json().base_layers as BaseLayer[])
+                      .then(response => response.json().base_layers as BaseLayer[]);
   }
 
   getLayers(): Promise<BaseLayer[]> {
