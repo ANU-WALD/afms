@@ -9,9 +9,9 @@ import { GeoTransform } from './geotransform'
 //import * as proj4 from 'proj4';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
-//const Plotly = require('plotly.js');
-declare var Plotly:any;
-
+//import * as Plotly from '../../../node_modules/plotly.js/dist/plotly-basic';
+//declare var Plotly:any;
+const Plotly = require('plotly.js/dist/plotly-basic');
 
 const CHART_YEARS = 4;
 
