@@ -37,7 +37,7 @@
     "map-wald": "ANU-WALD/map-wald",
     "plotly.js": "^1.25.1",
     "rxjs": "^5.1.0",
-    "typescript": "^2.2.2",
+    "typescript": "2.3.4",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -57,6 +57,6 @@
     "protractor": "~5.1.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
-    "typescript": "~2.2.0"
+    "typescript": "2.3.4"
   }
 }
