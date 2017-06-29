@@ -1,0 +1,5 @@
+<div>
+  <select [(ngModel)]="selectedOpacity" (ngModelChange)="opacityChange($event)">
+    <option *ngFor="let opacity of opacities" [ngValue]="opacity">{{opacity.label}}</option>
+  </select>
+</div>

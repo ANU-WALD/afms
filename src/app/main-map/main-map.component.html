@@ -36,7 +36,7 @@
       <app-wms-layer #wms
         [url]="wmsURL"
         [params]="wmsParameters"
-        [opacity]="1.0"
+        [opacity]="layerOpacity"
         [position]="0">
       </app-wms-layer>
 
@@ -60,6 +60,8 @@
           <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
           <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
           <fmc-base-layer-selection (baseLayerChanged)="baseLayerChanged($event)"></fmc-base-layer-selection>
+          <fmc-layer-opacity-selector (opacityChanged)="opacityChanged($event)">
+          </fmc-layer-opacity-selector>
         </div>
       </map-control>
 

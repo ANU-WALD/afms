@@ -30,6 +30,7 @@ export class MainMapComponent implements OnInit {
   chartHeight:number = 0;
   baseLayer: BaseLayer;
   testMapType: string = null;
+  layerOpacity: number = 1.0;
 
   initLayer(sat?:boolean):any{
     return {
@@ -259,5 +260,9 @@ export class MainMapComponent implements OnInit {
 
   baseLayerChanged(layer: BaseLayer){
     this.baseLayer = layer;
+  }
+
+  opacityChanged(opacity: number){
+    this.layerOpacity = opacity;
   }
 }

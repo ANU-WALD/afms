@@ -20,6 +20,7 @@ import { VectorLayerSelectionComponent } from './vector-layer-selection/vector-l
 import { SearchComponent } from './search/search.component';
 import { BaseLayerSelectionComponent } from './base-layer-selection/base-layer-selection.component';
 import { TimeseriesService } from './timeseries.service';
+import { LayerOpacitySelectorComponent } from './layer-opacity-selector/layer-opacity-selector.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { TimeseriesService } from './timeseries.service';
     LayerControlComponent,
     VectorLayerSelectionComponent,
     SearchComponent,
-    BaseLayerSelectionComponent
+    BaseLayerSelectionComponent,
+    LayerOpacitySelectorComponent
   ],
   imports: [
     BrowserModule,
