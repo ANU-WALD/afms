@@ -111,14 +111,20 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
         // each other rather than shown sequentially
         dataset.time = dataset.time.map(d=>new Date(d.setFullYear(selectedYear)));
 
+        var color=+index?'rgb(229,242,248)':'rgb(85,115,181)';
         var trace = {
           x: dataset.time,
           y: dataset.lfmc_mean,
           name: ''+dataSeries[index].year,
           mode: 'lines+markers',
           connectgaps: true,
+
           marker:{
-            size:3
+            size:+index?4:6,
+            color:color
+          },
+          line:{
+            color:color
           }
         };
 
@@ -126,6 +132,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
 
       }
 
+      traces.reverse();
       this.buildChart(traces);
 
     })
@@ -148,11 +155,15 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
         b:20
       },
       xaxis:{
-        tickformat:'%d/%b'
+        tickformat:'%d/%b',
+      },
+      yaxis:{
+        hoverformat:'.2f'
       },
       height:this.height,
       width:width,
-      title:`Fuel Moisture Content at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`
+      title:`Fuel Moisture Content at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
+      showlegend:false
     },
     {
       displaylogo: false,
