@@ -21,6 +21,7 @@ import { SearchComponent } from './search/search.component';
 import { BaseLayerSelectionComponent } from './base-layer-selection/base-layer-selection.component';
 import { TimeseriesService } from './timeseries.service';
 import { LayerOpacitySelectorComponent } from './layer-opacity-selector/layer-opacity-selector.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { LayerOpacitySelectorComponent } from './layer-opacity-selector/layer-op
     VectorLayerSelectionComponent,
     SearchComponent,
     BaseLayerSelectionComponent,
-    LayerOpacitySelectorComponent
+    LayerOpacitySelectorComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +47,7 @@ import { LayerOpacitySelectorComponent } from './layer-opacity-selector/layer-op
     MapWaldModule.forRoot({paths:routeParameters}),
     RouterModule.forRoot(routes,{ useHash: true })
   ],
+  entryComponents: [AboutComponent],
   providers: [SelectionService,TimeseriesService],
   bootstrap: [AppComponent]
 })
