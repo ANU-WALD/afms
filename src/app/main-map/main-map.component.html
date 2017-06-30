@@ -1,4 +1,4 @@
-<div class="main-map" [style.bottom]="(50+chartHeight)+'px'">
+<div class="main-map">
     <agm-map [(latitude)]="lat"
       [(longitude)]="lng"
       [(zoom)]="zoom"
@@ -51,27 +51,45 @@
       </app-map-control>
 -->
       <map-control position="TOP_LEFT">
-        <app-date-control></app-date-control>
-        <fmc-search (coordinatesSelected)="moveAndZoom($event)"></fmc-search>
+        <div class="card">
+          <div class="card-block">
+            <app-date-control></app-date-control>
+            <fmc-search (coordinatesSelected)="moveAndZoom($event)"></fmc-search>
+          </div>
+        </div>
       </map-control>
 
       <map-control position="TOP_RIGHT">
-        <div>
-          <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
-          <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
-          <fmc-base-layer-selection (baseLayerChanged)="baseLayerChanged($event)"></fmc-base-layer-selection>
-          <fmc-layer-opacity-selector (opacityChanged)="opacityChanged($event)">
-          </fmc-layer-opacity-selector>
+        <div class="card">
+          <div class="card-block">
+            <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
+            <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
+            <fmc-base-layer-selection (baseLayerChanged)="baseLayerChanged($event)"></fmc-base-layer-selection>
+            <fmc-layer-opacity-selector (opacityChanged)="opacityChanged($event)">
+            </fmc-layer-opacity-selector>
+          </div>
         </div>
       </map-control>
 
       <map-control position="LEFT_BOTTOM">
-        <map-legend [title]="mapTitle"
-                    [mapUnits]="mapUnits"
-                    [cbPalette]="wmsPalette"
-                    [cbCount]="wmsColourCount"
-                    [cbReverse]="wmsReverse"
-                    [cbRange]="wmsRange"></map-legend>
+        <div class="card">
+          <div class="card-block">
+            <map-legend [title]="mapTitle"
+                        [mapUnits]="mapUnits"
+                        [cbPalette]="wmsPalette"
+                        [cbCount]="wmsColourCount"
+                        [cbReverse]="wmsReverse"
+                        [cbRange]="wmsRange"></map-legend>
+          </div>
+        </div>
+      </map-control>
+
+      <map-control position="BOTTOM_CENTER">
+        <div class="chart-map-control" [style.width]>
+          <app-charts [coordinates]="selectedCoordinates"
+                      [year] = "selection.year"
+                      [height]="chartHeight" ></app-charts>
+        </div>
       </map-control>
 
     </agm-map>
@@ -101,12 +119,4 @@
           [editable]="true">
       </sebm-google-map-circle>
     -->
-</div>
-
-<div class="main-chart"
-     [style.bottom]="'50px'"
-     [style.height]="chartHeight+'px'">
-  <app-charts [coordinates]="selectedCoordinates"
-              [year] = "selection.year"
-              [height]="chartHeight"></app-charts>
 </div>
