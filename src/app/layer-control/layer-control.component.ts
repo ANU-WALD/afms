@@ -20,7 +20,7 @@ export class LayerControlComponent implements OnInit {
     _http.get("assets/config/layers.json").toPromise().then(resp=>{
       var json = resp.json();
       var layers:Array<any> = json.layers;
-      this.layers = layers.map(l=>new FMCLayer(l.name,l.units,l.icon,l.wms_layer,l.palette,l.range));
+      this.layers = layers.map(l=>new FMCLayer(l.name,l.units,l.icon,l.wms_layer,l.palette,l.range,l.description));
 
       var params = this.mapView.current();
       if(params.layer&&params.layer!=='_'){
@@ -43,20 +43,22 @@ export class LayerControlComponent implements OnInit {
   }
 }
 
-class FMCLayer{
+export class FMCLayer{
   icon:string;
   name:string;
   variable:string;
   palette:any;
   range:Array<number>;
   units:string;
+  description:string;
 
-  constructor(name:string,units:string,icon:string,variable:string,palette:any,range:Array<number>){
+  constructor(name:string,units:string,icon:string,variable:string,palette:any,range:Array<number>,description:string){
     this.name=name;
     this.units=units;
     this.icon=icon;
     this.variable=variable;
     this.palette=palette;
     this.range=range;
+    this.description=description;
   }
 }

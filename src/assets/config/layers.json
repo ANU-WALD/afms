@@ -9,7 +9,8 @@
       "count": 9,
       "reverse": false
     },
-    "range": [0, 140]
+    "range": [0, 140],
+    "description":"Fuel Moisture Content (%) amount of water in the fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU)."
   }, {
     "name": "Flammability",
     "units": "units",
@@ -31,6 +32,7 @@
       "count": 11,
       "reverse": true
     },
-    "range": [0, 50]
+    "range": [0, 50],
+    "description":"Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU)."
   }]
 }

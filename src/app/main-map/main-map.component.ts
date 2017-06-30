@@ -13,6 +13,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
+import { FMCLayer } from "app/layer-control/layer-control.component";
 
 //const BASE_URL='http://gsky-dev.nci.org.au/ows';
 const BASE_URL='http://gsky-test.nci.org.au/ows';
@@ -97,6 +98,7 @@ export class MainMapComponent implements OnInit {
   wmsRange: Array<number> = [0, 255];
   mapUnits: string = 'units';
   mapTitle: string = 'Fuel Moisture Content';
+  mapHelpText: string = '';
 
   // initial center position for the map
   lat: number = -22.673858;
@@ -231,11 +233,12 @@ export class MainMapComponent implements OnInit {
   ngOnInit() {
   }
 
-  layerChanged(layer) {
+  layerChanged(layer:FMCLayer) {
     this.layerVariable = layer.variable;
     this.wmsParameters.layers = this.layerVariable;
     this.wmsParametersSat.layers = this.layerVariable+'%3ASaturated';
     this.mapTitle = layer.name;
+    this.mapHelpText = layer.description;
     this.mapUnits = layer.units;
     this.wmsPalette = layer.palette.name;
     this.wmsColourCount = layer.palette.count;
