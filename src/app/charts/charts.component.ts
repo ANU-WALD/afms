@@ -154,7 +154,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
     Plotly.plot( node, series, {
       margin: {
         t:30,
-        l:25,
+        l:45,
         r:10,
         b:20
       },
@@ -162,11 +162,12 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
         tickformat:'%d/%b',
       },
       yaxis:{
-        hoverformat:'.2f'
+        hoverformat:'.2f',
+        title:'%'
       },
       height:this.height,
       width:width,
-      title:`Fuel Moisture Content at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
+      title:`Fuel Moisture Content (%) at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
       showlegend:false
     },
     {
