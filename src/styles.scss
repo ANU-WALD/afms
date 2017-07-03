@@ -15,7 +15,12 @@ $crc-yellow:rgb(245,221,37);
   .navbar-brand{
     color:black;
   }
+
+  .navbar-brand:hover{
+    color:black;
+  }
 }
+
 
 .main-map{
   position:fixed;
