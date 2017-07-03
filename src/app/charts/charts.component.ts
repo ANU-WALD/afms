@@ -103,7 +103,6 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
     Observable.forkJoin(observables).forEach((data:any)=>{
 
       var traces = [];
-
       for (let index in data) {
         var dataset = data[index];
 
@@ -145,6 +144,11 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
   buildChart(series:Array<any>){
     var node = this._element.nativeElement.querySelector('.our-chart');
     var width:number=this._element.nativeElement.parentNode.clientWidth;
+
+    if(!width){ // TODO: HACK
+      setTimeout(()=>this.buildChart(series),500);
+    }
+
     Plotly.purge(node);
 
     Plotly.plot( node, series, {
