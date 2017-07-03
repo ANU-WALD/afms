@@ -1,5 +1,6 @@
 {
   "layers": [{
+    "source":"gsky",
     "name": "Fuel Moisture Content",
     "units": "%",
     "icon": "fa-tint",
@@ -12,17 +13,7 @@
     "range": [0, 140],
     "description":"Fuel Moisture Content (%) amount of water in the fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU)."
   }, {
-    "name": "Flammability",
-    "units": "units",
-    "icon": "fa-fire",
-    "wms_layer": "unknown",
-    "palette": {
-      "name": "RdYlBu",
-      "count": 11,
-      "reverse": false
-    },
-    "range": [0,100]
-  }, {
+    "source":"gsky",
     "name": "Uncertainty",
     "units": "%",
     "icon": "fa-percent",
