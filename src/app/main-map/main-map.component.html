@@ -51,18 +51,16 @@
       <app-map-control position="RIGHT_BOTTOM">
       </app-map-control>
 -->
-      <map-control position="TOP_LEFT" zIndex="1">
-        <div class="card">
-          <div class="card-block">
+      <map-control position="TOP_LEFT" class="test">
+        <div class="card dateSearchCard map-control">
+          <div class="card-block control-card-content">
             <app-date-control></app-date-control>
             <fmc-search (coordinatesSelected)="moveAndZoom($event)"></fmc-search>
           </div>
         </div>
-      </map-control>
 
-      <map-control position="LEFT_TOP">
-        <div class="card">
-          <div class="card-block">
+        <div class="card layerSelectorCard map-control">
+          <div class="card-block control-card-content">
             <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
             <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
             <fmc-base-layer-selection (baseLayerChanged)="baseLayerChanged($event)"></fmc-base-layer-selection>
@@ -73,8 +71,8 @@
       </map-control>
 
       <map-control position="LEFT_BOTTOM">
-        <div class="card">
-          <div class="card-block">
+        <div class="card map-control">
+          <div class="card-block control-card-content">
             <map-legend [title]="mapTitle"
                         [mapUnits]="mapUnits"
                         [cbPalette]="wmsPalette"
@@ -86,10 +84,25 @@
       </map-control>
 
       <map-control position="BOTTOM_CENTER">
-        <div class="chart-map-control" [style.width]>
-          <app-charts [coordinates]="selectedCoordinates"
-                      [year] = "selection.year"
-                      [height]="chartHeight" ></app-charts>
+        <div class="card map-control chart">
+          <a (click)="chartIsCollapsed = !chartIsCollapsed">
+            <div class="card-header">
+              <h6 class="mb-0">
+                Chart 
+                <span *ngIf="chartIsCollapsed" class="fa fa-angle-up
+                  collapse-arrow" aria-hidden="true"></span>
+                <span *ngIf="!chartIsCollapsed" class="fa fa-angle-down
+                  collapse-arrow" aria-hidden="true"></span>
+              </h6>
+            </div>
+          </a>
+          
+          <div class="ngbCollapse" [ngbCollapse]="chartIsCollapsed">
+            <div class="card-block control-card-content">
+              <app-charts [coordinates]="selectedCoordinates"
+                          [year] = "selection.year" ></app-charts>
+            </div>
+          </div>
         </div>
       </map-control>
 

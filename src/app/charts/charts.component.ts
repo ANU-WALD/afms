@@ -23,7 +23,6 @@ const CHART_YEARS = 4;
 })
 export class ChartsComponent implements AfterViewInit, OnChanges {
   @Input() coordinates:LatLng;
-  @Input() height:number;
   @Input() year: number;
 
   havePlot:boolean=false;
@@ -143,11 +142,12 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
 
   buildChart(series:Array<any>){
     var node = this._element.nativeElement.querySelector('.our-chart');
-    var width:number=this._element.nativeElement.parentNode.clientWidth;
+    var width:number=this._element.nativeElement.clientWidth;
+    var height:number=this._element.nativeElement.clientHeight;
 
-    if(!width){ // TODO: HACK
-      setTimeout(()=>this.buildChart(series),500);
-    }
+    //if(!width){ // TODO: HACK
+    //  setTimeout(()=>this.buildChart(series),500);
+    //}
 
     Plotly.purge(node);
 
@@ -165,7 +165,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
         hoverformat:'.2f',
         title:'%'
       },
-      height:this.height,
+      height:height,
       width:width,
       title:`Fuel Moisture Content (%) at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
       showlegend:false

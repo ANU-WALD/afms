@@ -3,5 +3,29 @@
   width: 100%;
 }
 
-.chart-map-control {
+.card.map-control {
+  border-color: #000000;
+  margin: 5px;
+  box-shadow: 1px 1px 1px #888888;
+}
+
+.card.chart {
+  width: 700px;
+}
+
+.control-card-content {
+  padding: 10px;
+}
+
+.dateSearchCard {
+  z-index: 2;
+}
+
+.layerSelectorCard {
+  z-index: 1;
+  width: 200px;
+}
+
+.collapse-arrow {
+  float: right;
 }

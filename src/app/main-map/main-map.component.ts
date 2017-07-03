@@ -5,7 +5,7 @@ import { GoogleMapsAPIWrapper } from '@agm/core/services';
 import { WMSService, WMSLayerComponent, MapViewParameterService } from 'map-wald';
 import { SelectionService } from '../selection.service';
 import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.component';
-import {LatLng} from '../latlng';
+import { LatLng } from '../latlng';
 import { BaseLayer } from '../base-layer.service';
 import { TimeseriesService } from "../timeseries.service";
 
@@ -28,10 +28,10 @@ const BASE_URL='http://gsky-test.nci.org.au/ows';
 export class MainMapComponent implements OnInit {
 
   layerVariable: string;
-  chartHeight:number = 0;
   baseLayer: BaseLayer;
   testMapType: string = null;
   layerOpacity: number = 1.0;
+  chartIsCollapsed: boolean = true;
 
   initLayer(sat?:boolean):any{
     return {
@@ -115,6 +115,7 @@ export class MainMapComponent implements OnInit {
       lng:clickEvent.coords.lng,
       lat:clickEvent.coords.lat
     });
+    this.chartIsCollapsed = false;
   }
 
   clicked(clickEvent) {
@@ -122,6 +123,7 @@ export class MainMapComponent implements OnInit {
       lng:clickEvent.latLng.lng(),
       lat:clickEvent.latLng.lat()
     });
+    this.chartIsCollapsed = false;
   }
 
   moveAndZoom(coords:LatLng){
@@ -151,7 +153,6 @@ export class MainMapComponent implements OnInit {
   selectLocation(coords:LatLng){
     this.selectedCoordinates=coords;
     this.mapView.update({coords:`${coords.lat.toFixed(3)},${coords.lng.toFixed(3)}`});
-    this.chartHeight=150;
 
     this.updateTimeSeries();
   }
