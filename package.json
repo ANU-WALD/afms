@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "ng serve --port 9001 --aot false --proxy-config proxy.conf.json",
     "remote": "ng serve --port 9001 --host 0.0.0.0 --aot false --proxy-config proxy.conf.json",
-    "build": "if [[ $BRANCH == 'production' ]]; then export PREFIX='/afms/'; else export PREFIX='/afms/staging/'; fi; npm run build-with-prefix",
+    "build": "if [ $BRANCH = 'production' ]; then export PREFIX='/afms/'; else export PREFIX='/afms/staging/'; fi; npm run build-with-prefix",
     "build-with-prefix": "echo prefix=$PREFIX && ng build --prod --no-aot --base-href $PREFIX",
     "deprecated-build": "npm run transpile-plotly && npm run fix-plotly",
     "transpile-plotly": "mkdir -p plotly-transpiled && browserify node_modules/typedarray/index.js -o plotly-transpiled/typedarray.js && cd node_modules/plotly.js/dist && babel -d ../../../plotly-transpiled plotly.js plotly.min.js",
