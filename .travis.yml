@@ -6,6 +6,8 @@ install:
   - npm install
   - gem install compass
 script:
+  - npm config ls -l
+  - npm config set shell /bin/bash
   - echo $TRAVIS_BRANCH
   - node --version
   - ng version
