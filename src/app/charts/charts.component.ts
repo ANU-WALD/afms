@@ -9,12 +9,9 @@ import { GeoTransform } from './geotransform'
 //import * as proj4 from 'proj4';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
-//import * as Plotly from '../../../node_modules/plotly.js/dist/plotly-basic';
-//declare var Plotly:any;
-const Plotly = require('plotly.js/dist/plotly-basic');
+import * as Plotly from 'plotly.js/dist/plotly-basic';
 
 const CHART_YEARS = 4;
-
 
 @Component({
   selector: 'app-charts',
@@ -113,7 +110,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
         var trace = {
           x: dataset.time,
           y: dataset.lfmc_mean,
-          name: ''+dataSeries[index].year,
+          name: dataSeries[index].year.toString(),
           mode: 'lines+markers',
           connectgaps: true,
 
