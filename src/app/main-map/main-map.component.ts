@@ -13,7 +13,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
-import { FMCLayer } from "app/layer-control/layer-control.component";
+import { FMCLayer, DateRange } from "app/layer-control/layer-control.component";
 
 //const BASE_URL='http://gsky-dev.nci.org.au/ows';
 const BASE_URL='http://gsky-test.nci.org.au/ows';
@@ -109,6 +109,8 @@ export class MainMapComponent implements OnInit {
   selectedCoordinates:LatLng;
   currentYearDataForLocation:any;
   currentValue:any;
+
+  dateRange = new DateRange();
 
   mapClick(clickEvent){
     this.selectLocation({
@@ -246,6 +248,8 @@ export class MainMapComponent implements OnInit {
     this.wmsReverse = layer.palette.reverse;
     this.wmsRange = layer.range;
 
+    this.dateRange = layer.timePeriod;
+    this.selection.range = this.dateRange;
     this.updateLayers();
   }
 
