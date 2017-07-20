@@ -179,6 +179,9 @@ export class MainMapComponent implements OnInit {
         this.currentYearDataForLocation.year = year;
         this.currentYearDataForLocation.coords = coords;
         this.updateMarker();
+      },
+      error=>{
+        console.log(error);
       });
   }
 
