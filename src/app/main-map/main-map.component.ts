@@ -63,18 +63,23 @@ export class MainMapComponent implements OnInit {
 
     var coords = decodeURIComponent(view.coords)
     if(coords&&(coords!=='_')){
-      var coordArray = coords.split(',').map(s=>+s);
-      this.selectLocation(this.constrain({
-        lat:coordArray[0],
-        lng:coordArray[1]
-      }));
+      var coordArray = coords.split(',').map(s=>+s).filter(isNaN);
+      if(coordArray.length===2){
+        this.selectLocation(this.constrain({
+          lat:coordArray[0],
+          lng:coordArray[1]
+        }));
+      }
     }
 
     if(!((view.lat==='_')||(view.lng==='_')||(view.zm==='_'))){
-      var ll = this.constrain(<LatLng>view);
-      this.lat=ll.lat;
-      this.lng=ll.lng;
-      this.zoom=+view.zm;
+      if(!isNaN(view.lat)||!isNaN(view.lng)){
+        var ll = this.constrain(<LatLng>view);
+
+        this.lat=ll.lat;
+        this.lng=ll.lng;
+        this.zoom=+view.zm;
+      }
     }
   }
 
