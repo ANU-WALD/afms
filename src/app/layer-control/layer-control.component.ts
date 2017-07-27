@@ -20,7 +20,8 @@ export class LayerControlComponent implements OnInit {
     _http.get("assets/config/layers.json").toPromise().then(resp=>{
       var json = resp.json();
       var layers:Array<any> = json.layers;
-      this.layers = layers.map(l=>new FMCLayer(l.name,l.units,l.icon,l.wms_layer,l.palette,l.range,l.description));
+      this.layers = layers.map(l=>new FMCLayer(l.name,l.units,l.icon,l.wms_layer,l.palette,
+                                               l.range,l.description,DateRange.fromJSON(l.timeperiod)));
 
       var params = this.mapView.current();
       if(params.layer&&params.layer!=='_'){
@@ -51,8 +52,10 @@ export class FMCLayer{
   range:Array<number>;
   units:string;
   description:string;
+  timePeriod:DateRange;
 
-  constructor(name:string,units:string,icon:string,variable:string,palette:any,range:Array<number>,description:string){
+  constructor(name:string,units:string,icon:string,variable:string,palette:any,
+              range:Array<number>,description:string,timeperiod:DateRange){
     this.name=name;
     this.units=units;
     this.icon=icon;
@@ -60,5 +63,40 @@ export class FMCLayer{
     this.palette=palette;
     this.range=range;
     this.description=description;
+    this.timePeriod = timeperiod;
   }
 }
+
+export class DateRange{
+  start:Date;
+  end:Date;
+
+  static dateFromConfig(json:any,end?:boolean):Date{
+    if(!json){
+      return new Date();
+    }
+
+    if('number' === typeof json){
+      if(end){
+        return new Date(json,11,31);
+      }
+
+      return new Date(json,0,1);
+    }
+
+    // ? expect a string and parse out dd/mm/yyyy?
+    var [yyyy,mm,dd] = json.split('/').map(elem=>+elem);
+    return new Date(yyyy,mm-1,dd);
+  }
+
+  static fromJSON(json:any):DateRange{
+    var result = new DateRange();
+    result.start = DateRange.dateFromConfig(json.start);
+    result.end = DateRange.dateFromConfig(json.end,true);
+    return result;
+  }
+}
+
+
+//http://130.56.242.21/ows?&service=WMS&version=1.1.1&request=GetMap&BBOX=16123932.49458821676671504974,-4304933.43302112631499767303,16202204.01155224069952964783,-4226661.9160571051761507988&FORMAT=image/png&layers=Fenner%3AFMC%3ANonInterp&time=2010-09-14T00%3A00%3A00.000Z&styles=&transparent=true&tiled=true&feature_count=101&width=512&height=512&SRS=EPSG:3857
+

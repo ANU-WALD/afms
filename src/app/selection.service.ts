@@ -2,15 +2,19 @@ import { Injectable, EventEmitter } from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {MapViewParameterService} from 'map-wald';
+import {DateRange} from "app/layer-control/layer-control.component";
+import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
 const MILLISECONDS_PER_DAY=24*60*60*1000;
 
 @Injectable()
 export class SelectionService {
-  _year:number = 2010;
-  _month:number = 9;
-  _day:number = 22;
-  _struct:any;
+  _struct:NgbDateStruct={
+    day:22,
+    month:9,
+    year:2010
+  };
+  _range:DateRange;
 
   timeStep:number=8;
 
@@ -21,34 +25,55 @@ export class SelectionService {
 
   loadFromURL(route:ActivatedRoute){
     var params = this.mapView.retrieveFromRoute(route);
-    this.year = +params.yyyy||this.year;
-    this.month = +params.mm||this.month;
-    this.day = +params.dd||this.day;
+    this._struct = {
+      day:+params.dd||this.day,
+      month:+params.mm||this.month,
+      year:+params.yyyy||this.year
+    }
     this._fireDateChange();
   }
 
-  get year():number {return this._year;}
-  get month():number {return this._month;}
-  get day():number {return this._day;}
+  get year():number {return this._struct.year;}
+  get month():number {return this._struct.month;}
+  get day():number {return this._struct.day;}
 
-  set year(v:number) { this._year=v; this._buildStruct(); this._fireDateChange();}
-  set month(v:number) { this._month=v; this._buildStruct(); this._fireDateChange();}
-  set day(v:number) { this._day=v; this._buildStruct(); this._fireDateChange();}
 
-  get date():any{
-    if(!this._struct){
-      this._buildStruct();
-    }
+  get date():NgbDateStruct{
     return this._struct;
   }
 
-  set date(d:any){
-    console.log(d);
+  set date(d:NgbDateStruct){
     this._struct=d;
-    this._year = d.year;
-    this._month = d.month;
-    this._day = d.day;
+    this.constrain();
     this._fireDateChange();
+  }
+
+  private goto(d:Date){
+    this._struct = this.convertDate(d);
+  }
+
+  get range():DateRange{ return this._range; }
+  set range(dr:DateRange){
+    this._range = dr;
+    this.constrain();
+    this._fireDateChange();
+  }
+
+  constrain(){
+    if(!this.range){
+      return;
+    }
+
+    var now = this.effectiveDate();
+    if(now<this.range.start){
+      this.goto(this.range.start);
+      return;
+    }
+
+    if(now>this.range.end){
+      this.goto(this.range.end);
+      return;
+    }
   }
 
   leading0(n:number):string {
@@ -60,14 +85,6 @@ export class SelectionService {
 
   dateText(d:Date):string {
     return `${d.getFullYear()}-${this.leading0(d.getMonth()+1)}-${this.leading0(d.getDate())}`;
-  }
-
-  _buildStruct(){
-    this._struct = {
-      year:this._year,
-      month:this._month,
-      day:this.day
-    };
   }
 
   _fireDateChange() {
@@ -83,27 +100,34 @@ export class SelectionService {
     };
 
     this.mapView.update(params);
-//    var newURL=this.mapView.constructRoute(params);
-//    this._location.go(newURL);
+  }
+
+  convertDate(d:Date):NgbDateStruct{
+    if(!d){
+      d = new Date();
+    }
+
+    return {
+      day: d.getUTCDate(),
+      month: d.getUTCMonth()+1,
+      year: d.getUTCFullYear()
+    };
   }
 
   move(n:number){
-    var d = new Date(this._year,this._month-1,this._day+n,12);
-    this._year = d.getFullYear();
-    this._month = d.getMonth()+1;
-    this._day = d.getDate();
+    var d = new Date(this._struct.year,this._struct.month-1,this._struct.day+n,12);
+    this._struct = this.convertDate(d);
     d = this.effectiveDate();
-    this._year = d.getFullYear();
-    this._month = d.getMonth()+1;
-    this._day = d.getDate();
+    this._struct = this.convertDate(d);
 
-    this._buildStruct();
+    this.constrain();
     this._fireDateChange();
   }
+
   dateChange: EventEmitter<string> = new EventEmitter<string>();
 
   effectiveDate():Date{
-    return this.mostRecentTimestep(new Date(this._year,this._month-1,this._day,12));
+    return this.mostRecentTimestep(new Date(this._struct.year,this._struct.month-1,this._struct.day,12));
   }
 
   previousTimeStep(now:Date):Date{

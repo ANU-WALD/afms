@@ -13,7 +13,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
-import { FMCLayer } from "app/layer-control/layer-control.component";
+import { FMCLayer, DateRange } from "app/layer-control/layer-control.component";
 
 //const BASE_URL='http://gsky-dev.nci.org.au/ows';
 const BASE_URL='http://gsky-test.nci.org.au/ows';
@@ -63,18 +63,23 @@ export class MainMapComponent implements OnInit {
 
     var coords = decodeURIComponent(view.coords)
     if(coords&&(coords!=='_')){
-      var coordArray = coords.split(',').map(s=>+s);
-      this.selectLocation(this.constrain({
-        lat:coordArray[0],
-        lng:coordArray[1]
-      }));
+      var coordArray = coords.split(',').map(s=>+s).filter(isNaN);
+      if(coordArray.length===2){
+        this.selectLocation(this.constrain({
+          lat:coordArray[0],
+          lng:coordArray[1]
+        }));
+      }
     }
 
     if(!((view.lat==='_')||(view.lng==='_')||(view.zm==='_'))){
-      var ll = this.constrain(<LatLng>view);
-      this.lat=ll.lat;
-      this.lng=ll.lng;
-      this.zoom=+view.zm;
+      if(!isNaN(view.lat)||!isNaN(view.lng)){
+        var ll = this.constrain(<LatLng>view);
+
+        this.lat=ll.lat;
+        this.lng=ll.lng;
+        this.zoom=+view.zm;
+      }
     }
   }
 
@@ -109,6 +114,8 @@ export class MainMapComponent implements OnInit {
   selectedCoordinates:LatLng;
   currentYearDataForLocation:any;
   currentValue:any;
+
+  dateRange = new DateRange();
 
   mapClick(clickEvent){
     this.selectLocation({
@@ -177,6 +184,9 @@ export class MainMapComponent implements OnInit {
         this.currentYearDataForLocation.year = year;
         this.currentYearDataForLocation.coords = coords;
         this.updateMarker();
+      },
+      error=>{
+        console.log(error);
       });
   }
 
@@ -246,6 +256,8 @@ export class MainMapComponent implements OnInit {
     this.wmsReverse = layer.palette.reverse;
     this.wmsRange = layer.range;
 
+    this.dateRange = layer.timePeriod;
+    this.selection.range = this.dateRange;
     this.updateLayers();
   }
 

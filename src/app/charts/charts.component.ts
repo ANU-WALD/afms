@@ -96,7 +96,8 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
 
     var observables = dataSeries.map(s=>s.observable);
 
-    Observable.forkJoin(observables).forEach((data:any)=>{
+    Observable.forkJoin(observables)
+      .subscribe((data:any)=>{
 
       var traces = [];
       for (let index in data) {
@@ -130,8 +131,10 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
       traces.reverse();
       this.buildChart(traces);
 
-    })
-
+    },
+    (error)=>{
+      console.log(error);
+    });
   }
 
   ngAfterViewInit() {

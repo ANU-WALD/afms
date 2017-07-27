@@ -1,19 +1,23 @@
 <div class="date-control container-fluid">
   <div class="row no-gutters">
     <div class="col-2" >
-      <button class="btn btn-sm" (click)="move(-selection.timeStep)"><i class="fa fa-chevron-left"></i></button>
+      <button class="btn btn-sm" [disabled]="atMin"
+              (click)="move(-selection.timeStep)"><i class="fa fa-chevron-left"></i></button>
     </div>
     <div class="col-8 form-group-inline">
       <div class="input-group input-group-sm">
-        <input class="form-control form-control-sm" placeholder="dd-mm-yyyy"
-               name="dp" [(ngModel)]="selection.date" ngbDatepicker #d="ngbDatepicker">
+        <input class="form-control form-control-sm" placeholder="yyyy-mm-dd"
+               name="dp" [(ngModel)]="selection.date" (ngOnChange)="dateChanged()"
+               ngbDatepicker #d="ngbDatepicker"
+               [maxDate]="maxDate" [minDate]="minDate">
         <div class="input-group-addon" (click)="d.toggle()" >
           <i class="fa fa-calendar"></i>
         </div>
       </div>
     </div>
     <div class="col-2" >
-      <button class="btn btn-sm" (click)="move(selection.timeStep)"><i class="fa fa-chevron-right"></i></button>
+      <button class="btn btn-sm" [disabled]="atMax"
+              (click)="move(selection.timeStep)"><i class="fa fa-chevron-right"></i></button>
     </div>
 <!--
     <div class="col-2" >
