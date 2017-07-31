@@ -21,7 +21,8 @@ export class LayerControlComponent implements OnInit {
       var json = resp.json();
       var layers:Array<any> = json.layers;
       this.layers = layers.map(l=>new FMCLayer(l.name,l.units,l.icon,l.wms_layer,l.palette,
-                                               l.range,l.description,DateRange.fromJSON(l.timeperiod)));
+                                               l.range,l.description,DateRange.fromJSON(l.timeperiod),
+                                               l.wms_params));
 
       var params = this.mapView.current();
       if(params.layer&&params.layer!=='_'){
@@ -45,25 +46,10 @@ export class LayerControlComponent implements OnInit {
 }
 
 export class FMCLayer{
-  icon:string;
-  name:string;
-  variable:string;
-  palette:any;
-  range:Array<number>;
-  units:string;
-  description:string;
-  timePeriod:DateRange;
 
-  constructor(name:string,units:string,icon:string,variable:string,palette:any,
-              range:Array<number>,description:string,timeperiod:DateRange){
-    this.name=name;
-    this.units=units;
-    this.icon=icon;
-    this.variable=variable;
-    this.palette=palette;
-    this.range=range;
-    this.description=description;
-    this.timePeriod = timeperiod;
+  constructor(public name:string,public  units:string,public icon:string,public variable:string,public palette:any,
+              public range:Array<number>,public description:string,public timePeriod:DateRange,
+              public wmsParams:any){
   }
 }
 

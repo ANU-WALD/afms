@@ -33,5 +33,38 @@
       "start":2001,
       "end":"2016/05/30"
     }
-  }]
+  }, {
+    "name": "Flammability",
+    "units": "units",
+    "icon": "fa-fire",
+    "wms_layer": "unknown",
+    "palette": {
+      "name": "RdYlBu",
+      "count": 11,
+      "reverse": false
+    },
+    "range": [0,100],
+    "timeperiod":{
+      "start":2013,
+      "end":2013
+    }
+  }, {
+    "name": "Computation Mask",
+    "icon": "fa-fire",
+    "wms_layer": "modis:Test",
+    "wms_params":{
+      "time":"2013-01-01T00%3A00%3A00.000Z"
+    },
+    "palette": {
+      "name": "RdYlBu",
+      "count": 11,
+      "reverse": false
+    },
+    "range": [0,100],
+    "timeperiod":{
+      "start":2013,
+      "end":2013
+    }
+  }
+]
 }

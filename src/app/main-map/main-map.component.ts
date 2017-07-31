@@ -8,6 +8,7 @@ import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.co
 import { LatLng } from '../latlng';
 import { BaseLayer } from '../base-layer.service';
 import { TimeseriesService } from "../timeseries.service";
+import { environment } from '../../environments/environment'
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -16,7 +17,7 @@ import 'rxjs/add/observable/throw';
 import { FMCLayer, DateRange } from "app/layer-control/layer-control.component";
 
 //const BASE_URL='http://gsky-dev.nci.org.au/ows';
-const BASE_URL='http://gsky-test.nci.org.au/ows';
+const BASE_URL=environment.gsky_server;
 //const BASE_URL = 'http://130.56.242.21/ows';
 //'http://dapds00.nci.org.au/thredds';
 
@@ -27,6 +28,7 @@ const BASE_URL='http://gsky-test.nci.org.au/ows';
 })
 export class MainMapComponent implements OnInit {
 
+  layer: FMCLayer;
   layerVariable: string;
   baseLayer: BaseLayer;
   testMapType: string = null;
@@ -34,7 +36,7 @@ export class MainMapComponent implements OnInit {
   chartIsCollapsed: boolean = true;
 
   initLayer(sat?:boolean):any{
-    return {
+    var result = {
       layers: this.layerVariable+(sat?'%3ASaturated':''),
       time: `${this.selection.dateText(this.selection.effectiveDate())}T00%3A00%3A00.000Z`,
       styles: "",
@@ -42,6 +44,8 @@ export class MainMapComponent implements OnInit {
       tiled: true,
       feature_count: 101
     };
+
+    return result;
   }
 
   constructor(private _wmsService: WMSService,
@@ -224,6 +228,11 @@ export class MainMapComponent implements OnInit {
   //  @ViewChild('wmsSat') wmsLayerSat: WMSLayerComponent;
 
   updateLayers(){
+    if(this.layer.wmsParams){
+      for(var k in this.layer.wmsParams){
+        Object.assign(this.wmsParameters,this.layer.wmsParams);
+      }
+    }
     this.wmsLayer.buildMap();
 
     // UNCOMMENT to enable underlay layer
@@ -245,6 +254,7 @@ export class MainMapComponent implements OnInit {
   }
 
   layerChanged(layer:FMCLayer) {
+    this.layer = layer;
     this.layerVariable = layer.variable;
     this.wmsParameters.layers = this.layerVariable;
     this.wmsParametersSat.layers = this.layerVariable+'%3ASaturated';
