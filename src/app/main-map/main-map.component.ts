@@ -2,24 +2,75 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http, Response } from '@angular/http';
 import { GoogleMapsAPIWrapper } from '@agm/core/services';
-import { WMSService, WMSLayerComponent, MapViewParameterService } from 'map-wald';
+import { WMSService, WMSLayerComponent, MapViewParameterService, InterpolationService } from 'map-wald';
 import { SelectionService } from '../selection.service';
 import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.component';
 import { LatLng } from '../latlng';
 import { BaseLayer } from '../base-layer.service';
 import { TimeseriesService } from "../timeseries.service";
+import { LayersService } from '../layers.service';
 import { environment } from '../../environments/environment'
+import { FMCLayer, DateRange } from "../layer";
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
-import { FMCLayer, DateRange } from "app/layer-control/layer-control.component";
 
 //const BASE_URL='http://gsky-dev.nci.org.au/ows';
 const BASE_URL=environment.gsky_server;
 //const BASE_URL = 'http://130.56.242.21/ows';
 //'http://dapds00.nci.org.au/thredds';
+
+class VisibleLayer{
+  url:string = BASE_URL;
+  opacity:number=1.0;
+  wmsParameters:any;
+
+  applyFixed(){
+    if(this.layer.wmsParams){
+      Object.assign(this.wmsParameters,this.layer.wmsParams);
+    }
+  }
+
+  leading0(n:number):string {
+    if(n<10){
+      return '0'+n;
+    }
+    return ''+n;
+  }
+
+  dateText(date:Date):string{
+    var fmt = this.layer.timePeriod.format || "{{year}}-{{month}}-{{day}}T00%3A00%3A00.000Z";
+    return InterpolationService.interpolate(fmt,{
+      year:date.getFullYear(),
+      month:this.leading0(date.getMonth()+1),
+      day:this.leading0(date.getDate())
+    });
+  }
+
+  setDate(newDate:Date){
+    this.updateParameters(newDate);
+  }
+
+  constructor(public layer:FMCLayer,currentDate:Date){
+    if(layer){
+      this.updateParameters(currentDate);
+    }
+  };
+
+  updateParameters(currentDate:Date){
+    this.wmsParameters = {
+      layers: this.layer.variable,
+      time: this.dateText(currentDate),
+      styles: "",
+      transparent: true,
+      tiled: true,
+      feature_count: 101
+    };
+    this.applyFixed();
+  }
+}
 
 @Component({
   selector: 'app-main-map',
@@ -28,40 +79,33 @@ const BASE_URL=environment.gsky_server;
 })
 export class MainMapComponent implements OnInit {
 
-  layer: FMCLayer;
-  layerVariable: string;
+  maskLayer:VisibleLayer;
+  mainLayer:VisibleLayer;
+
   baseLayer: BaseLayer;
   testMapType: string = null;
-  layerOpacity: number = 1.0;
   chartIsCollapsed: boolean = true;
-
-  initLayer(sat?:boolean):any{
-    var result = {
-      layers: this.layerVariable+(sat?'%3ASaturated':''),
-      time: `${this.selection.dateText(this.selection.effectiveDate())}T00%3A00%3A00.000Z`,
-      styles: "",
-      transparent: true,
-      tiled: true,
-      feature_count: 101
-    };
-
-    return result;
-  }
 
   constructor(private _wmsService: WMSService,
     _activatedRoute: ActivatedRoute,
     private selection: SelectionService,
     private mapView:MapViewParameterService,
     private http: Http,
-    private timeseries:TimeseriesService) {
+    private timeseries:TimeseriesService,
+    private layers:LayersService) {
 
-    this.selection.loadFromURL(_activatedRoute);
-    this.selection.dateChange.subscribe((dateTxt: string) => {
-      this.dateChanged(dateTxt);
+    this.mainLayer = new VisibleLayer(null,null);
+
+    this.layers.mask.subscribe(mask=>{
+      this.maskLayer = new VisibleLayer(mask,this.selection.effectiveDate());
     });
-    this.wmsURL = BASE_URL;
-    this.wmsParameters = this.initLayer();
-    this.wmsParametersSat = this.initLayer(true);
+
+    this.layers.availableLayers.subscribe(available=>{
+      this.selection.loadFromURL(_activatedRoute);
+      this.selection.dateChange.subscribe((newDate: Date) => {
+        this.dateChanged(newDate);
+      });
+    });
 
     var view = mapView.current();
 
@@ -97,17 +141,6 @@ export class MainMapComponent implements OnInit {
   map: any;
   // google maps zoom level
   zoom: number = 4;
-
-  wmsURL: string;
-  wmsParameters: any = {};
-  wmsParametersSat: any = null;
-  wmsPalette: string = 'RdYlBu';
-  wmsColourCount: number = 11;
-  wmsReverse: boolean = true;
-  wmsRange: Array<number> = [0, 255];
-  mapUnits: string = 'units';
-  mapTitle: string = 'Fuel Moisture Content';
-  mapHelpText: string = '';
 
   // initial center position for the map
   lat: number = -22.673858;
@@ -224,27 +257,9 @@ export class MainMapComponent implements OnInit {
 
   @ViewChild('mapDiv') mapDiv: Component;
   @ViewChild('wms') wmsLayer: WMSLayerComponent;
-  // UNCOMMENT to enable underlay layer
-  //  @ViewChild('wmsSat') wmsLayerSat: WMSLayerComponent;
 
-  updateLayers(){
-    if(this.layer.wmsParams){
-      for(var k in this.layer.wmsParams){
-        Object.assign(this.wmsParameters,this.layer.wmsParams);
-      }
-    }
-    this.wmsLayer.buildMap();
-
-    // UNCOMMENT to enable underlay layer
-    // this.wmsLayerSat.buildMap();
-  }
-
-  dateChanged(dateText: string) {
-    this.wmsParameters.time = `${dateText}T00%3A00%3A00.000Z`;
-    this.wmsParametersSat.time =
-      this.selection.dateText(this.selection.previousTimeStep(this.selection.effectiveDate()));
-
-    this.updateLayers();
+  dateChanged(newDate: Date) {
+    this.mainLayer.setDate(newDate);
   }
 
   ngAfterViewInit() {
@@ -254,21 +269,12 @@ export class MainMapComponent implements OnInit {
   }
 
   layerChanged(layer:FMCLayer) {
-    this.layer = layer;
-    this.layerVariable = layer.variable;
-    this.wmsParameters.layers = this.layerVariable;
-    this.wmsParametersSat.layers = this.layerVariable+'%3ASaturated';
-    this.mapTitle = layer.name;
-    this.mapHelpText = layer.description;
-    this.mapUnits = layer.units;
-    this.wmsPalette = layer.palette.name;
-    this.wmsColourCount = layer.palette.count;
-    this.wmsReverse = layer.palette.reverse;
-    this.wmsRange = layer.range;
+    var opacity = this.mainLayer.opacity;
+    this.mainLayer = new VisibleLayer(layer,this.selection.effectiveDate());
+    this.mainLayer.opacity = opacity;
 
     this.dateRange = layer.timePeriod;
     this.selection.range = this.dateRange;
-    this.updateLayers();
   }
 
   changeCount:number =0;
@@ -289,6 +295,6 @@ export class MainMapComponent implements OnInit {
   }
 
   opacityChanged(opacity: number){
-    this.layerOpacity = opacity;
+    this.mainLayer.opacity = opacity;
   }
 }

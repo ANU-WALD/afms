@@ -56,7 +56,7 @@ export class TimeseriesService {
       .refCount();
   }
 
-  constructor(private http:Http, ps:ProjectionService) { 
+  constructor(private http:Http, ps:ProjectionService) {
     var proj4 = ps.proj4();
     var def ="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs";
 

@@ -2,7 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {MapViewParameterService} from 'map-wald';
-import {DateRange} from "app/layer-control/layer-control.component";
+import {DateRange} from "./layer";
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
 const MILLISECONDS_PER_DAY=24*60*60*1000;
@@ -76,20 +76,9 @@ export class SelectionService {
     }
   }
 
-  leading0(n:number):string {
-    if(n<10){
-      return '0'+n;
-    }
-    return ''+n;
-  }
-
-  dateText(d:Date):string {
-    return `${d.getFullYear()}-${this.leading0(d.getMonth()+1)}-${this.leading0(d.getDate())}`;
-  }
-
   _fireDateChange() {
     this.updateURL();
-    this.dateChange.emit(this.dateText(this.effectiveDate()));
+    this.dateChange.emit(this.effectiveDate());
   }
 
   updateURL(){
@@ -124,7 +113,7 @@ export class SelectionService {
     this._fireDateChange();
   }
 
-  dateChange: EventEmitter<string> = new EventEmitter<string>();
+  dateChange: EventEmitter<Date> = new EventEmitter<Date>();
 
   effectiveDate():Date{
     return this.mostRecentTimestep(new Date(this._struct.year,this._struct.month-1,this._struct.day,12));
