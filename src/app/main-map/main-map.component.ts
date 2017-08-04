@@ -297,4 +297,8 @@ export class MainMapComponent implements OnInit {
   opacityChanged(opacity: number){
     this.mainLayer.opacity = opacity;
   }
+
+  downloadBtnClicked() {
+
+  }
 }

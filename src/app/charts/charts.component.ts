@@ -1,3 +1,5 @@
+// TODO: All plot generating code should be pulled out into a service (e.g.,
+// plotly.service)
 import { Component, ElementRef, AfterViewInit,Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ProjectionService } from 'map-wald';
@@ -5,65 +7,41 @@ import { SelectionService } from '../selection.service';
 import { TimeseriesService } from '../timeseries.service';
 import { Http } from '@angular/http';
 import { LatLng } from '../latlng';
-import { GeoTransform } from './geotransform'
+import { GeoTransform } from './geotransform';
+import { CsvService } from '../csv.service';
 //import * as proj4 from 'proj4';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
-//import * as Plotly from '../../../node_modules/plotly.js/dist/plotly-basic';
-//declare var Plotly:any;
-const Plotly = require('plotly.js/dist/plotly-basic');
+import * as Plotly from 'plotly.js/dist/plotly-basic';
+import * as FileSaver from 'file-saver';
 
 const CHART_YEARS = 4;
-
+const ALICE = [-23.6980,133.8807];
 
 @Component({
   selector: 'app-charts',
   templateUrl: './charts.component.html',
-  styleUrls: ['./charts.component.scss']
+  styleUrls: ['./charts.component.scss'],
+  providers: [CsvService],
 })
+
 export class ChartsComponent implements AfterViewInit, OnChanges {
   @Input() coordinates:LatLng;
   @Input() year: number;
 
+  fullTimeSeries = null;
   havePlot:boolean=false;
-  wpsRequest: string = 'http://gsky-dev.nci.org.au/ows?service=WPS&request=Execute&version=1.0.0&Identifier=geometryDrill&DataInputs=geometry%3D%7B%22type%22%3A%22FeatureCollection%22%2C%22features%22%3A%5B%7B%22type%22%3A%22Feature%22%2C%22geometry%22%3A%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B%2035.0000%2C%2055.5000%5D%2C%5B%2035.5000%2C%2055.5000%5D%2C%5B%2035.5000%2C%2055.0000%5D%2C%5B%2035.0000%2C%2055.0000%5D%2C%5B%2035.0000%2C%2055.5000%5D%5D%5D%7D%7D%5D%7D&status=true&storeExecuteResponse=true';
 
   constructor(private timeseries:TimeseriesService,
               private http:Http,
+              private csv_service: CsvService,
               private _element:ElementRef,
               private _selection:SelectionService) {
 
-    //defs['SR-ORG:6842']="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs";
-    //    var p = Proj('EPSG:4326','PROJCS["unnamed",GEOGCS["Unknown datum based upon the custom spheroid",DATUM["Not specified (based on custom spheroid)",SPHEROID["Custom spheroid",6371007.181,0]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]],PROJECTION["Sinusoidal"],PARAMETER["longitude_of_center",0],PARAMETER["false_easting",0],PARAMETER["false_northing",0],UNIT["Meter",1]]')
-    // TODO Read from DAS
-    var alice=[-23.6980,133.8807];
     this.coordinates={
-      lat:alice[0],
-      lng:alice[1]
+      lat:ALICE[0],
+      lng:ALICE[1]
     };
-
-    //    http.get(`${DAP_SERVER}${fn}.ddx`).toPromise().then(resp=>{
-    //      var txt = resp.text();
-    //      var parsed = dap.parseDDX(txt);
-    //      console.log('DDX',parsed);
-    //    });
-
-    //    this.http.get(this.wpsRequest)
-    //      .map((r) => r.text())
-    //      .subscribe((txt) => {
-    //        var data = (new DOMParser()).parseFromString(txt, 'text/xml');
-    //        //          console.log(data);
-    //        //          var d2:Element = data.getElementsByTagName('ExecuteResponse')[0];console.log(d2);
-    //        //          d2 = d2.getElementsByTagName('ProcessOutputs')[0];console.log(d2);
-    //        //          d2 = d2.getElementsByTagName('Output')[0];console.log(d2);
-    //        //          d2 = d2.getElementsByTagName('Data')[0];console.log(d2);
-    //        //          d2 = d2.getElementsByTagName('ComplexData')[0];
-    //
-    //        var d2 = data.getElementsByTagName('ComplexData');
-    //        //          console.log(d2);
-    //        var result = Array.prototype.slice.call(d2).map((d) => d.textContent).map(JSON.parse);
-    //        //          console.log(result);
-    //      });
 
     var component=this;
     window.onresize = function(e) {
@@ -80,13 +58,40 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
     this.updateChart(CHART_YEARS);
   }
 
+  setFullTimeSeries(data: any[]) {
+    // TODO: make this more generic - currently only works with the FMC data
+
+    let data_copy = Array.from(data);
+
+    data_copy.reverse();
+
+    let fullTimeSeries = {labels: [], columns: [] };
+
+    let time = [];
+    let lfmc_mean = [];
+
+    fullTimeSeries.labels = ['date', 'lfmc_mean'];
+
+    for (let series of data_copy){
+      time = time.concat(series.time);
+      lfmc_mean = lfmc_mean.concat(series.lfmc_mean);
+    }
+
+    time = time.map(t => t.toISOString());
+
+    fullTimeSeries.columns =[time, lfmc_mean];
+
+    this.fullTimeSeries = fullTimeSeries;
+
+  }
+
   updateChart(yearCount: number){
     var selectedYear = this.year;
     var dataSeries = [];
 
     for (var i = 0; i < CHART_YEARS; i++) {
       var year = selectedYear - i;
-      var observable = this.timeseries.getTimeSeries(this.coordinates,year);
+      var observable = this.timeseries.getTimeSeries(this.coordinates, year);
 
       var newDataSeries = {
         year: year,
@@ -102,19 +107,25 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
     Observable.forkJoin(observables)
       .subscribe((data:any)=>{
 
+      this.setFullTimeSeries(data);
+
       var traces = [];
       for (let index in data) {
-        var dataset = data[index];
+        let dataset = data[index];
 
         // Set all datasets to the same year so that they are overlayed with
         // each other rather than shown sequentially
-        dataset.time = dataset.time.map(d=>new Date(d.setFullYear(selectedYear)));
+        let chartTimestamps: Date[] = dataset.time.map(d => {
+          let modifiedDate = new Date(d);
+          modifiedDate.setFullYear(selectedYear);
+          return modifiedDate;
+        });
 
         var color=+index?'rgb(229,242,248)':'rgb(85,115,181)';
         var trace = {
-          x: dataset.time,
+          x: chartTimestamps,
           y: dataset.lfmc_mean,
-          name: ''+dataSeries[index].year,
+          name: dataSeries[index].year.toString(),
           mode: 'lines+markers',
           connectgaps: true,
 
@@ -139,6 +150,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
       console.log(error);
     });
   }
+
 
   ngAfterViewInit() {
   }
@@ -188,6 +200,21 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
     var node = this._element.nativeElement.querySelector('.our-chart');
 
     Plotly.Plots.resize(node);
+  }
+
+  downloadData() {
+
+    // TODO: set the filename to something more meaningful!
+
+    if (this.fullTimeSeries) {
+
+      let output = new Blob(
+        [this.csv_service.getCsv(this.fullTimeSeries.labels, this.fullTimeSeries.columns)], 
+        {type: "text/plain;charset=utf-8"});
+      FileSaver.saveAs(output, "data.csv");
+
+    }
+
   }
 
 }
