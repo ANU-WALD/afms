@@ -11,12 +11,12 @@
       (zoomChange)="moved($event)"
       scaleControl="true">
 
-      <agm-marker *ngIf="selectedCoordinates"
-                  [longitude]="selectedCoordinates.lng"
-                  [latitude]="selectedCoordinates.lat"
-                  [openInfoWindow]="true">
-        <agm-info-window [disableAutoPan]="true" [isOpen]="true">
-          <strong>{{currentValue}}</strong>
+      <agm-marker *ngIf="marker"
+                  [longitude]="marker.loc.lng"
+                  [latitude]="marker.loc.lat">
+
+        <agm-info-window [disableAutoPan]="true" [isOpen]="marker.open">
+          <strong>{{marker.value}}</strong>
         </agm-info-window>
       </agm-marker>
 
@@ -109,7 +109,7 @@
               </h6>
             </div>
           </a>
-          
+
           <div class="ngbCollapse" [ngbCollapse]="chartIsCollapsed">
             <div class="card-block control-card-content">
               <app-charts [coordinates]="selectedCoordinates"

@@ -22,6 +22,12 @@ const BASE_URL=environment.gsky_server;
 //const BASE_URL = 'http://130.56.242.21/ows';
 //'http://dapds00.nci.org.au/thredds';
 
+class ValueMarker{
+  loc:LatLng;
+  value:string;
+  open:boolean;
+}
+
 class VisibleLayer{
   url:string = BASE_URL;
   opacity:number=1.0;
@@ -149,8 +155,8 @@ export class MainMapComponent implements OnInit {
   geoJsonObject: Object = null;
   vectorLayer:VectorLayer;
   selectedCoordinates:LatLng;
+  marker:ValueMarker=null;
   currentYearDataForLocation:any;
-  currentValue:any;
 
   dateRange = new DateRange();
 
@@ -195,26 +201,29 @@ export class MainMapComponent implements OnInit {
   }
 
   selectLocation(coords:LatLng){
+    this.marker ={
+      loc:coords,
+      value:'...',
+      open:true
+    };
+    this.updateTimeSeries();
+
     this.selectedCoordinates=coords;
     this.mapView.update({coords:`${coords.lat.toFixed(3)},${coords.lng.toFixed(3)}`});
-
-    this.updateTimeSeries();
   }
 
   updateTimeSeries(){
-    if(this.currentYearDataForLocation&&(this.currentYearDataForLocation.coords===this.selectedCoordinates)&&
+    var coords = this.marker.loc;
+    if(this.currentYearDataForLocation&&(this.currentYearDataForLocation.coords===coords)&&
        (this.currentYearDataForLocation.year===this.selection.year)){
       this.updateMarker();
       return;
     }
-    this.currentValue=null;
 
-    var coords = this.selectedCoordinates;
     var year = this.selection.year;
     this.timeseries.getTimeSeries(coords,year)
-
       .subscribe(dapData=>{
-        if((year!==this.selection.year)||(coords!==this.selectedCoordinates)){
+        if((year!==this.selection.year)||(coords!==this.marker.loc)){
           return; // Reject the data
         }
         this.currentYearDataForLocation=dapData;
@@ -231,10 +240,13 @@ export class MainMapComponent implements OnInit {
     var now = this.selection.effectiveDate();
     var deltas = this.currentYearDataForLocation.time.map(t=>Math.abs(t.getTime()-now.getTime()));
     var closest = deltas.indexOf(Math.min(...deltas));
-    this.currentValue = this.currentYearDataForLocation.lfmc_mean[closest];
-    if(this.currentValue===null){
-      this.currentValue='-';
+    var val = this.currentYearDataForLocation.lfmc_mean[closest];
+    if(val===null){
+      val='-';
+    } else {
+      val = val.toFixed(3);
     }
+    this.marker.value=val;
   }
 
   staticStyles:any={
