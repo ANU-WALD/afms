@@ -53,7 +53,7 @@ export class CsvService {
 
     let column_copy = Array.from(column);
 
-    column_copy = column_copy.map(e => e? e: 'NAN');
+    column_copy = column_copy.map(e => e? e: 'NA');
 
     return column_copy;
 
