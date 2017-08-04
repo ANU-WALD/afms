@@ -8,15 +8,16 @@ import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.co
 import { LatLng } from '../latlng';
 import { BaseLayer } from '../base-layer.service';
 import { TimeseriesService } from "../timeseries.service";
+import { environment } from '../../environments/environment'
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
-import { FMCLayer } from "app/layer-control/layer-control.component";
+import { FMCLayer, DateRange } from "app/layer-control/layer-control.component";
 
 //const BASE_URL='http://gsky-dev.nci.org.au/ows';
-const BASE_URL='http://gsky-test.nci.org.au/ows';
+const BASE_URL=environment.gsky_server;
 //const BASE_URL = 'http://130.56.242.21/ows';
 //'http://dapds00.nci.org.au/thredds';
 
@@ -27,6 +28,7 @@ const BASE_URL='http://gsky-test.nci.org.au/ows';
 })
 export class MainMapComponent implements OnInit {
 
+  layer: FMCLayer;
   layerVariable: string;
   baseLayer: BaseLayer;
   testMapType: string = null;
@@ -34,7 +36,7 @@ export class MainMapComponent implements OnInit {
   chartIsCollapsed: boolean = true;
 
   initLayer(sat?:boolean):any{
-    return {
+    var result = {
       layers: this.layerVariable+(sat?'%3ASaturated':''),
       time: `${this.selection.dateText(this.selection.effectiveDate())}T00%3A00%3A00.000Z`,
       styles: "",
@@ -42,6 +44,8 @@ export class MainMapComponent implements OnInit {
       tiled: true,
       feature_count: 101
     };
+
+    return result;
   }
 
   constructor(private _wmsService: WMSService,
@@ -63,18 +67,23 @@ export class MainMapComponent implements OnInit {
 
     var coords = decodeURIComponent(view.coords)
     if(coords&&(coords!=='_')){
-      var coordArray = coords.split(',').map(s=>+s);
-      this.selectLocation(this.constrain({
-        lat:coordArray[0],
-        lng:coordArray[1]
-      }));
+      var coordArray = coords.split(',').map(s=>+s).filter(isNaN);
+      if(coordArray.length===2){
+        this.selectLocation(this.constrain({
+          lat:coordArray[0],
+          lng:coordArray[1]
+        }));
+      }
     }
 
     if(!((view.lat==='_')||(view.lng==='_')||(view.zm==='_'))){
-      var ll = this.constrain(<LatLng>view);
-      this.lat=ll.lat;
-      this.lng=ll.lng;
-      this.zoom=+view.zm;
+      if(!isNaN(view.lat)||!isNaN(view.lng)){
+        var ll = this.constrain(<LatLng>view);
+
+        this.lat=ll.lat;
+        this.lng=ll.lng;
+        this.zoom=+view.zm;
+      }
     }
   }
 
@@ -109,6 +118,8 @@ export class MainMapComponent implements OnInit {
   selectedCoordinates:LatLng;
   currentYearDataForLocation:any;
   currentValue:any;
+
+  dateRange = new DateRange();
 
   mapClick(clickEvent){
     this.selectLocation({
@@ -177,6 +188,9 @@ export class MainMapComponent implements OnInit {
         this.currentYearDataForLocation.year = year;
         this.currentYearDataForLocation.coords = coords;
         this.updateMarker();
+      },
+      error=>{
+        console.log(error);
       });
   }
 
@@ -214,6 +228,11 @@ export class MainMapComponent implements OnInit {
   //  @ViewChild('wmsSat') wmsLayerSat: WMSLayerComponent;
 
   updateLayers(){
+    if(this.layer.wmsParams){
+      for(var k in this.layer.wmsParams){
+        Object.assign(this.wmsParameters,this.layer.wmsParams);
+      }
+    }
     this.wmsLayer.buildMap();
 
     // UNCOMMENT to enable underlay layer
@@ -235,6 +254,7 @@ export class MainMapComponent implements OnInit {
   }
 
   layerChanged(layer:FMCLayer) {
+    this.layer = layer;
     this.layerVariable = layer.variable;
     this.wmsParameters.layers = this.layerVariable;
     this.wmsParametersSat.layers = this.layerVariable+'%3ASaturated';
@@ -246,6 +266,8 @@ export class MainMapComponent implements OnInit {
     this.wmsReverse = layer.palette.reverse;
     this.wmsRange = layer.range;
 
+    this.dateRange = layer.timePeriod;
+    this.selection.range = this.dateRange;
     this.updateLayers();
   }
 
@@ -268,5 +290,9 @@ export class MainMapComponent implements OnInit {
 
   opacityChanged(opacity: number){
     this.layerOpacity = opacity;
+  }
+
+  downloadBtnClicked() {
+
   }
 }

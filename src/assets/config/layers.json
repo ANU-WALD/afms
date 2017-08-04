@@ -11,7 +11,11 @@
       "reverse": false
     },
     "range": [0, 140],
-    "description":"Fuel Moisture Content (%) amount of water in the fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU)."
+    "description":"Fuel Moisture Content (%) amount of water in the fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+    "timeperiod":{
+      "start":2001,
+      "end":"2016/05/31"
+    }
   }, {
     "source":"gsky",
     "name": "Uncertainty",
@@ -24,6 +28,43 @@
       "reverse": true
     },
     "range": [0, 50],
-    "description":"Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU)."
-  }]
+    "description":"Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+    "timeperiod":{
+      "start":2001,
+      "end":"2016/05/30"
+    }
+  }, {
+    "name": "Flammability",
+    "units": "units",
+    "icon": "fa-fire",
+    "wms_layer": "unknown",
+    "palette": {
+      "name": "RdYlBu",
+      "count": 11,
+      "reverse": false
+    },
+    "range": [0,100],
+    "timeperiod":{
+      "start":2013,
+      "end":2013
+    }
+  }, {
+    "name": "Computation Mask",
+    "icon": "fa-fire",
+    "wms_layer": "modis:Test",
+    "wms_params":{
+      "time":"2013-01-01T00%3A00%3A00.000Z"
+    },
+    "palette": {
+      "name": "RdYlBu",
+      "count": 11,
+      "reverse": false
+    },
+    "range": [0,100],
+    "timeperiod":{
+      "start":2013,
+      "end":2013
+    }
+  }
+]
 }

@@ -131,7 +131,12 @@ export class TimeseriesService {
         var tile = tileMatch.tile;
         var cell = tileMatch.cell;
         var das = this._match(tile,allDAS);
-        var filename = files.find(f=>(f.tile===tile)&&(f.year===year)).filename;
+        var tileFile = files.find(f=>(f.tile===tile)&&(f.year===year));
+
+        if(!tileFile){
+          return Observable.throw(new Error('No time series data'));
+        }
+        var filename = tileFile.filename;
         var [r,c] = cell;
         var url = `${DAP_SERVER}${filename}.ascii?lfmc_mean[0:1:45][${r}:1:${r}][${c}:1:${c}]`;
         return this.http.get(url).map(r=>r.text())
