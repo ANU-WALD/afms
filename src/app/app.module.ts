@@ -22,6 +22,7 @@ import { BaseLayerSelectionComponent } from './base-layer-selection/base-layer-s
 import { TimeseriesService } from './timeseries.service';
 import { LayerOpacitySelectorComponent } from './layer-opacity-selector/layer-opacity-selector.component';
 import { AboutComponent } from './about/about.component';
+import { SplashModalComponent } from './splash-modal/splash-modal.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AboutComponent } from './about/about.component';
     SearchComponent,
     BaseLayerSelectionComponent,
     LayerOpacitySelectorComponent,
-    AboutComponent
+    AboutComponent,
+    SplashModalComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +49,7 @@ import { AboutComponent } from './about/about.component';
     MapWaldModule.forRoot({paths:routeParameters}),
     RouterModule.forRoot(routes,{ useHash: true })
   ],
-  entryComponents: [AboutComponent],
+  entryComponents: [AboutComponent, SplashModalComponent],
   providers: [SelectionService,TimeseriesService,LayersService],
   bootstrap: [AppComponent]
 })
