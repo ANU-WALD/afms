@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { AgmCoreModule } from '@agm/core';
 import { MapWaldModule, MapViewParameterService } from 'map-wald';
 import { SelectionService } from './selection.service';
-
+import { LayersService } from './layers.service';
 import { MainMapComponent } from './main-map/main-map.component';
 import { LayerControlComponent } from './layer-control/layer-control.component';
 import { ChartsComponent } from './charts/charts.component';
@@ -22,6 +22,7 @@ import { BaseLayerSelectionComponent } from './base-layer-selection/base-layer-s
 import { TimeseriesService } from './timeseries.service';
 import { LayerOpacitySelectorComponent } from './layer-opacity-selector/layer-opacity-selector.component';
 import { AboutComponent } from './about/about.component';
+import { SplashModalComponent } from './splash-modal/splash-modal.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AboutComponent } from './about/about.component';
     SearchComponent,
     BaseLayerSelectionComponent,
     LayerOpacitySelectorComponent,
-    AboutComponent
+    AboutComponent,
+    SplashModalComponent
   ],
   imports: [
     BrowserModule,
@@ -47,8 +49,8 @@ import { AboutComponent } from './about/about.component';
     MapWaldModule.forRoot({paths:routeParameters}),
     RouterModule.forRoot(routes,{ useHash: true })
   ],
-  entryComponents: [AboutComponent],
-  providers: [SelectionService,TimeseriesService],
+  entryComponents: [AboutComponent, SplashModalComponent],
+  providers: [SelectionService,TimeseriesService,LayersService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

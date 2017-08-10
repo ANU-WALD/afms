@@ -1,5 +1,6 @@
 <div class="main-map">
-    <agm-map [(latitude)]="lat"
+    <agm-map
+      [(latitude)]="lat"
       [(longitude)]="lng"
       [(zoom)]="zoom"
       [disableDefaultUI]="false"
@@ -10,12 +11,12 @@
       (zoomChange)="moved($event)"
       scaleControl="true">
 
-      <agm-marker *ngIf="selectedCoordinates"
-                              [longitude]="selectedCoordinates.lng"
-                              [latitude]="selectedCoordinates.lat"
-                              [openInfoWindow]="true">
-        <agm-info-window [disableAutoPan]="true" [isOpen]="true">
-          <strong>{{currentValue}}</strong>
+      <agm-marker *ngIf="marker"
+                  [longitude]="marker.loc.lng"
+                  [latitude]="marker.loc.lat">
+
+        <agm-info-window [disableAutoPan]="true" [isOpen]="marker.open">
+          <strong>{{marker.value}}</strong>
         </agm-info-window>
       </agm-marker>
 
@@ -35,11 +36,22 @@
       </app-wms-layer>
 -->
       <app-wms-layer #wms
-        [url]="wmsURL"
-        [params]="wmsParameters"
-        [opacity]="layerOpacity"
-        [position]="0">
+                     *ngIf="mainLayer?.layer"
+                     [url]="mainLayer.url"
+                     [params]="mainLayer.wmsParameters"
+                     [opacity]="mainLayer.opacity"
+                     [position]="0">
       </app-wms-layer>
+
+<!--
+
+      <app-wms-layer #wmsMask *ngIf="mask"
+        [url]="mask.url"
+        [params]="mask.parameters"
+        [opacity]="mask.opacity"
+        [position]="1">
+      </app-wms-layer>
+-->
 
       <agm-data-layer *ngIf="geoJsonObject"
                       [geoJson]="geoJsonObject"
@@ -71,15 +83,15 @@
       </map-control>
 
       <map-control position="LEFT_BOTTOM">
-        <div class="card map-control">
+        <div *ngIf="mainLayer?.layer" class="card map-control">
           <div class="card-block control-card-content">
-            <map-legend [title]="mapTitle"
-                        [mapUnits]="mapUnits"
-                        [cbPalette]="wmsPalette"
-                        [cbCount]="wmsColourCount"
-                        [cbReverse]="wmsReverse"
-                        [cbRange]="wmsRange"
-                        [helpText]="mapHelpText"></map-legend>
+            <map-legend [title]="mainLayer.layer.name"
+                        [mapUnits]="mainLayer.layer.units"
+                        [cbPalette]="mainLayer.layer.palette.name"
+                        [cbCount]="mainLayer.layer.palette.count"
+                        [cbReverse]="mainLayer.layer.palette.reverse"
+                        [cbRange]="mainLayer.layer.range"
+                        [helpText]="mainLayer.layer.description"></map-legend>
           </div>
         </div>
       </map-control>
@@ -97,7 +109,7 @@
               </h6>
             </div>
           </a>
-          
+
           <div class="ngbCollapse" [ngbCollapse]="chartIsCollapsed">
             <div class="card-block control-card-content">
               <app-charts [coordinates]="selectedCoordinates"

@@ -51,10 +51,7 @@
   }, {
     "name": "Computation Mask",
     "icon": "fa-fire",
-    "wms_layer": "modis:Test",
-    "wms_params":{
-      "time":"2013-01-01T00%3A00%3A00.000Z"
-    },
+    "wms_layer": "Modis Land Mask",
     "palette": {
       "name": "RdYlBu",
       "count": 11,
@@ -62,9 +59,20 @@
     },
     "range": [0,100],
     "timeperiod":{
-      "start":2013,
-      "end":2013
+      "start":2001,
+      "end":2013,
+      "format":"{{year}}-01-01T00%3A00%3A00.000Z"
+    }
+  }],
+  "mask":{
+    "name": "Computation Mask",
+    "icon": "fa-fire",
+    "wms_layer": "Modis Land Mask (Inverted)",
+    "range": [0,100],
+    "timeperiod":{
+      "start":2001,
+      "end":2013,
+      "format":"{{year}}-01-01T00%3A00%3A00.000Z"
     }
   }
-]
 }
