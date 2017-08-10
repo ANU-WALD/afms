@@ -30,6 +30,8 @@ export class DateControlComponent implements OnInit, OnChanges {
     if(changes.end){
       this.maxDate = this.selection.convertDate(this.end);
     }
+
+    this.checkLimits();
   }
 
   move(n:number){
@@ -47,6 +49,7 @@ export class DateControlComponent implements OnInit, OnChanges {
            (lhs.day===rhs.day);
 
   }
+
   dateChanged(){
     this.checkLimits();
   }

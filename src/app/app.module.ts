@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { AgmCoreModule } from '@agm/core';
 import { MapWaldModule, MapViewParameterService } from 'map-wald';
 import { SelectionService } from './selection.service';
-
+import { LayersService } from './layers.service';
 import { MainMapComponent } from './main-map/main-map.component';
 import { LayerControlComponent } from './layer-control/layer-control.component';
 import { ChartsComponent } from './charts/charts.component';
@@ -48,7 +48,7 @@ import { AboutComponent } from './about/about.component';
     RouterModule.forRoot(routes,{ useHash: true })
   ],
   entryComponents: [AboutComponent],
-  providers: [SelectionService,TimeseriesService],
+  providers: [SelectionService,TimeseriesService,LayersService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
