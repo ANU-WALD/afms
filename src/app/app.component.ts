@@ -24,7 +24,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.modalService.open(SplashModalComponent);
-
+    Promise.resolve().then(()=>{
+      this.modalService.open(SplashModalComponent);
+    });
   }
 }
