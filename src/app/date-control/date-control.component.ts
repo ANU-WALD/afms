@@ -57,6 +57,5 @@ export class DateControlComponent implements OnInit, OnChanges {
   checkLimits(){
     this.atMax = this.datesEqual(this.selection.date,this.maxDate);
     this.atMin = this.datesEqual(this.selection.date,this.minDate);
-    console.log(this.atMax,this.atMin);
   }
 }
