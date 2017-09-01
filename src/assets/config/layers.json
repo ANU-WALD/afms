@@ -11,7 +11,7 @@
       "reverse": false
     },
     "range": [0, 140],
-    "description":"Fuel Moisture Content (%) amount of water in the fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+    "description":"Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
     "timeperiod":{
       "start":2001,
       "end":"2016/05/31"
