@@ -16,7 +16,7 @@ import 'rxjs/add/operator/first';
 
 let dap = require('dap-query-js');
 
-const DAP_SERVER='http://dapds00.nci.org.au/thredds/dodsC/ub8/au/FMC/sinusoidal/';
+const DAP_SERVER='http://dapds00.nci.org.au/thredds/dodsC/ub8/au/FMC/';
 
 export interface FmcTile{
   filename:string;
@@ -64,13 +64,20 @@ export class TimeseriesService {
 
     this.files$ = http.get('assets/config/fmc_filelist.json').map(r=>r.json()).map(val=>{
       var fileList = val.files;
-      return fileList.map(fn=>{
-        var elements=fn.split('.');
+      return fileList.map(fullFn=>{
+        var [dir,fn] = fullFn.split('/');
+        var splitChar='_'
+        if(dir==='sinusoidal'){
+          splitChar='.';
+        }
+
+        var elements=fn.split(splitChar);
         return {
-          filename:fn,
+          filename:fullFn,
+          dataSet:dir,
           year:+elements[1],
           tile:elements[2]
-        };
+        };  
       })
     }).publishReplay().refCount();
 
