@@ -19,6 +19,7 @@ let dap = require('dap-query-js');
 const DAP_SERVER='http://dapds00.nci.org.au/thredds/dodsC/ub8/au/FMC/';
 
 export interface FmcTile{
+  dataSet:string;
   filename:string;
   year:number;
   tile:string;
@@ -37,17 +38,17 @@ export class TimeseriesService {
   ddxCache:{[key:string]:any}={};
   geoTransforms:{[key:string]:GeoTransform}={};
   files$:Observable<Array<FmcTile>>;
-  das$:Observable<Array<[string,any]>>;
-  ddx$:Observable<Array<[string,any]>>;
+  das$:Observable<Array<[FmcTile,any]>>;
+  ddx$:Observable<Array<[FmcTile,any]>>;
   geoTransforms$:Observable<Array<[string,GeoTransform]>>;
 
-  getAllMetadata(paths$:Observable<string[][]>,metaType:string,parser:(string)=>any){
+  getAllMetadata(paths$:Observable<FmcTile[]>,metaType:string,parser:(string)=>any){
     return (paths$.map(entries=>{
-      return Observable.from(entries.map(([tileID,fn])=>{
-        return <Observable<[string,any]>>this.http.get(`${DAP_SERVER}${fn}.${metaType}`)
+      return Observable.from(entries.map(tile=>{
+        return <Observable<[FmcTile,any]>>this.http.get(`${DAP_SERVER}${tile.filename}.${metaType}`)
           .map(resp=>resp.text())
           .map(parser)
-          .map(das=>[tileID,das]);
+          .map(metadata=>[tile,metadata]);
       })).mergeAll();
     }))
       .switch()
@@ -66,12 +67,14 @@ export class TimeseriesService {
       var fileList = val.files;
       return fileList.map(fullFn=>{
         var [dir,fn] = fullFn.split('/');
-        var splitChar='_'
+        var elements:Array<string>;
         if(dir==='sinusoidal'){
-          splitChar='.';
+          elements = fn.split('.');
+        } else {
+          elements = fn.split('_')
+          elements[2] = elements[2].split('.')[0];
         }
 
-        var elements=fn.split(splitChar);
         return {
           filename:fullFn,
           dataSet:dir,
@@ -81,27 +84,44 @@ export class TimeseriesService {
       })
     }).publishReplay().refCount();
 
-    var uniqueTiles$ = this.files$.map(allFiles=>Array.from(new Set(allFiles.map(t=>t.tile))));
+    var uniqueTiles$ = this.files$.map(allFiles=>{
+      return Array.from(new Set(allFiles.map(t=>`${t.tile}-${t.dataSet}`)));
+    });
 
     var pathsToTiles$ = Observable.forkJoin(this.files$,uniqueTiles$).map(([files,uniqueTiles])=>{
-      return uniqueTiles.map(tileID=>{
+      return uniqueTiles.map(tileIDandDataset=>{
+        var [tileID, dataSet] = tileIDandDataset.split('-');
         var tile = files.find(t=>t.tile===tileID);
-        return [tileID,tile.filename];
+        return [tileID,dataSet,tile.filename];
       });
     });
 
-    this.das$ = this.getAllMetadata(pathsToTiles$,'das',dap.parseDAS);
+    this.das$ = this.getAllMetadata(this.files$,'das',dap.parseDAS);
 
     this.geoTransforms$ = this.das$.map(allDAS=>{
-      return allDAS.map((x)=>{
-        var [tileID,das] = x;
+      var justSinusoidal = allDAS.filter(([tile,das])=>tile.dataSet==='sinusoidal');
+      var uniqueTiles = Array.from(new Set(justSinusoidal.map(([t,das])=>t.tile)));
+      var dasForUniqueTiles = uniqueTiles.map(tileID=>{
+        return justSinusoidal.find(([t,das])=>t.tile===tileID);
+      })
+      return dasForUniqueTiles.map((x)=>{
+        var [tile,das] = x;
         var tmp = das.variables.sinusoidal;
         var geo = tmp.GeoTransform.trim().split(' ').map(s=>+s);
-        return [tileID,new GeoTransform(geo)];
+        return [tile.tile,new GeoTransform(geo)];
       });
     }).publishReplay().refCount();
 
-    this.ddx$ = this.getAllMetadata(pathsToTiles$,'ddx',dap.parseDDX);
+    // var pathToAllTiles$ = this.files$.map(files=>{
+    //   return files.map(file=>{
+    //     return [
+    //       file.tile,
+    //       file.dataSet,
+    //       file.filename
+    //     ];
+    //   });
+    // });
+    this.ddx$ = this.getAllMetadata(this.files$,'ddx',dap.parseDDX);
   }
 
   findTile(ll:LatLng):Observable<TileCell>{
@@ -112,7 +132,7 @@ export class TimeseriesService {
         return Observable.from(allGeo.map(([tileID,geotransform],i)=>{
           var [row,col] = geotransform.toRowColumn(projected[0],projected[1]);
           col -= 0.5;
-          var ddx = allDDX[i][1];
+          var ddx = this._match({tile:tileID},allDDX);
 
           if((row<0)||(Math.floor(row)>=+ddx.variables.x.dimensions[0].size)||
             (col<0)||(Math.floor(col)>=+ddx.variables.y.dimensions[0].size)){
@@ -128,24 +148,42 @@ export class TimeseriesService {
       }).switch().first(tc=>tc!==null);
   }
 
-  _match(key:string,pairs:Array<[string,any]>):any{
-    return pairs.find(([k,o])=>key===k)[1];
+  _match(search:any,pairs:Array<[FmcTile,any]>):any{
+    var result = pairs.find(([t,o])=>{
+      for(var k in search){
+        if(search[k]!==t[k]){
+          return false;
+        }
+      }
+      return true;
+    });
+    
+    if(result){
+      return result[1];
+    }
+    return undefined;
   }
 
   getTimeSeries(point:LatLng,year:number):Observable<any>{
-    return Observable.forkJoin(this.findTile(point),this.files$,this.das$)
-      .map(([tileMatch,files,allDAS])=>{
+    return Observable.forkJoin(this.findTile(point),this.files$,this.das$,this.ddx$)
+      .map(([tileMatch,files,allDAS,allDDX])=>{
         var tile = tileMatch.tile;
         var cell = tileMatch.cell;
-        var das = this._match(tile,allDAS);
+        var matchCriteria = {year:year,tile:tile};
+        var das = this._match(matchCriteria,allDAS);
+        var ddx = this._match(matchCriteria,allDDX);
         var tileFile = files.find(f=>(f.tile===tile)&&(f.year===year));
 
         if(!tileFile){
-          return Observable.throw(new Error('No time series data'));
+          return Observable.throw(new Error(`No time series data at ${tile} in ${year}`));
         }
+        // console.log(das);
+        // console.log(ddx);
+        var nTimeSteps = +(ddx.variables.time.dimensions[0].size);
+        //console.log(ddx.variables.time.dimensions,nTimeSteps);
         var filename = tileFile.filename;
         var [r,c] = cell;
-        var url = `${DAP_SERVER}${filename}.ascii?lfmc_mean[0:1:45][${r}:1:${r}][${c}:1:${c}]`;
+        var url = `${DAP_SERVER}${filename}.ascii?lfmc_mean[0:1:${nTimeSteps-1}][${r}:1:${r}][${c}:1:${c}]`;
         return this.http.get(url).map(r=>r.text())
           .map(txt=>dap.parseData(txt,das))
           .map(dap.simplify)
