@@ -1,9 +1,15 @@
 
 export class FMCLayer{
+  colours: Array<string>;
+  labels: Array<string>;
 
   constructor(public name:string,public  units:string,public icon:string,public variable:string,public palette:any,
               public range:Array<number>,public description:string,public timePeriod:DateRange,
-              public wmsParams:any){
+              public legend:Array<any>,public wmsParams:any){
+    if(legend){
+      this.colours = legend.map(e=>`rgb(${e.r},${e.g},${e.b})`);
+      this.labels = legend.map(e=>e.label);
+    }
   }
 }
 
