@@ -1,140 +1,384 @@
 {
   "api_address": "10.0.1.69:80",
-  "layers": [{
-    "name": "Fenner:FMC",
-    "title": "Fuel Moisture",
-    "abstract": "Test Data from the ANU Fenner School",
-    "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
-    "start_isodate": "2000-02-18T00:00:00.000Z",
-    "end_isodate": "2017-01-01T00:00:00.000Z",
-    "step_days": 8,
-    "accum": false,
-    "time_generator": "mcd43",
-    "rgb_products": [
-      "lfmc_mean"
-    ],
-    "offset_value": 0,
-    "clip_value": 157,
-    "scale_value": 1.62,
-    "palette": {
-      "interpolate": false,
-      "colours": $FMC_PALETTE
+  "layers": [
+    {
+      "name": "Modis Land Mask",
+      "title": "Modis Land Mask",
+      "abstract": "Modis Land Mask.",
+      "data_source": "/g/data2/u39/public/data/modis/lpdaac-tiles-c5/MCD12Q1.051",
+      "start_isodate": "2000-01-01T00:00:00.000Z",
+      "end_isodate": "2013-01-01T00:00:00.000Z",
+      "step_days": 365,
+      "accum": false,
+      "time_generator": "yearly",
+      "rgb_products": [
+        "Land_Cover_Type_1"
+      ],
+      "offset_value": 0,
+      "clip_value": 16.0,
+      "scale_value": 16,
+      "palette": {
+        "interpolate": false,
+        "colours": [
+          {
+            "R": 211,
+            "G": 211,
+            "B": 211,
+            "A": 0
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 255
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 255
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 255
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 255
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 255
+          },
+          {
+            "R": 255,
+            "G": 165,
+            "B": 0,
+            "A": 255
+          },
+          {
+            "R": 255,
+            "G": 165,
+            "B": 0,
+            "A": 255
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 255
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 255
+          },
+          {
+            "R": 255,
+            "G": 255,
+            "B": 0,
+            "A": 255
+          },
+          {
+            "R": 211,
+            "G": 211,
+            "B": 211,
+            "A": 0
+          },
+          {
+            "R": 255,
+            "G": 255,
+            "B": 0,
+            "A": 255
+          },
+          {
+            "R": 211,
+            "G": 211,
+            "B": 211,
+            "A": 0
+          },
+          {
+            "R": 211,
+            "G": 211,
+            "B": 211,
+            "A": 0
+          },
+          {
+            "R": 211,
+            "G": 211,
+            "B": 211,
+            "A": 0
+          }
+        ]
+      },
+      "legend_path": "./static/legend/NDVI_Legend.png",
+      "zoom_limit": 10000
     },
-    "legend_path": "",
-    "zoom_limit": 20000
-  }, {
-    "name": "Fenner:FMC:Saturated",
-    "title": "Fuel Moisture (Saturated colours)",
-    "abstract": "Test Data from the ANU Fenner School",
-    "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
-    "start_isodate": "2000-02-18T00:00:00.000Z",
-    "end_isodate": "2017-01-01T00:00:00.000Z",
-    "step_days": 8,
-    "accum": false,
-    "time_generator": "mcd43",
-    "rgb_products": [
-      "lfmc_mean"
-    ],
-    "offset_value": 0,
-    "clip_value": 157,
-    "scale_value": 1.62,
-    "palette": {
-      "interpolate": false,
-      "colours": $FMC_PALETTE_SAT
+    {
+      "name": "Modis Land Mask (Inverted)",
+      "title": "Modis Land Mask (Inverted)",
+      "abstract": "Modis Land Mask (Inverted)",
+      "data_source": "/g/data2/u39/public/data/modis/lpdaac-tiles-c5/MCD12Q1.051",
+      "start_isodate": "2000-01-01T00:00:00.000Z",
+      "end_isodate": "2013-01-01T00:00:00.000Z",
+      "step_days": 365,
+      "accum": false,
+      "time_generator": "yearly",
+      "rgb_products": [
+        "Land_Cover_Type_1"
+      ],
+      "offset_value": 0,
+      "clip_value": 16.0,
+      "scale_value": 16,
+      "palette": {
+        "interpolate": false,
+        "colours": [
+          {
+            "R": 211,
+            "G": 211,
+            "B": 211,
+            "A": 255
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 0
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 0
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 0
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 0
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 0
+          },
+          {
+            "R": 255,
+            "G": 165,
+            "B": 0,
+            "A": 0
+          },
+          {
+            "R": 255,
+            "G": 165,
+            "B": 0,
+            "A": 0
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 0
+          },
+          {
+            "R": 34,
+            "G": 139,
+            "B": 34,
+            "A": 0
+          },
+          {
+            "R": 255,
+            "G": 255,
+            "B": 0,
+            "A": 0
+          },
+          {
+            "R": 211,
+            "G": 211,
+            "B": 211,
+            "A": 255
+          },
+          {
+            "R": 255,
+            "G": 255,
+            "B": 0,
+            "A": 0
+          },
+          {
+            "R": 211,
+            "G": 211,
+            "B": 211,
+            "A": 255
+          },
+          {
+            "R": 211,
+            "G": 211,
+            "B": 211,
+            "A": 255
+          },
+          {
+            "R": 211,
+            "G": 211,
+            "B": 211,
+            "A": 255
+          }
+        ]
+      },
+      "legend_path": "./static/legend/NDVI_Legend.png",
+      "zoom_limit": 10000
     },
-    "legend_path": "",
-    "zoom_limit": 20000
-  }, {
-    "name": "Fenner:FMC:5C",
-    "title": "Fuel Moisture",
-    "abstract": "Test Data from the ANU Fenner School",
-    "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
-    "start_isodate": "2000-02-18T00:00:00.000Z",
-    "end_isodate": "2017-01-01T00:00:00.000Z",
-    "step_days": 8,
-    "accum": false,
-    "time_generator": "mcd43",
-    "rgb_products": [
-      "lfmc_mean"
-    ],
-    "offset_value": 0,
-    "clip_value": 175,
-    "scale_value": 1.45,
-    "palette": {
-      "interpolate": false,
-      "colours": $FMC_PALETTE_SHORT
-
+    {
+      "name": "Fenner:FMC",
+      "title": "Fuel Moisture",
+      "abstract": "Test Data from the ANU Fenner School",
+      "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
+      "start_isodate": "2000-02-18T00:00:00.000Z",
+      "end_isodate": "2017-01-01T00:00:00.000Z",
+      "step_days": 8,
+      "accum": false,
+      "time_generator": "mcd43",
+      "rgb_products": [
+        "lfmc_mean"
+      ],
+      "offset_value": 0,
+      "clip_value": 157,
+      "scale_value": 1.62,
+      "palette": {
+        "interpolate": false,
+        "colours": $FMC_PALETTE
+      },
+      "legend_path": "",
+      "zoom_limit": 20000
     },
-    "legend_path": "",
-    "zoom_limit": 20000
-  }, {
-    "name": "Fenner:FMC:5C:I",
-    "title": "Fuel Moisture",
-    "abstract": "Test Data from the ANU Fenner School",
-    "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
-    "start_isodate": "2000-02-18T00:00:00.000Z",
-    "end_isodate": "2017-01-01T00:00:00.000Z",
-    "step_days": 8,
-    "accum": false,
-    "time_generator": "mcd43",
-    "rgb_products": [
-      "lfmc_mean"
-    ],
-    "offset_value": 0,
-    "clip_value": 175,
-    "scale_value": 1.45,
-    "palette": {
-      "interpolate": true,
-      "colours": $FMC_PALETTE_SHORT
+    {
+      "name": "Fenner:FMC:Saturated",
+      "title": "Fuel Moisture (Saturated colours)",
+      "abstract": "Test Data from the ANU Fenner School",
+      "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
+      "start_isodate": "2000-02-18T00:00:00.000Z",
+      "end_isodate": "2017-01-01T00:00:00.000Z",
+      "step_days": 8,
+      "accum": false,
+      "time_generator": "mcd43",
+      "rgb_products": [
+        "lfmc_mean"
+      ],
+      "offset_value": 0,
+      "clip_value": 157,
+      "scale_value": 1.62,
+      "palette": {
+        "interpolate": false,
+        "colours": $FMC_PALETTE_SAT
+      },
+      "legend_path": "",
+      "zoom_limit": 20000
     },
-    "legend_path": "",
-    "zoom_limit": 20000
-  }, {
-    "name": "Fenner:FMC:Uncertainty",
-    "title": "Fuel Moisture (Uncertainty)",
-    "abstract": "Test Data from the ANU Fenner School",
-    "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
-    "start_isodate": "2000-02-18T00:00:00.000Z",
-    "end_isodate": "2017-01-01T00:00:00.000Z",
-    "step_days": 8,
-    "accum": false,
-    "time_generator": "mcd43",
-    "rgb_products": [
-      "lfmc_stdv"
-    ],
-    "offset_value": 0,
-    "clip_value": 255,
-    "scale_value": 5,
-    "palette": {
-      "interpolate": false,
-      "colours": $FMC_UNCERTAINTY_PALETTE
+    {
+      "name": "Fenner:FMC:5C",
+      "title": "Fuel Moisture",
+      "abstract": "Test Data from the ANU Fenner School",
+      "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
+      "start_isodate": "2000-02-18T00:00:00.000Z",
+      "end_isodate": "2017-01-01T00:00:00.000Z",
+      "step_days": 8,
+      "accum": false,
+      "time_generator": "mcd43",
+      "rgb_products": [
+        "lfmc_mean"
+      ],
+      "offset_value": 0,
+      "clip_value": 175,
+      "scale_value": 1.45,
+      "palette": {
+        "interpolate": false,
+        "colours": $FMC_PALETTE_SHORT
+      },
+      "legend_path": "",
+      "zoom_limit": 20000
     },
-    "legend_path": "",
-    "zoom_limit": 20000
-  }, {
-    "name": "Fenner:FMC:Uncertainty:Saturated",
-    "title": "Fuel Moisture (Uncertainty, Saturated Colours)",
-    "abstract": "Test Data from the ANU Fenner School",
-    "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
-    "start_isodate": "2000-02-18T00:00:00.000Z",
-    "end_isodate": "2017-01-01T00:00:00.000Z",
-    "step_days": 8,
-    "accum": false,
-    "time_generator": "mcd43",
-    "rgb_products": [
-      "lfmc_stdv"
-    ],
-    "offset_value": 0,
-    "clip_value": 255,
-    "scale_value": 5,
-    "palette": {
-      "interpolate": false,
-      "colours": $FMC_UNCERTAINTY_PALETTE_SAT
+    {
+      "name": "Fenner:FMC:5C:I",
+      "title": "Fuel Moisture",
+      "abstract": "Test Data from the ANU Fenner School",
+      "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
+      "start_isodate": "2000-02-18T00:00:00.000Z",
+      "end_isodate": "2017-01-01T00:00:00.000Z",
+      "step_days": 8,
+      "accum": false,
+      "time_generator": "mcd43",
+      "rgb_products": [
+        "lfmc_mean"
+      ],
+      "offset_value": 0,
+      "clip_value": 175,
+      "scale_value": 1.45,
+      "palette": {
+        "interpolate": true,
+        "colours": $FMC_PALETTE_SHORT
+      },
+      "legend_path": "",
+      "zoom_limit": 20000
     },
-    "legend_path": "",
-    "zoom_limit": 20000
-  }],
-  "processes": [
-
-  ]
+    {
+      "name": "Fenner:FMC:Uncertainty",
+      "title": "Fuel Moisture (Uncertainty)",
+      "abstract": "Test Data from the ANU Fenner School",
+      "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
+      "start_isodate": "2000-02-18T00:00:00.000Z",
+      "end_isodate": "2017-01-01T00:00:00.000Z",
+      "step_days": 8,
+      "accum": false,
+      "time_generator": "mcd43",
+      "rgb_products": [
+        "lfmc_stdv"
+      ],
+      "offset_value": 0,
+      "clip_value": 255,
+      "scale_value": 5,
+      "palette": {
+        "interpolate": false,
+        "colours": $FMC_UNCERTAINTY_PALETTE
+      },
+      "legend_path": "",
+      "zoom_limit": 20000
+    },
+    {
+      "name": "Fenner:FMC:Uncertainty:Saturated",
+      "title": "Fuel Moisture (Uncertainty, Saturated Colours)",
+      "abstract": "Test Data from the ANU Fenner School",
+      "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
+      "start_isodate": "2000-02-18T00:00:00.000Z",
+      "end_isodate": "2017-01-01T00:00:00.000Z",
+      "step_days": 8,
+      "accum": false,
+      "time_generator": "mcd43",
+      "rgb_products": [
+        "lfmc_stdv"
+      ],
+      "offset_value": 0,
+      "clip_value": 255,
+      "scale_value": 5,
+      "palette": {
+        "interpolate": false,
+        "colours": $FMC_UNCERTAINTY_PALETTE_SAT
+      },
+      "legend_path": "",
+      "zoom_limit": 20000
+    }
+  ],
+  "processes": []
 }

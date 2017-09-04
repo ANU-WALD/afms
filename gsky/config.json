@@ -2,6 +2,246 @@
   "api_address": "10.0.1.69:80", 
   "layers": [
     {
+      "name": "Modis Land Mask", 
+      "title": "Modis Land Mask", 
+      "abstract": "Modis Land Mask.", 
+      "data_source": "/g/data2/u39/public/data/modis/lpdaac-tiles-c5/MCD12Q1.051", 
+      "start_isodate": "2000-01-01T00:00:00.000Z", 
+      "end_isodate": "2013-01-01T00:00:00.000Z", 
+      "step_days": 365, 
+      "accum": false, 
+      "time_generator": "yearly", 
+      "rgb_products": [
+        "Land_Cover_Type_1"
+      ], 
+      "offset_value": 0, 
+      "clip_value": 16.0, 
+      "scale_value": 16, 
+      "palette": {
+        "interpolate": false, 
+        "colours": [
+          {
+            "R": 211, 
+            "G": 211, 
+            "B": 211, 
+            "A": 0
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 255
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 255
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 255
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 255
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 255
+          }, 
+          {
+            "R": 255, 
+            "G": 165, 
+            "B": 0, 
+            "A": 255
+          }, 
+          {
+            "R": 255, 
+            "G": 165, 
+            "B": 0, 
+            "A": 255
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 255
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 255
+          }, 
+          {
+            "R": 255, 
+            "G": 255, 
+            "B": 0, 
+            "A": 255
+          }, 
+          {
+            "R": 211, 
+            "G": 211, 
+            "B": 211, 
+            "A": 0
+          }, 
+          {
+            "R": 255, 
+            "G": 255, 
+            "B": 0, 
+            "A": 255
+          }, 
+          {
+            "R": 211, 
+            "G": 211, 
+            "B": 211, 
+            "A": 0
+          }, 
+          {
+            "R": 211, 
+            "G": 211, 
+            "B": 211, 
+            "A": 0
+          }, 
+          {
+            "R": 211, 
+            "G": 211, 
+            "B": 211, 
+            "A": 0
+          }
+        ]
+      }, 
+      "legend_path": "./static/legend/NDVI_Legend.png", 
+      "zoom_limit": 10000
+    }, 
+    {
+      "name": "Modis Land Mask (Inverted)", 
+      "title": "Modis Land Mask (Inverted)", 
+      "abstract": "Modis Land Mask (Inverted)", 
+      "data_source": "/g/data2/u39/public/data/modis/lpdaac-tiles-c5/MCD12Q1.051", 
+      "start_isodate": "2000-01-01T00:00:00.000Z", 
+      "end_isodate": "2013-01-01T00:00:00.000Z", 
+      "step_days": 365, 
+      "accum": false, 
+      "time_generator": "yearly", 
+      "rgb_products": [
+        "Land_Cover_Type_1"
+      ], 
+      "offset_value": 0, 
+      "clip_value": 16.0, 
+      "scale_value": 16, 
+      "palette": {
+        "interpolate": false, 
+        "colours": [
+          {
+            "R": 211, 
+            "G": 211, 
+            "B": 211, 
+            "A": 255
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 0
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 0
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 0
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 0
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 0
+          }, 
+          {
+            "R": 255, 
+            "G": 165, 
+            "B": 0, 
+            "A": 0
+          }, 
+          {
+            "R": 255, 
+            "G": 165, 
+            "B": 0, 
+            "A": 0
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 0
+          }, 
+          {
+            "R": 34, 
+            "G": 139, 
+            "B": 34, 
+            "A": 0
+          }, 
+          {
+            "R": 255, 
+            "G": 255, 
+            "B": 0, 
+            "A": 0
+          }, 
+          {
+            "R": 211, 
+            "G": 211, 
+            "B": 211, 
+            "A": 255
+          }, 
+          {
+            "R": 255, 
+            "G": 255, 
+            "B": 0, 
+            "A": 0
+          }, 
+          {
+            "R": 211, 
+            "G": 211, 
+            "B": 211, 
+            "A": 255
+          }, 
+          {
+            "R": 211, 
+            "G": 211, 
+            "B": 211, 
+            "A": 255
+          }, 
+          {
+            "R": 211, 
+            "G": 211, 
+            "B": 211, 
+            "A": 255
+          }
+        ]
+      }, 
+      "legend_path": "./static/legend/NDVI_Legend.png", 
+      "zoom_limit": 10000
+    }, 
+    {
       "name": "Fenner:FMC", 
       "title": "Fuel Moisture", 
       "abstract": "Test Data from the ANU Fenner School", 

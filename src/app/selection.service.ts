@@ -10,9 +10,9 @@ const MILLISECONDS_PER_DAY=24*60*60*1000;
 @Injectable()
 export class SelectionService {
   _struct:NgbDateStruct={
-    day:22,
-    month:9,
-    year:2010
+    day:10,
+    month:8,
+    year:2017
   };
   _range:DateRange;
 
@@ -30,7 +30,7 @@ export class SelectionService {
       month:+params.mm||this.month,
       year:+params.yyyy||this.year
     }
-    this._fireDateChange();
+    this.dateChanged(false);
   }
 
   get year():number {return this._struct.year;}
@@ -45,7 +45,7 @@ export class SelectionService {
   set date(d:NgbDateStruct){
     this._struct=d;
     this.constrain();
-    this._fireDateChange();
+    this.dateChanged();
   }
 
   private goto(d:Date){
@@ -55,29 +55,37 @@ export class SelectionService {
   get range():DateRange{ return this._range; }
   set range(dr:DateRange){
     this._range = dr;
-    this.constrain();
-    this._fireDateChange();
+    if(this.constrain()){
+      this.dateChanged();
+    }
   }
 
-  constrain(){
+  // Constrain the selected date to be within the
+  // configured range (if any).
+  // Returns true if the date was changed, false otherwise
+  constrain(): boolean{
     if(!this.range){
-      return;
+      return false;
     }
 
     var now = this.effectiveDate();
     if(now<this.range.start){
       this.goto(this.range.start);
-      return;
+      return true;
     }
 
     if(now>this.range.end){
       this.goto(this.range.end);
-      return;
+      return true;
     }
+
+    return false;
   }
 
-  _fireDateChange() {
-    this.updateURL();
+  private dateChanged(triggerURLUpdate:boolean=true) {
+    if(triggerURLUpdate){
+      this.updateURL();
+    }
     this.dateChange.emit(this.effectiveDate());
   }
 
@@ -110,7 +118,7 @@ export class SelectionService {
     this._struct = this.convertDate(d);
 
     this.constrain();
-    this._fireDateChange();
+    this.dateChanged();
   }
 
   dateChange: EventEmitter<Date> = new EventEmitter<Date>();

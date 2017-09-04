@@ -1,9 +1,13 @@
 {
   "vector_layers": [{
+    "filename": "gfe_fire_weather.json",
+    "title": "Fire Weather Areas",
+    "name_field": "DIST_NAME"
+  }, {
     "filename": "LGA11aAust.json",
     "title": "Local Government Areas",
     "name_field": "LGA_NAME11"
-  }, { 
+  }, {
     "filename": "states4326.json",
     "title": "States and Territories",
     "name_field": "STATE_NAME"

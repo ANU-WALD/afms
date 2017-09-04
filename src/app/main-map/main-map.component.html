@@ -87,10 +87,12 @@
           <div class="card-block control-card-content">
             <map-legend [title]="mainLayer.layer.name"
                         [mapUnits]="mainLayer.layer.units"
-                        [cbPalette]="mainLayer.layer.palette.name"
-                        [cbCount]="mainLayer.layer.palette.count"
-                        [cbReverse]="mainLayer.layer.palette.reverse"
+                        [cbPalette]="mainLayer.layer.palette?.name"
+                        [cbCount]="mainLayer.layer.palette?.count"
+                        [cbReverse]="mainLayer.layer.palette?.reverse"
                         [cbRange]="mainLayer.layer.range"
+                        [colours]="mainLayer.layer.colours"
+                        [labels]="mainLayer.layer.labels"
                         [helpText]="mainLayer.layer.description"></map-legend>
           </div>
         </div>
