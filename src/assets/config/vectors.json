@@ -12,10 +12,6 @@
     "title": "States and Territories",
     "name_field": "STATE_NAME"
   }, {
-    "filename": "DefenceTA.json",
-    "title": "Defence Training Areas",
-    "name_field": "PR_NAME"
-  }, {
     "filename":"NatParks.json",
     "title":"National Parks",
     "name_field":"NAME"
