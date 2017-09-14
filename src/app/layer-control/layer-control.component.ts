@@ -11,7 +11,6 @@ import {FMCLayer} from '../layer';
 })
 export class LayerControlComponent implements OnInit {
   layers:Array<FMCLayer>;
-
   selectedLayer:FMCLayer;
 
   @Output() layerChanged: EventEmitter<FMCLayer> = new EventEmitter<FMCLayer>();

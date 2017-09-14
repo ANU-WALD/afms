@@ -3,12 +3,14 @@ import { environment } from '../environments/environment'
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { RouterModule }   from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { AgmCoreModule } from '@agm/core';
 import { MapWaldModule, MapViewParameterService } from 'map-wald';
+
 import { SelectionService } from './selection.service';
 import { LayersService } from './layers.service';
 import { MainMapComponent } from './main-map/main-map.component';
@@ -41,7 +43,8 @@ import { SplashModalComponent } from './splash-modal/splash-modal.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpModule, // old
+    HttpClientModule, // new
     NgbModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: environment.google_maps_api_key

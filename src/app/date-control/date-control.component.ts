@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import {SelectionService} from '../selection.service';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { TimeUtilsService } from "map-wald";
 
 @Component({
   selector: 'app-date-control',
@@ -16,7 +17,7 @@ export class DateControlComponent implements OnInit, OnChanges {
   atMax:boolean=false;
   atMin:boolean=false;
 
-  constructor(private selection:SelectionService) {
+  constructor(private selection:SelectionService, private timeUtils:TimeUtilsService) {
   }
 
   ngOnInit() {
@@ -24,11 +25,11 @@ export class DateControlComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes:any){
     if(changes.start){
-      this.minDate = this.selection.convertDate(this.start);
+      this.minDate = this.timeUtils.convertDate(this.start);
     }
 
     if(changes.end){
-      this.maxDate = this.selection.convertDate(this.end);
+      this.maxDate = this.timeUtils.convertDate(this.end);
     }
 
     this.checkLimits();
@@ -39,23 +40,12 @@ export class DateControlComponent implements OnInit, OnChanges {
     this.checkLimits();
   }
 
-  datesEqual(lhs:NgbDateStruct,rhs:NgbDateStruct):boolean{
-    if(!lhs || !rhs){
-      return false;
-    }
-
-    return (lhs.year===rhs.year) &&
-           (lhs.month===rhs.month) &&
-           (lhs.day===rhs.day);
-
-  }
-
   dateChanged(){
     this.checkLimits();
   }
 
   checkLimits(){
-    this.atMax = this.datesEqual(this.selection.date,this.maxDate);
-    this.atMin = this.datesEqual(this.selection.date,this.minDate);
+    this.atMax = this.timeUtils.datesEqual(this.selection.date,this.maxDate);
+    this.atMin = this.timeUtils.datesEqual(this.selection.date,this.minDate);
   }
 }

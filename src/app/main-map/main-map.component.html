@@ -21,27 +21,27 @@
       </agm-marker>
 
 <!--
-      <app-wms-layer *ngIf="wmsParametersSat" #wmsSat
+      <wms-layer *ngIf="wmsParametersSat" #wmsSat
         [url]="wmsURL"
         [params]="wmsParametersSat"
         [opacity]="0.5"
         [position]="0">
-      </app-wms-layer>
+      </wms-layer>
 
-      <app-wms-layer #wms
+      <wms-layer #wms
         [url]="wmsURL"
         [params]="wmsParameters"
         [opacity]="0.5"
         [position]="1">
-      </app-wms-layer>
+      </wms-layer>
 -->
-      <app-wms-layer #wms
+      <wms-layer #wms
                      *ngIf="mainLayer?.layer"
                      [url]="mainLayer.url"
                      [params]="mainLayer.wmsParameters"
                      [opacity]="mainLayer.opacity"
                      [position]="0">
-      </app-wms-layer>
+      </wms-layer>
 
 <!--
 
