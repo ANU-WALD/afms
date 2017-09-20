@@ -1,6 +1,23 @@
 {
   "layers": [
-  {
+    {
+      "source":"gsky",
+      "name": "Live Fuel Moisture Content",
+      "units": "%",
+      "icon": "fa-tint",
+      "wms_layer": "Fenner%3AFMC%3AC6",
+      "palette": {
+        "name": "RdYlBu",
+        "count": 9,
+        "reverse": false
+      },
+      "range": [0, 140],
+      "description":"Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+      "timeperiod":{
+        "start":2001,
+        "end":"2017/08/05"
+      }
+    },  {
     "source":"gsky",
     "name": "Historical Fuel Moisture Content",
     "units": "%",
@@ -12,7 +29,7 @@
       "reverse": false
     },
     "range": [0, 140],
-    "description":"Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+    "description":"Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
     "timeperiod":{
       "start":2001,
       "end":"2016/05/24"
