@@ -43,15 +43,12 @@
                      [position]="0">
       </wms-layer>
 
-<!--
-
-      <app-wms-layer #wmsMask *ngIf="mask"
-        [url]="mask.url"
-        [params]="mask.parameters"
-        [opacity]="mask.opacity"
+      <wms-layer #wmsMask *ngIf="showMask"
+        [url]="maskLayer.url"
+        [params]="maskLayer.wmsParameters"
+        [opacity]="maskLayer.opacity"
         [position]="1">
-      </app-wms-layer>
--->
+      </wms-layer>
 
       <agm-data-layer *ngIf="geoJsonObject"
                       [geoJson]="geoJsonObject"
@@ -103,7 +100,7 @@
           <a (click)="chartIsCollapsed = !chartIsCollapsed">
             <div class="card-header">
               <h6 class="mb-0">
-                Chart 
+                Chart
                 <span *ngIf="chartIsCollapsed" class="fa fa-angle-up
                   collapse-arrow" aria-hidden="true"></span>
                 <span *ngIf="!chartIsCollapsed" class="fa fa-angle-down

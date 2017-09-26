@@ -74,6 +74,10 @@ class VisibleLayer{
       tiled: true,
       feature_count: 101
     };
+
+    if(currentDate>this.layer.timePeriod.end){
+      this.wmsParameters.time = this.dateText(this.layer.timePeriod.end);
+    }
     this.applyFixed();
   }
 }
@@ -85,6 +89,7 @@ class VisibleLayer{
 })
 export class MainMapComponent implements OnInit {
 
+  showMask:boolean;
   maskLayer:VisibleLayer;
   mainLayer:VisibleLayer;
 
@@ -103,6 +108,7 @@ export class MainMapComponent implements OnInit {
     this.mainLayer = new VisibleLayer(null,null);
 
     this.layers.mask.subscribe(mask=>{
+      this.showMask=true;
       this.maskLayer = new VisibleLayer(mask,this.selection.effectiveDate());
     });
 
