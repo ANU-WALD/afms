@@ -1,94 +1,114 @@
 {
-  "layers": [{
-    "source":"gsky",
-    "name": "Fuel Moisture Content",
-    "units": "%",
-    "icon": "fa-tint",
-    "wms_layer": "Fenner%3AFMC",
-    "palette": {
-      "name": "RdYlBu",
-      "count": 9,
-      "reverse": false
-    },
-    "range": [0, 140],
-    "description":"Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
-    "timeperiod":{
-      "start":2001,
-      "end":"2017/08/10"
-    }
-  }, {
-    "source":"gsky",
-    "name": "Uncertainty",
-    "units": "%",
-    "icon": "fa-percent",
-    "wms_layer": "Fenner%3AFMC%3AUncertainty",
-    "palette": {
-      "name": "RdYlBu",
-      "count": 11,
-      "reverse": true
-    },
-    "range": [0, 50],
-    "description":"Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
-    "timeperiod":{
-      "start":2001,
-      "end":"2017/08/10"
-    }
-  }, {
-    "name": "Flammability",
-    "units": "units",
-    "icon": "fa-fire",
-    "wms_layer": "unknown",
-    "palette": {
-      "name": "RdYlBu",
-      "count": 11,
-      "reverse": false
-    },
-    "range": [0,100],
-    "timeperiod":{
-      "start":2013,
-      "end":2013
-    }
-  }, {
-    "name": "Computation Mask",
-    "icon": "fa-fire",
-    "wms_layer": "Modis Land Mask",
-    "legend": [
-      {
-        "r":34,
-        "g":139,
-        "b":34,
-        "label":"Forest"
+  "layers": [
+    {
+      "source": "gsky",
+      "name": "Live Fuel Moisture Content",
+      "units": "%",
+      "icon": "fa-tint",
+      "wms_layer": "Fenner%3AFMC%3AC6",
+      "palette": {
+        "name": "RdYlBu",
+        "count": 9,
+        "reverse": false
       },
-      {
-        "r":255,
-        "g":165,
-        "b":0,
-        "label":"Shrubs"
-      },
-      {
-        "r":255,
-        "g":255,
-        "b":0,
-        "label":"Grass"
+      "range": [
+        0,
+        140
+      ],
+      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+      "timeperiod": {
+        "start": 2001,
+        "end": "2017/08/05"
       }
-    ],
-    "range": [0,100],
-    "description":"Land cover classification used in computing live fuel moisture.",
-    "timeperiod":{
-      "start":2001,
-      "end":2013,
-      "format":"{{year}}-01-01T00%3A00%3A00.000Z"
+    },
+    {
+      "source": "gsky",
+      "name": "Uncertainty",
+      "units": "%",
+      "icon": "fa-percent",
+      "wms_layer": "Fenner%3AFMC%3AUncertainty",
+      "palette": {
+        "name": "RdYlBu",
+        "count": 11,
+        "reverse": true
+      },
+      "range": [
+        0,
+        50
+      ],
+      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+      "timeperiod": {
+        "start": 2001,
+        "end": "2017/08/10"
+      }
+    },
+    {
+      "name": "Flammability",
+      "units": "units",
+      "icon": "fa-fire",
+      "wms_layer": "unknown",
+      "palette": {
+        "name": "RdYlBu",
+        "count": 11,
+        "reverse": false
+      },
+      "range": [
+        0,
+        100
+      ],
+      "timeperiod": {
+        "start": 2013,
+        "end": 2013
+      }
+    },
+    {
+      "name": "Computation Mask",
+      "icon": "fa-fire",
+      "wms_layer": "Modis Land Mask",
+      "legend": [
+        {
+          "r": 34,
+          "g": 139,
+          "b": 34,
+          "label": "Forest"
+        },
+        {
+          "r": 255,
+          "g": 165,
+          "b": 0,
+          "label": "Shrubs"
+        },
+        {
+          "r": 255,
+          "g": 255,
+          "b": 0,
+          "label": "Grass"
+        }
+      ],
+      "range": [
+        0,
+        100
+      ],
+      "description": "Land cover classification used in computing live fuel moisture.",
+      "timeperiod": {
+        "start": 2001,
+        "end": 2013,
+        "format": "{{year}}-01-01T00%3A00%3A00.000Z"
+      }
     }
-  }],
-  "mask":{
+  ],
+  "mask": {
     "name": "Computation Mask",
     "icon": "fa-fire",
     "wms_layer": "Modis Land Mask (Inverted)",
-    "range": [0,100],
-    "timeperiod":{
-      "start":2001,
-      "end":2013,
-      "format":"{{year}}-01-01T00%3A00%3A00.000Z"
+    "range": [
+      0,
+      100
+    ],
+    "timeperiod": {
+      "start": 2001,
+      "end": 2013,
+      "format": "{{year}}-01-01T00%3A00%3A00.000Z"
     }
   }
 }

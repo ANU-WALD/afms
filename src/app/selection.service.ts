@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
-import {MapViewParameterService} from 'map-wald';
+import { MapViewParameterService, TimeUtilsService } from 'map-wald';
 import {DateRange} from "./layer";
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
@@ -20,6 +20,7 @@ export class SelectionService {
 
 
   constructor(private mapView:MapViewParameterService,
+              private timeUtils:TimeUtilsService,
               private _location: Location) {
   }
 
@@ -49,7 +50,7 @@ export class SelectionService {
   }
 
   private goto(d:Date){
-    this._struct = this.convertDate(d);
+    this._struct = this.timeUtils.convertDate(d);
   }
 
   get range():DateRange{ return this._range; }
@@ -99,23 +100,11 @@ export class SelectionService {
     this.mapView.update(params);
   }
 
-  convertDate(d:Date):NgbDateStruct{
-    if(!d){
-      d = new Date();
-    }
-
-    return {
-      day: d.getUTCDate(),
-      month: d.getUTCMonth()+1,
-      year: d.getUTCFullYear()
-    };
-  }
-
   move(n:number){
     var d = new Date(this._struct.year,this._struct.month-1,this._struct.day+n,12);
-    this._struct = this.convertDate(d);
+    this._struct = this.timeUtils.convertDate(d);
     d = this.effectiveDate();
-    this._struct = this.convertDate(d);
+    this._struct = this.timeUtils.convertDate(d);
 
     this.constrain();
     this.dateChanged();
