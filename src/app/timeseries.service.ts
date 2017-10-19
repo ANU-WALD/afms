@@ -99,10 +99,10 @@ export class TimeseriesService {
     this.das$ = this.getAllMetadata(this.files$,'das',dap.parseDAS);
 
     this.geoTransforms$ = this.das$.map(allDAS=>{
-      var justSinusoidal = allDAS.filter(([tile,das])=>tile.dataSet==='sinusoidal');
-      var uniqueTiles = Array.from(new Set(justSinusoidal.map(([t,das])=>t.tile)));
+//      var justSinusoidal = allDAS.filter(([tile,das])=>tile.dataSet==='sinusoidal');
+      var uniqueTiles = Array.from(new Set(allDAS.map(([t,das])=>t.tile)));
       var dasForUniqueTiles = uniqueTiles.map(tileID=>{
-        return justSinusoidal.find(([t,das])=>t.tile===tileID);
+        return allDAS.find(([t,das])=>t.tile===tileID);
       })
       return dasForUniqueTiles.map((x)=>{
         var [tile,das] = x;
@@ -183,7 +183,9 @@ export class TimeseriesService {
         //console.log(ddx.variables.time.dimensions,nTimeSteps);
         var filename = tileFile.filename;
         var [r,c] = cell;
-        var url = `${DAP_SERVER}${filename}.ascii?lfmc_mean[0:1:${nTimeSteps-1}][${r}:1:${r}][${c}:1:${c}]`;
+        var variable='lvmc_mean';
+        //variable =  filename.split('/')[1].split('_')[0].toLowerCase() + '_mean';
+        var url = `${DAP_SERVER}${filename}.ascii?${variable}[0:1:${nTimeSteps-1}][${r}:1:${r}][${c}:1:${c}]`;
         return this.http.get(url).map(r=>r.text())
           .map(txt=>dap.parseData(txt,das))
           .map(dap.simplify)

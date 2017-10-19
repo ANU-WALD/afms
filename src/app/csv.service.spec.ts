@@ -2,7 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { CsvService } from './csv.service';
 
-let testObject1 = {'time': [1,2,3], 'lfmc_mean': [4,5,6]}
+let testObject1 = {'time': [1,2,3], 'lvmc_mean': [4,5,6]}
 
 describe('CsvService', () => {
   beforeEach(() => {

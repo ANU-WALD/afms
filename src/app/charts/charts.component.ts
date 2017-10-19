@@ -68,18 +68,18 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
     let fullTimeSeries = {labels: [], columns: [] };
 
     let time = [];
-    let lfmc_mean = [];
+    let lvmc_mean = [];
 
-    fullTimeSeries.labels = ['date', 'lfmc_mean'];
+    fullTimeSeries.labels = ['date', 'lvmc_mean'];
 
     for (let series of data_copy){
       time = time.concat(series.time);
-      lfmc_mean = lfmc_mean.concat(series.lfmc_mean);
+      lvmc_mean = lvmc_mean.concat(series.lvmc_mean);
     }
 
     time = time.map(t => t.toISOString());
 
-    fullTimeSeries.columns =[time, lfmc_mean];
+    fullTimeSeries.columns =[time, lvmc_mean];
 
     this.fullTimeSeries = fullTimeSeries;
 
@@ -124,7 +124,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
         var color=+index?'rgb(229,242,248)':'rgb(85,115,181)';
         var trace = {
           x: chartTimestamps,
-          y: dataset.lfmc_mean,
+          y: dataset.lvmc_mean,
           name: dataSeries[index].year.toString(),
           mode: 'lines+markers',
           connectgaps: true,
