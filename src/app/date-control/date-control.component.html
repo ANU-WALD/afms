@@ -1,34 +1,17 @@
 <div class="date-control container-fluid">
-  <div class="row no-gutters">
-    <div class="col-2" >
-      <button class="btn btn-sm" [disabled]="atMin"
+  <div class="row">
+      <button class="btn btn-sm col-2" [disabled]="atMin"
               (click)="move(-selection.timeStep)"><i class="fa fa-chevron-left"></i></button>
-    </div>
-    <div class="col-8 form-group-inline">
-      <div class="input-group input-group-sm">
-        <input class="form-control form-control-sm" placeholder="yyyy-mm-dd"
+      <span class="input-group col-8 px-1">
+        <input class="form-control form-control-sm" id="dateInputGroup" placeholder="yyyy-mm-dd"
                name="dp" [(ngModel)]="selection.date" (ngOnChange)="dateChanged()"
                ngbDatepicker #d="ngbDatepicker"
                [maxDate]="maxDate" [minDate]="minDate">
-        <div class="input-group-addon" (click)="d.toggle()" >
+        <div class="input-group-addon" for="dateInputGroup"(click)="d.toggle()" >
           <i class="fa fa-calendar"></i>
         </div>
-      </div>
-    </div>
-    <div class="col-2" >
-      <button class="btn btn-sm" [disabled]="atMax"
+      </span>
+      <button class="btn btn-sm col-2" [disabled]="atMax"
               (click)="move(selection.timeStep)"><i class="fa fa-chevron-right"></i></button>
-    </div>
-<!--
-    <div class="col-2" >
-      <input class="form-control form-control-sm" type=number size="2" [(ngModel)]="selection.day">
-    </div>
-    <div class="col-2" >
-      <input class="form-control form-control-sm" type=number size="2" [(ngModel)]="selection.month">
-    </div>
-    <div class="col-4" >
-      <input class="form-control form-control-sm" type=number size="4" [(ngModel)]="selection.year">
-    </div>
--->
   </div>
 </div>
