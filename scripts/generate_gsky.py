@@ -11,10 +11,8 @@ template = Template(raw_template)
 
 palettes = {
   'FMC_PALETTE':['RdYlBu',9,False,1,0],
-  'FMC_PALETTE_SAT':['RdYlBu',9,False,1,20],
-  'FMC_PALETTE_SHORT':['RdYlBu',5,False,1,0],
   'FMC_UNCERTAINTY_PALETTE':['RdYlBu',11,True,1,0],
-  'FMC_UNCERTAINTY_PALETTE_SAT':['RdYlBu',11,True,1,20],
+  'FLAMMABILITY_PALETTE':['RdYlBu',11,True,1,0]
 }
 
 generated_palettes = {k:gsky_palette(cb_palette(*v[:2]),*v[2:]) for k,v in palettes.items()}
