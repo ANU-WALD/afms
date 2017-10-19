@@ -1,8 +1,8 @@
 <div class="date-control container-fluid">
-  <div class="row">
+  <div class="row pb-1">
       <button class="btn btn-sm col-2" [disabled]="atMin"
               (click)="move(-selection.timeStep)"><i class="fa fa-chevron-left"></i></button>
-      <span class="input-group col-8 px-1">
+      <div class="input-group input-group-sm col px-1">
         <input class="form-control form-control-sm" id="dateInputGroup" placeholder="yyyy-mm-dd"
                name="dp" [(ngModel)]="selection.date" (ngOnChange)="dateChanged()"
                ngbDatepicker #d="ngbDatepicker"
@@ -10,7 +10,7 @@
         <div class="input-group-addon" for="dateInputGroup"(click)="d.toggle()" >
           <i class="fa fa-calendar"></i>
         </div>
-      </span>
+      </div>
       <button class="btn btn-sm col-2" [disabled]="atMax"
               (click)="move(selection.timeStep)"><i class="fa fa-chevron-right"></i></button>
   </div>
