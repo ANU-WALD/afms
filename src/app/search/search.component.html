@@ -1,12 +1,12 @@
-<div class="form-group row">
-  <label for="location" class="col-sm-2 col-form-label">Search</label>
-  <div class="col-10">
+<div class="form-group row mb-0">
+  <label for="location" class="col-sm-2 col-form-label sr-only">Search</label>
+  <div class="col">
     <div class="input-group input-group-sm">
       <input id="location"
              class="form-control form-control-sm"
              name="location"
              [(ngModel)]="address"
-             placeholder="lat/lon or address"
+             placeholder="Search (lat/lon or address)"
              [ngbTypeahead]="search"
              [resultFormatter]="formatter"
              [inputFormatter]="formatter"/>

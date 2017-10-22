@@ -247,7 +247,7 @@ export class MainMapComponent implements OnInit {
     var now = this.selection.effectiveDate();
     var deltas = this.currentYearDataForLocation.time.map(t=>Math.abs(t.getTime()-now.getTime()));
     var closest = deltas.indexOf(Math.min(...deltas));
-    var val = this.currentYearDataForLocation.lfmc_mean[closest];
+    var val = this.currentYearDataForLocation.lvmc_mean[closest];
     if(val===null){
       val='-';
     } else {

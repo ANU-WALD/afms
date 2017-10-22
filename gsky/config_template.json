@@ -242,17 +242,17 @@
       "zoom_limit": 10000
     },
     {
-      "name": "Fenner:FMC",
-      "title": "Fuel Moisture",
+      "name": "Fenner:FMC:C6",
+      "title": "Fuel Moisture C6",
       "abstract": "Test Data from the ANU Fenner School",
-      "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
+      "data_source": "/g/data1/ub8/au/FMC/c6",
       "start_isodate": "2000-02-18T00:00:00.000Z",
-      "end_isodate": "2017-01-01T00:00:00.000Z",
-      "step_days": 8,
+      "end_isodate": "2017-09-02T00:00:00.000Z",
+      "step_days": 4,
       "accum": false,
       "time_generator": "mcd43",
       "rgb_products": [
-        "lfmc_mean"
+        "lvmc_mean"
       ],
       "offset_value": 0,
       "clip_value": 157,
@@ -265,86 +265,17 @@
       "zoom_limit": 20000
     },
     {
-      "name": "Fenner:FMC:Saturated",
-      "title": "Fuel Moisture (Saturated colours)",
-      "abstract": "Test Data from the ANU Fenner School",
-      "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
-      "start_isodate": "2000-02-18T00:00:00.000Z",
-      "end_isodate": "2017-01-01T00:00:00.000Z",
-      "step_days": 8,
-      "accum": false,
-      "time_generator": "mcd43",
-      "rgb_products": [
-        "lfmc_mean"
-      ],
-      "offset_value": 0,
-      "clip_value": 157,
-      "scale_value": 1.62,
-      "palette": {
-        "interpolate": false,
-        "colours": $FMC_PALETTE_SAT
-      },
-      "legend_path": "",
-      "zoom_limit": 20000
-    },
-    {
-      "name": "Fenner:FMC:5C",
-      "title": "Fuel Moisture",
-      "abstract": "Test Data from the ANU Fenner School",
-      "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
-      "start_isodate": "2000-02-18T00:00:00.000Z",
-      "end_isodate": "2017-01-01T00:00:00.000Z",
-      "step_days": 8,
-      "accum": false,
-      "time_generator": "mcd43",
-      "rgb_products": [
-        "lfmc_mean"
-      ],
-      "offset_value": 0,
-      "clip_value": 175,
-      "scale_value": 1.45,
-      "palette": {
-        "interpolate": false,
-        "colours": $FMC_PALETTE_SHORT
-      },
-      "legend_path": "",
-      "zoom_limit": 20000
-    },
-    {
-      "name": "Fenner:FMC:5C:I",
-      "title": "Fuel Moisture",
-      "abstract": "Test Data from the ANU Fenner School",
-      "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
-      "start_isodate": "2000-02-18T00:00:00.000Z",
-      "end_isodate": "2017-01-01T00:00:00.000Z",
-      "step_days": 8,
-      "accum": false,
-      "time_generator": "mcd43",
-      "rgb_products": [
-        "lfmc_mean"
-      ],
-      "offset_value": 0,
-      "clip_value": 175,
-      "scale_value": 1.45,
-      "palette": {
-        "interpolate": true,
-        "colours": $FMC_PALETTE_SHORT
-      },
-      "legend_path": "",
-      "zoom_limit": 20000
-    },
-    {
       "name": "Fenner:FMC:Uncertainty",
       "title": "Fuel Moisture (Uncertainty)",
       "abstract": "Test Data from the ANU Fenner School",
-      "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
+      "data_source": "/g/data1/ub8/au/FMC/c6",
       "start_isodate": "2000-02-18T00:00:00.000Z",
-      "end_isodate": "2017-01-01T00:00:00.000Z",
-      "step_days": 8,
+      "end_isodate": "2017-09-02T00:00:00.000Z",
+      "step_days": 4,
       "accum": false,
       "time_generator": "mcd43",
       "rgb_products": [
-        "lfmc_stdv"
+        "lvmc_stdv"
       ],
       "offset_value": 0,
       "clip_value": 255,
@@ -357,24 +288,24 @@
       "zoom_limit": 20000
     },
     {
-      "name": "Fenner:FMC:Uncertainty:Saturated",
-      "title": "Fuel Moisture (Uncertainty, Saturated Colours)",
+      "name": "Fenner:Flammability",
+      "title": "Flammability",
       "abstract": "Test Data from the ANU Fenner School",
-      "data_source": "/g/data1/ub8/au/FMC/sinusoidal",
+      "data_source": "/g/data1/ub8/au/FMC/c6",
       "start_isodate": "2000-02-18T00:00:00.000Z",
-      "end_isodate": "2017-01-01T00:00:00.000Z",
-      "step_days": 8,
+      "end_isodate": "2017-09-02T00:00:00.000Z",
+      "step_days": 4,
       "accum": false,
       "time_generator": "mcd43",
       "rgb_products": [
-        "lfmc_stdv"
+        "flammability_index"
       ],
       "offset_value": 0,
       "clip_value": 255,
-      "scale_value": 5,
+      "scale_value": 255,
       "palette": {
         "interpolate": false,
-        "colours": $FMC_UNCERTAINTY_PALETTE_SAT
+        "colours": $FLAMMABILITY_PALETTE
       },
       "legend_path": "",
       "zoom_limit": 20000
