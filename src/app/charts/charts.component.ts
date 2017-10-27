@@ -1,6 +1,6 @@
 // TODO: All plot generating code should be pulled out into a service (e.g.,
 // plotly.service)
-import { Component, ElementRef, AfterViewInit,Input, OnChanges } from '@angular/core';
+import { Component, ElementRef, AfterViewInit, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ProjectionService } from 'map-wald';
 import { SelectionService } from '../selection.service';
@@ -9,14 +9,13 @@ import { Http } from '@angular/http';
 import { LatLng } from '../latlng';
 import { GeoTransform } from './geotransform';
 import { CsvService } from '../csv.service';
-//import * as proj4 from 'proj4';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
 import * as Plotly from 'plotly.js/dist/plotly-basic';
 import * as FileSaver from 'file-saver';
 
 const CHART_YEARS = 4;
-const ALICE = [-23.6980,133.8807];
+const ALICE = [-23.6980, 133.8807];
 
 @Component({
   selector: 'app-charts',
@@ -26,7 +25,7 @@ const ALICE = [-23.6980,133.8807];
 })
 
 export class ChartsComponent implements AfterViewInit, OnChanges {
-  @Input() coordinates:LatLng;
+  @Input() coordinates: LatLng;
   @Input() year: number;
 
   fullTimeSeries = null;
