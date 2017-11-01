@@ -41,16 +41,18 @@ export class TimeseriesService {
   files: Observable<FmcTile[]>;
   das$: Observable<Array<[FmcTile, any]>>;
   ddx$: Observable<Array<[FmcTile, any]>>;
+
   geoTransforms$: Observable<Array<[string, GeoTransform]>>;
 
   getMetaData(tile: FmcTile, metaType: string, parser: (string) => any): Observable<[FmcTile, string]> {
 
-    return this.http.get(`${DAP_SERVER}${tile.filename}.${metaType}`)
-                                .map(resp => resp.text())
-                                .map(parser)
-                                .map(metadata => [tile, metadata]);
-  }
+    const tile_url = `${DAP_SERVER}${tile.filename}.${metaType}`;
 
+    return this.http.get(tile_url)
+      .map(resp => resp.text())
+      .map(parser)
+      .map(metadata => [tile, metadata]);
+  }
 
   getAllMetadata(metaType: string, parser: (string) => any): Observable<[FmcTile, string][]> {
 
@@ -157,30 +159,6 @@ export class TimeseriesService {
       }));
     }).switch().first(tc => tc !== null);
   }
-/*
-  findTile(ll: LatLng): Observable<TileCell> {
-    const projected = this.projection.forward([ll.lng, ll.lat]);
-
-    return Observable.forkJoin(this.das$, this.geoTransforms$, this.ddx$)
-      .map(([allDAS, allGeo, allDDX]) => {
-        return Observable.from(allGeo.map(([tileID, geotransform], i) => {
-          let [row, col] = geotransform.toRowColumn(projected[0], projected[1]);
-          col -= 0.5; // FIXME: Insert comment - why are we making this adjustment?
-          const ddx = this._match({tile: tileID}, allDDX);
-
-          // Check if bounds are within this tile
-          if ((row < 0) || (Math.floor(row) >= +ddx.variables.x.dimensions[0].size) ||
-            (col < 0) || (Math.floor(col) >= +ddx.variables.y.dimensions[0].size)) {
-            return null;
-          }
-
-          return {
-            tile: tileID,
-            cell: [Math.floor(row), Math.floor(col)]
-          };
-        }));
-      }).switch().first(tc => tc! == null);
-  }*/
 
   _match(search: any, pairs: Array<[FmcTile, any]>): any {
     const result = pairs.find(([t, o]) => {
