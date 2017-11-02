@@ -1,6 +1,6 @@
 // TODO: All plot generating code should be pulled out into a service (e.g.,
 // plotly.service)
-import { Component, ElementRef, AfterViewInit, Input, OnChanges } from '@angular/core';
+import { Component, ElementRef, AfterViewInit, Input, OnChanges, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ProjectionService } from 'map-wald';
 import { SelectionService } from '../selection.service';
@@ -24,12 +24,14 @@ const ALICE = [-23.6980, 133.8807];
   providers: [CsvService],
 })
 
-export class ChartsComponent implements AfterViewInit, OnChanges {
+export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   @Input() coordinates: LatLng;
   @Input() year: number;
 
   fullTimeSeries = null;
   havePlot:boolean=false;
+  node: HTMLElement;
+  hasBeenLoaded = false;
 
   constructor(private timeseries:TimeseriesService,
               private http:Http,
@@ -47,6 +49,10 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
       component.resizePlot();
     };
 
+  }
+
+  ngOnInit() {
+    this.node = this._element.nativeElement.querySelector('.our-chart');
   }
 
   ngOnChanges(event){
@@ -87,6 +93,11 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
   updateChart(yearCount: number){
     var selectedYear = this.year;
     var dataSeries = [];
+
+    this.havePlot = false;
+    this.hasBeenLoaded = true;
+
+    Plotly.purge(this.node);
 
     for (var i = 0; i < CHART_YEARS; i++) {
       var year = selectedYear - i;
@@ -155,7 +166,6 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
   }
 
   buildChart(series:Array<any>){
-    var node = this._element.nativeElement.querySelector('.our-chart');
     var width:number=this._element.nativeElement.clientWidth;
     var height:number=this._element.nativeElement.clientHeight;
 
@@ -163,9 +173,8 @@ export class ChartsComponent implements AfterViewInit, OnChanges {
     //  setTimeout(()=>this.buildChart(series),500);
     //}
 
-    Plotly.purge(node);
 
-    Plotly.plot( node, series, {
+    Plotly.plot( this.node, series, {
       margin: {
         t:30,
         l:45,

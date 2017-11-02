@@ -1,5 +1,12 @@
 <div class="our-chart">
+  <div *ngIf="!hasBeenLoaded" style="text-align: center">Click a location on the map to load data.</div>
+  <div *ngIf="!havePlot && hasBeenLoaded" style="text-align: center">
+    <i class="fa fa-spinner fa-pulse"
+                    aria-hidden="true"></i>
+    Downloading data...
+  </div>
 </div>
-<button class="btn btn-secondary btn-sm" (click)="downloadData()">
+<button class="btn btn-secondary btn-sm" (click)="downloadData()"
+  [disabled]="!havePlot">
   <span class="fa fa-download"></span> Download data
 </button>
