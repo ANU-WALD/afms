@@ -29,22 +29,22 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   @Input() year: number;
 
   fullTimeSeries = null;
-  havePlot:boolean=false;
+  havePlot = false;
   node: HTMLElement;
   hasBeenLoaded = false;
 
-  constructor(private timeseries:TimeseriesService,
-              private http:Http,
+  constructor(private timeseries: TimeseriesService,
+              private http: Http,
               private csv_service: CsvService,
-              private _element:ElementRef,
-              private _selection:SelectionService) {
+              private _element: ElementRef,
+              private _selection: SelectionService) {
 
-    this.coordinates={
-      lat:ALICE[0],
-      lng:ALICE[1]
+    this.coordinates = {
+      lat: ALICE[0],
+      lng: ALICE[1]
     };
 
-    var component=this;
+    const component = this;
     window.onresize = function(e) {
       component.resizePlot();
     };
@@ -55,8 +55,8 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     this.node = this._element.nativeElement.querySelector('.our-chart');
   }
 
-  ngOnChanges(event){
-    if(!this.coordinates){
+  ngOnChanges(event) {
+    if (!this.coordinates) {
       return;
     }
 
@@ -66,85 +66,85 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   setFullTimeSeries(data: any[]) {
     // TODO: make this more generic - currently only works with the FMC data
 
-    let data_copy = Array.from(data);
+    const data_copy = Array.from(data);
 
     data_copy.reverse();
 
-    let fullTimeSeries = {labels: [], columns: [] };
+    const fullTimeSeries = {labels: [], columns: [] };
 
     let time = [];
     let lvmc_mean = [];
 
     fullTimeSeries.labels = ['date', 'lvmc_mean'];
 
-    for (let series of data_copy){
+    for (const series of data_copy) {
       time = time.concat(series.time);
       lvmc_mean = lvmc_mean.concat(series.lvmc_mean);
     }
 
     time = time.map(t => t.toISOString());
 
-    fullTimeSeries.columns =[time, lvmc_mean];
+    fullTimeSeries.columns = [time, lvmc_mean];
 
     this.fullTimeSeries = fullTimeSeries;
 
   }
 
-  updateChart(yearCount: number){
-    var selectedYear = this.year;
-    var dataSeries = [];
+  updateChart(yearCount: number) {
+    const selectedYear = this.year;
+    const dataSeries = [];
 
     this.havePlot = false;
     this.hasBeenLoaded = true;
 
     Plotly.purge(this.node);
 
-    for (var i = 0; i < CHART_YEARS; i++) {
-      var year = selectedYear - i;
-      var observable = this.timeseries.getTimeSeries(this.coordinates, year);
+    for (let i = 0; i < CHART_YEARS; i++) {
+      const year = selectedYear - i;
+      const observable = this.timeseries.getTimeSeries(this.coordinates, year);
 
-      var newDataSeries = {
+      const newDataSeries = {
         year: year,
         observable: observable
-      }
+      };
 
       dataSeries.push(newDataSeries);
 
     }
 
-    var observables = dataSeries.map(s=>s.observable);
+    const observables = dataSeries.map(s => s.observable);
 
     Observable.forkJoin(observables)
-      .subscribe((data:any)=>{
+      .subscribe((data: any) => {
 
       this.setFullTimeSeries(data);
 
-      var traces = [];
-      for (let index in data) {
-        let dataset = data[index];
+      const traces = [];
+      for (const index in data) {
+        const dataset = data[index];
 
         // Set all datasets to the same year so that they are overlayed with
         // each other rather than shown sequentially
-        let chartTimestamps: Date[] = dataset.time.map(d => {
-          let modifiedDate = new Date(d);
+        const chartTimestamps: Date[] = dataset.time.map(d => {
+          const modifiedDate = new Date(d);
           modifiedDate.setFullYear(selectedYear);
           return modifiedDate;
         });
 
-        var color=+index?'rgb(229,242,248)':'rgb(85,115,181)';
-        var trace = {
+        const color = +index ? 'rgb(229,242,248)' : 'rgb(85,115,181)';
+        const trace = {
           x: chartTimestamps,
           y: dataset.lvmc_mean,
           name: dataSeries[index].year.toString(),
           mode: 'lines+markers',
           connectgaps: true,
 
-          marker:{
-            size:+index?4:6,
-            color:color
+          marker: {
+            size: + index ? 4 : 6,
+            color: color
           },
-          line:{
-            color:color
+          line: {
+            color: color
           }
         };
 
@@ -156,7 +156,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       this.buildChart(traces);
 
     },
-    (error)=>{
+    (error) => {
       console.log(error);
     });
   }
@@ -165,49 +165,43 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   ngAfterViewInit() {
   }
 
-  buildChart(series:Array<any>){
-    var width:number=this._element.nativeElement.clientWidth;
-    var height:number=this._element.nativeElement.clientHeight;
+  buildChart(series: Array<any>) {
+    const width: number = this._element.nativeElement.clientWidth;
+    const height: number = this._element.nativeElement.clientHeight;
 
-    //if(!width){ // TODO: HACK
-    //  setTimeout(()=>this.buildChart(series),500);
-    //}
-
-
-    Plotly.plot( this.node, series, {
+    Plotly.plot(this.node, series, {
       margin: {
-        t:30,
-        l:45,
-        r:10,
-        b:20
+        t: 30,
+        l: 45,
+        r: 10,
+        b: 20
       },
-      xaxis:{
-        tickformat:'%d/%b',
+      xaxis: {
+        tickformat: '%d/%b',
       },
-      yaxis:{
-        hoverformat:'.2f',
-        title:'%'
+      yaxis: {
+        hoverformat: '.2f',
+        title: '%'
       },
-      height:height,
-      width:width,
-      title:`Fuel Moisture Content (%) at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
-      showlegend:false
+      height: height,
+      width: width,
+      title: `Fuel Moisture Content (%) at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
+      showlegend: false
     },
     {
       displaylogo: false,
-      modeBarButtonsToRemove: ['hoverCompareCartesian','hoverClosestCartesian',
-        'lasso2d','select2d', 'toggleSpikelines']
+      modeBarButtonsToRemove: ['hoverCompareCartesian', 'hoverClosestCartesian',
+        'lasso2d', 'select2d', 'toggleSpikelines']
     } );
-    this.havePlot=true;
+    this.havePlot = true;
   }
 
-  resizePlot(){
-    if(!this.havePlot){
+  resizePlot() {
+    if (!this.havePlot) {
       return;
     }
-    var node = this._element.nativeElement.querySelector('.our-chart');
 
-    Plotly.Plots.resize(node);
+    Plotly.Plots.resize(this.node);
   }
 
   downloadData() {
@@ -216,13 +210,19 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
     if (this.fullTimeSeries) {
 
-      let output = new Blob(
-        [this.csv_service.getCsv(this.fullTimeSeries.labels, this.fullTimeSeries.columns)], 
-        {type: "text/plain;charset=utf-8"});
-      FileSaver.saveAs(output, "data.csv");
+
+      const filename_lat = this.coordinates.lat.toFixed(6).replace('.', '_');
+      const filename_lng = this.coordinates.lng.toFixed(6).replace('.', '_');
+
+      const fileName = `lvmc_${this.year - CHART_YEARS}_${this.year}_${filename_lat}_${filename_lng}.csv`;
+
+      const output = new Blob(
+        [this.csv_service.getCsv(this.fullTimeSeries.labels, this.fullTimeSeries.columns)],
+        {type: 'text/plain;charset=utf-8'});
+      FileSaver.saveAs(output, fileName);
 
     }
 
   }
-
 }
+
