@@ -210,7 +210,7 @@ export class MainMapComponent implements OnInit {
   selectLocation(coords:LatLng){
     this.marker ={
       loc:coords,
-      value:'...',
+      value:null,
       open:true
     };
     this.updateTimeSeries();
@@ -248,7 +248,7 @@ export class MainMapComponent implements OnInit {
     var deltas = this.currentYearDataForLocation.time.map(t=>Math.abs(t.getTime()-now.getTime()));
     var closest = deltas.indexOf(Math.min(...deltas));
     var val = this.currentYearDataForLocation.lvmc_mean[closest];
-    if(val===null){
+    if (val === null || isNaN(val)) {
       val='-';
     } else {
       val = val.toFixed(3);
