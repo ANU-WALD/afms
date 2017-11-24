@@ -66,7 +66,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   setFullTimeSeries(data: any[]) {
     // TODO: make this more generic - currently only works with the FMC data
 
-    const data_copy = Array.from(data);
+    let data_copy = Array.from(data);
 
     data_copy.reverse();
 
@@ -131,7 +131,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
           return modifiedDate;
         });
 
-        const color = +index ? 'rgb(229,242,248)' : 'rgb(85,115,181)';
+        const color = +index ? 'rgb(198,219,239)' : 'rgb(33,113,181)';
         const trace = {
           x: chartTimestamps,
           y: dataset.lvmc_mean,
