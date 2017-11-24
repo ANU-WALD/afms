@@ -260,7 +260,7 @@ export class MainMapComponent implements OnInit {
       clickable: true,
       fillOpacity: 0,
       fillColor: null,//'#80F090',
-      strokeWeight: 0.5,
+      strokeWeight: 1,
       strokeColor: '#444'
     };
 
