@@ -17,10 +17,8 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 
-//const BASE_URL='http://gsky-dev.nci.org.au/ows';
 const BASE_URL=environment.gsky_server;
-//const BASE_URL = 'http://130.56.242.21/ows';
-//'http://dapds00.nci.org.au/thredds';
+const TDS_URL=environment.tds_server;
 
 class ValueMarker{
   loc:LatLng;
@@ -66,6 +64,10 @@ class VisibleLayer{
   };
 
   updateParameters(currentDate:Date){
+    if(this.layer.source==='tds'){
+      this.url = `${TDS_URL}/wms/${this.layer.path}`;
+    }
+
     this.wmsParameters = {
       layers: this.layer.variable,
       time: this.dateText(currentDate),
