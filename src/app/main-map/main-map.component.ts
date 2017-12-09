@@ -28,6 +28,7 @@ class ValueMarker{
 
 class VisibleLayer{
   url:string = BASE_URL;
+  legendImageURL:string = null;
   opacity:number=1.0;
   wmsParameters:any;
 
@@ -80,7 +81,14 @@ class VisibleLayer{
     if(currentDate>this.layer.timePeriod.end){
       this.wmsParameters.time = this.dateText(this.layer.timePeriod.end);
     }
+
     this.applyFixed();
+
+    if(this.layer.palette && this.layer.palette.image){
+      var p = this.wmsParameters;
+      this.legendImageURL = 
+        `${this.url}?request=GetLegendGraphic&layer=${p.layers}&palette=${p.styles.split('/')[1]}&colorscalerange=${this.layer.range.join(',')}&numcolorbands=${p.numcolorbands}`;
+    }
   }
 }
 
