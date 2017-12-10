@@ -2,12 +2,14 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http, Response } from '@angular/http';
 import { GoogleMapsAPIWrapper } from '@agm/core/services';
-import { WMSService, WMSLayerComponent, MapViewParameterService, InterpolationService } from 'map-wald';
+import { WMSService, WMSLayerComponent, MapViewParameterService, 
+         InterpolationService, TimeseriesService, CatalogHost } from 'map-wald';
 import { SelectionService } from '../selection.service';
 import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.component';
 import { LatLng } from '../latlng';
+import { LatLng as GoogleLatLng } from '@agm/core';
 import { BaseLayer } from '../base-layer.service';
-import { TimeseriesService } from "../timeseries.service";
+//import { TimeseriesService } from "../timeseries.service";
 import { LayersService } from '../layers.service';
 import { environment } from '../../environments/environment'
 import { FMCLayer, DateRange } from "../layer";
@@ -26,8 +28,9 @@ class ValueMarker{
   open:boolean;
 }
 
-class VisibleLayer{
+export class VisibleLayer{
   url:string = BASE_URL;
+  path:string;
   legendImageURL:string = null;
   opacity:number=1.0;
   wmsParameters:any;
@@ -65,8 +68,14 @@ class VisibleLayer{
   };
 
   updateParameters(currentDate:Date){
+    this.path = InterpolationService.interpolate(this.layer.path,{
+      year:currentDate.getFullYear(),
+      month:this.leading0(currentDate.getMonth()+1),
+      day:this.leading0(currentDate.getDate())
+    });
+    
     if(this.layer.source==='tds'){
-      this.url = `${TDS_URL}/wms/${this.layer.path}`;
+      this.url = `${TDS_URL}/wms/${this.path}`;
     }
 
     this.wmsParameters = {
@@ -98,7 +107,7 @@ class VisibleLayer{
   styleUrls: ['./main-map.component.scss']
 })
 export class MainMapComponent implements OnInit {
-
+  thredds:CatalogHost;
   showMask:boolean;
   maskLayer:VisibleLayer;
   mainLayer:VisibleLayer;
@@ -114,6 +123,10 @@ export class MainMapComponent implements OnInit {
     private http: Http,
     private timeseries:TimeseriesService,
     private layers:LayersService) {
+    this.thredds = {
+      software:'tds',
+      url:TDS_URL
+    };
 
     this.mainLayer = new VisibleLayer(null,null);
 
@@ -238,7 +251,12 @@ export class MainMapComponent implements OnInit {
     }
 
     var year = this.selection.year;
-    this.timeseries.getTimeSeries(coords,year)
+    var fn = this.mainLayer.path;
+    if(!fn){
+      return;
+    }
+
+    this.timeseries.getTimeseries(this.thredds,fn,this.mainLayer.layer.variable,coords)//,year)
       .subscribe(dapData=>{
         if((year!==this.selection.year)||(coords!==this.marker.loc)){
           return; // Reject the data
@@ -255,9 +273,9 @@ export class MainMapComponent implements OnInit {
 
   updateMarker(){
     var now = this.selection.effectiveDate();
-    var deltas = this.currentYearDataForLocation.time.map(t=>Math.abs(t.getTime()-now.getTime()));
+    var deltas = this.currentYearDataForLocation.dates.map(t=>Math.abs(t.getTime()-now.getTime()));
     var closest = deltas.indexOf(Math.min(...deltas));
-    var val = this.currentYearDataForLocation.lvmc_mean[closest];
+    var val = this.currentYearDataForLocation.values[closest];
     if (val === null || isNaN(val)) {
       val='-';
     } else {

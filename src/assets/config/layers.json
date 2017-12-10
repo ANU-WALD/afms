@@ -2,7 +2,7 @@
   "layers": [
     {
       "source": "tds",
-      "path": "ub8/au/FMC/australia_LVMC_2017.nc",
+      "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "Live Fuel Moisture Content",
       "units": "%",
       "icon": "fa-tint",
@@ -31,7 +31,7 @@
     },
     {
       "source": "tds",
-      "path": "ub8/au/FMC/australia_LVMC_2017.nc",
+      "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "Uncertainty",
       "units": "%",
       "icon": "fa-percent",
@@ -60,7 +60,7 @@
     },
     {
       "source":"tds",
-      "path": "ub8/au/FMC/australia_LVMC_2017.nc",
+      "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "Flammability",
       "units": "units",
       "icon": "fa-fire",

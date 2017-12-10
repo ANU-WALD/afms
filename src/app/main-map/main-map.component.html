@@ -116,7 +116,9 @@
           <div class="ngbCollapse" [ngbCollapse]="chartIsCollapsed">
             <div class="card-block control-card-content">
               <app-charts [coordinates]="selectedCoordinates"
-                          [year] = "selection.year" ></app-charts>
+                          [year] = "selection.year"
+                          [thredds] = "thredds"
+                          [layer] = "mainLayer"></app-charts>
             </div>
           </div>
         </div>
