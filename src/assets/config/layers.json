@@ -1,8 +1,94 @@
 {
   "layers": [
     {
-      "source": "gsky",
+      "source": "tds",
+      "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "Live Fuel Moisture Content",
+      "units": "%",
+      "icon": "fa-tint",
+      "wms_layer": "lvmc_mean",
+      "palette": {
+        "image":true,
+        "name": "RdYlBu",
+        "count": 9,
+        "reverse": false
+      },
+      "range": [
+        0,
+        140
+      ],
+      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+      "timeperiod": {
+        "start": 2001,
+        "end": "2017/11/21"
+      },
+      "wms_params":{
+        "styles":"boxfill/anu_wald_gistemp_inv",
+        "colorscalerange":"0,140",
+        "abovemaxcolor":"extend",
+        "numcolorbands":9
+      }
+    },
+    {
+      "source": "tds",
+      "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
+      "name": "Uncertainty",
+      "units": "%",
+      "icon": "fa-percent",
+      "wms_layer": "lvmc_stdv",
+      "palette": {
+        "image":true,
+        "name": "RdYlBu",
+        "count": 11,
+        "reverse": true
+      },
+      "range": [
+        0,
+        50
+      ],
+      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+      "timeperiod": {
+        "start": 2001,
+        "end": "2017/11/21"
+      },
+      "wms_params":{
+        "styles":"boxfill/sst_36",
+        "colorscalerange":"0,50",
+        "abovemaxcolor":"extend",
+        "numcolorbands":11
+      }
+    },
+    {
+      "source":"tds",
+      "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
+      "name": "Flammability",
+      "units": "units",
+      "icon": "fa-fire",
+      "wms_layer": "flammability_index",
+      "palette": {
+        "image":true,
+        "name": "RdYlBu",
+        "count": 11,
+        "reverse": true
+      },
+      "range": [
+        0,
+        1
+      ],
+      "timeperiod": {
+        "start": 2001,
+        "end": "2017/11/21"
+      },
+      "wms_params":{
+        "styles":"boxfill/sst_36",
+        "colorscalerange":"0,1",
+        "abovemaxcolor":"extend",
+        "numcolorbands":11
+      }
+    },
+    {
+      "source": "gsky",
+      "name": "Live Fuel Moisture Content (GSKY)",
       "units": "%",
       "icon": "fa-tint",
       "wms_layer": "Fenner%3AFMC%3AC6",
@@ -23,7 +109,7 @@
     },
     {
       "source": "gsky",
-      "name": "Uncertainty",
+      "name": "Uncertainty (GSKY)",
       "units": "%",
       "icon": "fa-percent",
       "wms_layer": "Fenner%3AFMC%3AUncertainty",
@@ -43,7 +129,7 @@
       }
     },
     {
-      "name": "Flammability",
+      "name": "Flammability (GSKY)",
       "units": "units",
       "icon": "fa-fire",
       "wms_layer": "unknown",

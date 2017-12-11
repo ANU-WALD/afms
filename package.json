@@ -29,7 +29,7 @@
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/platform-server": "^4.0.0",
     "@angular/router": "^4.0.0",
-    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.23",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-beta.6",
     "@types/googlemaps": "^3.26.7",
     "@types/proj4": "^2.3.4",
     "bootstrap": "^4.0.0-alpha.6",
