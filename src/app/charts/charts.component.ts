@@ -223,8 +223,9 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
       const filename_lat = this.coordinates.lat.toFixed(6).replace('.', '_');
       const filename_lng = this.coordinates.lng.toFixed(6).replace('.', '_');
+      const variable_name = this.layer.layer.variable;
 
-      const fileName = `lvmc_${this.year - CHART_YEARS}_${this.year}_${filename_lat}_${filename_lng}.csv`;
+      const fileName = `${variable_name}_${this.year - CHART_YEARS}_${this.year}_${filename_lat}_${filename_lng}.csv`;
 
       const output = new Blob(
         [this.csv_service.getCsv(this.fullTimeSeries.labels, this.fullTimeSeries.columns)],
