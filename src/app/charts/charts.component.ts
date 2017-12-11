@@ -195,7 +195,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       },
       height: height,
       width: width,
-      title: `Fuel Moisture Content (%) at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
+      title: `${this.layer.layer.name} (${this.layer.layer.units}) at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
       showlegend: false
     },
     {

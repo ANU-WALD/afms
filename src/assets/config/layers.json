@@ -62,7 +62,7 @@
       "source":"tds",
       "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "Flammability",
-      "units": "units",
+      "units": "unitless",
       "icon": "fa-fire",
       "wms_layer": "flammability_index",
       "palette": {
@@ -184,17 +184,19 @@
     }
   ],
   "mask": {
+    "source": "tds",
+    "path": "ub8/au/FMC/inverted_mask.nc",
     "name": "Computation Mask",
     "icon": "fa-fire",
-    "wms_layer": "Modis Land Mask (Inverted)",
+    "wms_layer": "computation_mask",
     "range": [
       0,
       100
     ],
     "timeperiod": {
       "start": 2001,
-      "end": 2013,
-      "format": "{{year}}-01-01T00%3A00%3A00.000Z"
+      "end": 2016,
+      "format": "{{year}}-12-31T00%3A00%3A00.000Z"
     }
   }
 }
