@@ -179,6 +179,11 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     const width: number = this._element.nativeElement.clientWidth;
     const height: number = this._element.nativeElement.clientHeight;
 
+    let y_axis_title: number;
+    if (this.layer.layer.chartConfig) {
+      y_axis_title = this.layer.layer.chartConfig.yaxis.title;
+    }
+
     Plotly.plot(this.node, series, {
       margin: {
         t: 30,
@@ -191,7 +196,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       },
       yaxis: {
         hoverformat: '.2f',
-        title: '%'
+        title: y_axis_title ? y_axis_title : '%',
       },
       height: height,
       width: width,

@@ -28,6 +28,7 @@
         "abovemaxcolor":"extend",
         "numcolorbands":9
       }
+        
     },
     {
       "source": "tds",
@@ -84,6 +85,11 @@
         "colorscalerange":"0,1",
         "abovemaxcolor":"extend",
         "numcolorbands":11
+      },
+      "chart_config": {
+        "yaxis": {
+          "title": " "
+        }
       }
     },
     {
