@@ -179,6 +179,11 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     const width: number = this._element.nativeElement.clientWidth;
     const height: number = this._element.nativeElement.clientHeight;
 
+    let y_axis_title: number;
+    if (this.layer.layer.chartConfig) {
+      y_axis_title = this.layer.layer.chartConfig.yaxis.title;
+    }
+
     Plotly.plot(this.node, series, {
       margin: {
         t: 30,
@@ -191,11 +196,11 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       },
       yaxis: {
         hoverformat: '.2f',
-        title: '%'
+        title: y_axis_title ? y_axis_title : '%',
       },
       height: height,
       width: width,
-      title: `Fuel Moisture Content (%) at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
+      title: `${this.layer.layer.name} (${this.layer.layer.units}) at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
       showlegend: false
     },
     {
@@ -223,8 +228,9 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
       const filename_lat = this.coordinates.lat.toFixed(6).replace('.', '_');
       const filename_lng = this.coordinates.lng.toFixed(6).replace('.', '_');
+      const variable_name = this.layer.layer.variable;
 
-      const fileName = `lvmc_${this.year - CHART_YEARS}_${this.year}_${filename_lat}_${filename_lng}.csv`;
+      const fileName = `${variable_name}_${this.year - CHART_YEARS}_${this.year}_${filename_lat}_${filename_lng}.csv`;
 
       const output = new Blob(
         [this.csv_service.getCsv(this.fullTimeSeries.labels, this.fullTimeSeries.columns)],

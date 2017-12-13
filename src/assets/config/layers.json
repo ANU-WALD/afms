@@ -8,7 +8,7 @@
       "icon": "fa-tint",
       "wms_layer": "lvmc_mean",
       "palette": {
-        "image":true,
+        "image":false,
         "name": "RdYlBu",
         "count": 9,
         "reverse": false
@@ -23,11 +23,12 @@
         "end": "2017/11/21"
       },
       "wms_params":{
-        "styles":"boxfill/anu_wald_gistemp_inv",
+        "styles":"boxfill/anu_fmc_rdylbu_9",
         "colorscalerange":"0,140",
         "abovemaxcolor":"extend",
         "numcolorbands":9
       }
+        
     },
     {
       "source": "tds",
@@ -37,7 +38,7 @@
       "icon": "fa-percent",
       "wms_layer": "lvmc_stdv",
       "palette": {
-        "image":true,
+        "image":false,
         "name": "RdYlBu",
         "count": 11,
         "reverse": true
@@ -52,7 +53,7 @@
         "end": "2017/11/21"
       },
       "wms_params":{
-        "styles":"boxfill/sst_36",
+        "styles":"boxfill/anu_fmc_rdylbu_11_rev",
         "colorscalerange":"0,50",
         "abovemaxcolor":"extend",
         "numcolorbands":11
@@ -62,7 +63,7 @@
       "source":"tds",
       "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "Flammability",
-      "units": "units",
+      "units": "unitless",
       "icon": "fa-fire",
       "wms_layer": "flammability_index",
       "palette": {
@@ -80,10 +81,15 @@
         "end": "2017/11/21"
       },
       "wms_params":{
-        "styles":"boxfill/sst_36",
+        "styles":"boxfill/anu_fmc_rdylbu_11_rev",
         "colorscalerange":"0,1",
         "abovemaxcolor":"extend",
         "numcolorbands":11
+      },
+      "chart_config": {
+        "yaxis": {
+          "title": " "
+        }
       }
     },
     {
@@ -193,7 +199,7 @@
     ],
     "timeperiod": {
       "start": 2001,
-      "end": 2013,
+      "end": 2017,
       "format": "{{year}}-01-01T00%3A00%3A00.000Z"
     }
   }
