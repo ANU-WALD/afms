@@ -8,7 +8,7 @@
       "icon": "fa-tint",
       "wms_layer": "lvmc_mean",
       "palette": {
-        "image":true,
+        "image":false,
         "name": "RdYlBu",
         "count": 9,
         "reverse": false
@@ -23,7 +23,7 @@
         "end": "2017/11/21"
       },
       "wms_params":{
-        "styles":"boxfill/anu_wald_gistemp_inv",
+        "styles":"boxfill/anu_fmc_rdylbu_9",
         "colorscalerange":"0,140",
         "abovemaxcolor":"extend",
         "numcolorbands":9
@@ -38,7 +38,7 @@
       "icon": "fa-percent",
       "wms_layer": "lvmc_stdv",
       "palette": {
-        "image":true,
+        "image":false,
         "name": "RdYlBu",
         "count": 11,
         "reverse": true
@@ -53,7 +53,7 @@
         "end": "2017/11/21"
       },
       "wms_params":{
-        "styles":"boxfill/sst_36",
+        "styles":"boxfill/anu_fmc_rdylbu_11_rev",
         "colorscalerange":"0,50",
         "abovemaxcolor":"extend",
         "numcolorbands":11
@@ -81,7 +81,7 @@
         "end": "2017/11/21"
       },
       "wms_params":{
-        "styles":"boxfill/sst_36",
+        "styles":"boxfill/anu_fmc_rdylbu_11_rev",
         "colorscalerange":"0,1",
         "abovemaxcolor":"extend",
         "numcolorbands":11
