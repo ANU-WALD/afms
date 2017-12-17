@@ -67,7 +67,7 @@
       "icon": "fa-fire",
       "wms_layer": "flammability_index",
       "palette": {
-        "image":true,
+        "image":false,
         "name": "RdYlBu",
         "count": 11,
         "reverse": true
