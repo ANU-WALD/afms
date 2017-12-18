@@ -115,6 +115,7 @@ export class MainMapComponent implements OnInit {
   baseLayer: BaseLayer;
   testMapType: string = null;
   chartIsCollapsed: boolean = true;
+  chartRange: Array<number> = null;
 
   constructor(private _wmsService: WMSService,
     _activatedRoute: ActivatedRoute,

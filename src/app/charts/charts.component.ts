@@ -31,7 +31,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   @Input() year: number;
   @Input() layer: VisibleLayer;
   @Input() thredds: CatalogHost;
-  
+
   fullTimeSeries = null;
   havePlot = false;
   node: HTMLElement;
@@ -180,8 +180,14 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     const height: number = this._element.nativeElement.clientHeight;
 
     let y_axis_title: number;
-    if (this.layer.layer.chartConfig) {
-      y_axis_title = this.layer.layer.chartConfig.yaxis.title;
+    let custom = this.layer.layer.chartConfig;
+    let yRange:Array<number>;
+
+    if (custom && custom.yaxis) {
+      y_axis_title = custom.yaxis.title;
+      if(custom.yaxis.fixed){
+        yRange = this.layer.layer.range;
+      }
     }
 
     Plotly.plot(this.node, series, {
@@ -197,6 +203,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       yaxis: {
         hoverformat: '.2f',
         title: y_axis_title ? y_axis_title : '%',
+        range:yRange
       },
       height: height,
       width: width,
