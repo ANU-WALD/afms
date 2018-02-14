@@ -103,6 +103,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
     Plotly.purge(this.node);
 
+
     var host = this.thredds;
     var baseFn = this.layer.layer.path;
     var variable = this.layer.layer.variable;
@@ -135,6 +136,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
         // Set all datasets to the same year so that they are overlayed with
         // each other rather than shown sequentially
+
         const chartTimestamps: Date[] = dataset.dates.map(d => {
           const modifiedDate = new Date(d);
           modifiedDate.setFullYear(selectedYear);
