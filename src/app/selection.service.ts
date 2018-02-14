@@ -10,9 +10,9 @@ const MILLISECONDS_PER_DAY=24*60*60*1000;
 @Injectable()
 export class SelectionService {
   _struct:NgbDateStruct={
-    day:10,
-    month:8,
-    year:2017
+    day:13,
+    month:1,
+    year:2018
   };
   _range:DateRange;
 

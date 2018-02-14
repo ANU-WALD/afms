@@ -2,9 +2,10 @@
 // plotly.service)
 import { Component, ElementRef, AfterViewInit, Input, OnChanges, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ProjectionService } from 'map-wald';
+import { ProjectionService, MappedLayer, CatalogHost, InterpolationService } from 'map-wald';
 import { SelectionService } from '../selection.service';
-import { TimeseriesService } from '../timeseries.service';
+//import { TimeseriesService } from '../timeseries.service';
+import { TimeseriesService } from 'map-wald';
 import { Http } from '@angular/http';
 import { LatLng } from '../latlng';
 import { GeoTransform } from './geotransform';
@@ -13,6 +14,7 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
 import * as Plotly from 'plotly.js/dist/plotly-basic';
 import * as FileSaver from 'file-saver';
+import { VisibleLayer } from 'app/main-map/main-map.component';
 
 const CHART_YEARS = 4;
 const ALICE = [-23.6980, 133.8807];
@@ -27,6 +29,8 @@ const ALICE = [-23.6980, 133.8807];
 export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   @Input() coordinates: LatLng;
   @Input() year: number;
+  @Input() layer: VisibleLayer;
+  @Input() thredds: CatalogHost;
 
   fullTimeSeries = null;
   havePlot = false;
@@ -78,8 +82,8 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     fullTimeSeries.labels = ['date', 'lvmc_mean'];
 
     for (const series of data_copy) {
-      time = time.concat(series.time);
-      lvmc_mean = lvmc_mean.concat(series.lvmc_mean);
+      time = time.concat(series.dates);
+      lvmc_mean = lvmc_mean.concat(series.values);
     }
 
     time = time.map(t => t.toISOString());
@@ -99,9 +103,16 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
     Plotly.purge(this.node);
 
+
+    var host = this.thredds;
+    var baseFn = this.layer.layer.path;
+    var variable = this.layer.layer.variable;
     for (let i = 0; i < CHART_YEARS; i++) {
       const year = selectedYear - i;
-      const observable = this.timeseries.getTimeSeries(this.coordinates, year);
+      var fn = InterpolationService.interpolate(baseFn,{
+        year:year
+      });
+      const observable = this.timeseries.getTimeseries(host,fn,variable,this.coordinates);//, year);
 
       const newDataSeries = {
         year: year,
@@ -125,7 +136,8 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
         // Set all datasets to the same year so that they are overlayed with
         // each other rather than shown sequentially
-        const chartTimestamps: Date[] = dataset.time.map(d => {
+
+        const chartTimestamps: Date[] = dataset.dates.map(d => {
           const modifiedDate = new Date(d);
           modifiedDate.setFullYear(selectedYear);
           return modifiedDate;
@@ -134,7 +146,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
         const color = +index ? 'rgb(198,219,239)' : 'rgb(33,113,181)';
         const trace = {
           x: chartTimestamps,
-          y: dataset.lvmc_mean,
+          y: dataset.values,
           name: dataSeries[index].year.toString(),
           mode: 'lines+markers',
           connectgaps: true,
@@ -169,6 +181,17 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     const width: number = this._element.nativeElement.clientWidth;
     const height: number = this._element.nativeElement.clientHeight;
 
+    let y_axis_title: number;
+    let custom = this.layer.layer.chartConfig;
+    let yRange:Array<number>;
+
+    if (custom && custom.yaxis) {
+      y_axis_title = custom.yaxis.title;
+      if(custom.yaxis.fixed){
+        yRange = this.layer.layer.range;
+      }
+    }
+
     Plotly.plot(this.node, series, {
       margin: {
         t: 30,
@@ -181,11 +204,12 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       },
       yaxis: {
         hoverformat: '.2f',
-        title: '%'
+        title: y_axis_title ? y_axis_title : '%',
+        range:yRange
       },
       height: height,
       width: width,
-      title: `Fuel Moisture Content (%) at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
+      title: `${this.layer.layer.name} (${this.layer.layer.units}) at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
       showlegend: false
     },
     {
@@ -213,8 +237,9 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
       const filename_lat = this.coordinates.lat.toFixed(6).replace('.', '_');
       const filename_lng = this.coordinates.lng.toFixed(6).replace('.', '_');
+      const variable_name = this.layer.layer.variable;
 
-      const fileName = `lvmc_${this.year - CHART_YEARS}_${this.year}_${filename_lat}_${filename_lng}.csv`;
+      const fileName = `${variable_name}_${this.year - CHART_YEARS}_${this.year}_${filename_lat}_${filename_lng}.csv`;
 
       const output = new Blob(
         [this.csv_service.getCsv(this.fullTimeSeries.labels, this.fullTimeSeries.columns)],

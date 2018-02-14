@@ -1,12 +1,14 @@
 {
   "layers": [
     {
-      "source": "gsky",
+      "source": "tds",
+      "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "Live Fuel Moisture Content",
       "units": "%",
       "icon": "fa-tint",
-      "wms_layer": "Fenner%3AFMC%3AC6",
+      "wms_layer": "lvmc_mean",
       "palette": {
+        "image":false,
         "name": "RdYlBu",
         "count": 9,
         "reverse": false
@@ -18,16 +20,25 @@
       "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
       "timeperiod": {
         "start": 2001,
-        "end": "2017/08/05"
+        "end": "2018/01/13"
+      },
+      "wms_params":{
+        "styles":"boxfill/anu_fmc_rdylbu_9",
+        "colorscalerange":"0,140",
+        "abovemaxcolor":"extend",
+        "numcolorbands":9
       }
+
     },
     {
-      "source": "gsky",
+      "source": "tds",
+      "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "Uncertainty",
       "units": "%",
       "icon": "fa-percent",
-      "wms_layer": "Fenner%3AFMC%3AUncertainty",
+      "wms_layer": "lvmc_stdv",
       "palette": {
+        "image":false,
         "name": "RdYlBu",
         "count": 11,
         "reverse": true
@@ -39,26 +50,47 @@
       "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
       "timeperiod": {
         "start": 2001,
-        "end": "2017/08/10"
+        "end": "2018/01/13"
+      },
+      "wms_params":{
+        "styles":"boxfill/anu_fmc_rdylbu_11_rev",
+        "colorscalerange":"0,50",
+        "abovemaxcolor":"extend",
+        "numcolorbands":11
       }
     },
     {
+      "source":"tds",
+      "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "Flammability",
-      "units": "units",
+      "units": "unitless",
       "icon": "fa-fire",
-      "wms_layer": "unknown",
+      "wms_layer": "flammability_index",
       "palette": {
+        "image":false,
         "name": "RdYlBu",
         "count": 11,
-        "reverse": false
+        "reverse": true
       },
       "range": [
         0,
-        100
+        1
       ],
       "timeperiod": {
-        "start": 2013,
-        "end": 2013
+        "start": 2001,
+        "end": "2018/01/13"
+      },
+      "wms_params":{
+        "styles":"boxfill/anu_fmc_rdylbu_11_rev",
+        "colorscalerange":"0,1",
+        "abovemaxcolor":"extend",
+        "numcolorbands":11
+      },
+      "chart_config": {
+        "yaxis": {
+          "title": " ",
+          "fixed":true
+        }
       }
     },
     {
@@ -107,7 +139,7 @@
     ],
     "timeperiod": {
       "start": 2001,
-      "end": 2013,
+      "end": 2017,
       "format": "{{year}}-01-01T00%3A00%3A00.000Z"
     }
   }

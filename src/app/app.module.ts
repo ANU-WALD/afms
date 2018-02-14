@@ -21,7 +21,7 @@ import { routes, routeParameters } from './router-config';
 import { VectorLayerSelectionComponent } from './vector-layer-selection/vector-layer-selection.component';
 import { SearchComponent } from './search/search.component';
 import { BaseLayerSelectionComponent } from './base-layer-selection/base-layer-selection.component';
-import { TimeseriesService } from './timeseries.service';
+//import { TimeseriesService } from './timeseries.service';
 import { LayerOpacitySelectorComponent } from './layer-opacity-selector/layer-opacity-selector.component';
 import { AboutComponent } from './about/about.component';
 import { SplashModalComponent } from './splash-modal/splash-modal.component';
@@ -53,7 +53,7 @@ import { SplashModalComponent } from './splash-modal/splash-modal.component';
     RouterModule.forRoot(routes,{ useHash: true })
   ],
   entryComponents: [AboutComponent, SplashModalComponent],
-  providers: [SelectionService,TimeseriesService,LayersService],
+  providers: [SelectionService,LayersService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
