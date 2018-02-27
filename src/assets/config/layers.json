@@ -94,6 +94,42 @@
       }
     },
     {
+      "source":"tds",
+      "host":"http://www.flowmatters.com.au/proxies/bom-dap/thredds",
+      "realhost":"http://opendap.bom.gov.au:8080/thredds",
+      "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.smc.{{year}}.nc",
+      "name": "Soil Moisture (JASMIN)",
+      "units": "unitless",
+      "icon": "fa-tiny",
+      "wms_layer": "sm",
+      "palette": {
+        "image":true,
+        "name": "RdYlBu",
+        "count": 11,
+        "reverse": true
+      },
+      "range": [
+        0,
+        100
+      ],
+      "timeperiod": {
+        "start": 2001,
+        "end": 2017
+      },
+      "wms_params":{
+        "styles":"boxfill/rainbow",
+        "colorscalerange":"0,100",
+        "abovemaxcolor":"extend",
+        "numcolorbands":11
+      },
+      "chart_config": {
+        "yaxis": {
+          "title": " ",
+          "fixed":true
+        }
+      }
+    },
+    {
       "name": "Computation Mask",
       "icon": "fa-fire",
       "wms_layer": "Modis Land Mask",

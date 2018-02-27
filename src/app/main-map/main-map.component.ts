@@ -75,7 +75,7 @@ export class VisibleLayer{
     });
     
     if(this.layer.source==='tds'){
-      this.url = `${TDS_URL}/wms/${this.path}`;
+      this.url = `${this.layer.host||TDS_URL}/wms/${this.path}`;
     }
 
     this.wmsParameters = {
@@ -107,7 +107,7 @@ export class VisibleLayer{
   styleUrls: ['./main-map.component.scss']
 })
 export class MainMapComponent implements OnInit {
-  thredds:CatalogHost;
+  layerHost:CatalogHost;
   showMask:boolean;
   maskLayer:VisibleLayer;
   mainLayer:VisibleLayer;
@@ -124,10 +124,6 @@ export class MainMapComponent implements OnInit {
     private http: Http,
     private timeseries:TimeseriesService,
     private layers:LayersService) {
-    this.thredds = {
-      software:'tds',
-      url:TDS_URL
-    };
 
     this.mainLayer = new VisibleLayer(null,null);
 
@@ -166,6 +162,13 @@ export class MainMapComponent implements OnInit {
         this.zoom=+view.zm;
       }
     }
+  }
+
+  thredds(url?:string):CatalogHost{
+    return {
+      software:'tds',
+      url:url||TDS_URL
+    };
   }
 
   constrain(ll:LatLng){
@@ -257,7 +260,7 @@ export class MainMapComponent implements OnInit {
       return;
     }
 
-    this.timeseries.getTimeseries(this.thredds,fn,this.mainLayer.layer.variable,coords)//,year)
+    this.timeseries.getTimeseries(this.layerHost,fn,this.mainLayer.layer.variable,coords)//,year)
       .subscribe(dapData=>{
         if((year!==this.selection.year)||(coords!==this.marker.loc)){
           return; // Reject the data
@@ -323,6 +326,7 @@ export class MainMapComponent implements OnInit {
 
     this.dateRange = layer.timePeriod;
     this.selection.range = this.dateRange;
+    this.layerHost = this.thredds(layer.host);
   }
 
   changeCount:number =0;
