@@ -100,7 +100,7 @@
       "realhost":"http://opendap.bom.gov.au:8080/thredds",
       "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.smc.{{year}}.nc",
       "name": "Soil Moisture (JASMIN)",
-      "units": "unitless",
+      "units": "Kg.m-2",
       "icon": "fa-tiny",
       "wms_layer": "sm",
       "description": " ",
