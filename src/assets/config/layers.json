@@ -33,7 +33,7 @@
     {
       "source": "tds",
       "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
-      "name": "Uncertainty",
+      "name": "LFMC Uncertainty",
       "units": "%",
       "icon": "fa-percent",
       "wms_layer": "lvmc_stdv",
@@ -66,6 +66,7 @@
       "units": "unitless",
       "icon": "fa-fire",
       "wms_layer": "flammability_index",
+      "description": "Flammability Index (0-1) derived from logistic regression models trained on fire events mapped in the MODIS burned area product and four predictor variables calculated from the FMC estimates following the methodology of Yebra and colleagues (ANU)",
       "palette": {
         "image":false,
         "name": "RdYlBu",
@@ -102,6 +103,7 @@
       "units": "unitless",
       "icon": "fa-tiny",
       "wms_layer": "sm",
+      "description": " ",
       "palette": {
         "image":true,
         "name": "RdYlBu",
