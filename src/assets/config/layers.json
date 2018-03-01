@@ -99,7 +99,7 @@
       "host":"http://www.flowmatters.com.au/proxies/bom-dap/thredds",
       "realhost":"http://opendap.bom.gov.au:8080/thredds",
       "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.vol.smc.{{year}}.nc",
-      "name": "Soil Moisture (JASMIN)",
+      "name": "Soil Moisture 0-10cm (JASMIN)",
       "units": "m^3.m^-3",
       "icon": "fa-tint",
       "wms_layer": "sm",
@@ -119,6 +119,45 @@
         "end": 2017
       },
       "wms_params":{
+        "styles":"boxfill/rainbow",
+        "colorscalerange":"0,0.5",
+        "abovemaxcolor":"extend",
+        "numcolorbands":11
+      },
+      "chart_config": {
+        "yaxis": {
+          "title": " ",
+          "fixed":true
+        }
+      }
+    },
+    {
+      "source":"tds",
+      "host":"http://www.flowmatters.com.au/proxies/bom-dap/thredds",
+      "realhost":"http://opendap.bom.gov.au:8080/thredds",
+      "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.vol.smc.{{year}}.nc",
+      "name": "Soil Moisture 10-35cm (JASMIN)",
+      "units": "m^3.m^-3",
+      "icon": "fa-tint",
+      "wms_layer": "sm",
+      "url_fragment":"sm1035",
+      "description": "Volumetric soil moisture (m^3/m^-3) from JASMIN land surface modelling system developed by Bureau of Meteorology (Dharssi and Vinodkumar, 2017)",
+      "palette": {
+        "image":true,
+        "name": "RdYlBu",
+        "count": 11,
+        "reverse": true
+      },
+      "range": [
+        0,
+        0.5
+      ],
+      "timeperiod": {
+        "start": 2010,
+        "end": 2017
+      },
+      "wms_params":{
+        "elevation":0.25,
         "styles":"boxfill/rainbow",
         "colorscalerange":"0,0.5",
         "abovemaxcolor":"extend",
