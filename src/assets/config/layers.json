@@ -130,41 +130,6 @@
           "fixed":true
         }
       }
-    },
-    {
-      "name": "Computation Mask",
-      "icon": "fa-fire",
-      "wms_layer": "Modis Land Mask",
-      "legend": [
-        {
-          "r": 34,
-          "g": 139,
-          "b": 34,
-          "label": "Forest"
-        },
-        {
-          "r": 255,
-          "g": 165,
-          "b": 0,
-          "label": "Shrubs"
-        },
-        {
-          "r": 255,
-          "g": 255,
-          "b": 0,
-          "label": "Grass"
-        }
-      ],
-      "range": [
-        0,
-        100
-      ],
-      "description": "Land cover classification used in computing live fuel moisture.",
-      "timeperiod": {
-        "start": 2001,
-        "end": 2013,
-        "format": "{{year}}-01-01T00%3A00%3A00.000Z"
-      }
     }
   ],
   "mask": {
