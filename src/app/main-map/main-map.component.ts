@@ -18,6 +18,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/observable/forkJoin';
+import { Observable } from 'rxjs/Observable'
 
 const BASE_URL=environment.gsky_server;
 const TDS_URL=environment.tds_server;
@@ -29,7 +31,7 @@ class ValueMarker{
 }
 
 export class VisibleLayer{
-  url:string = BASE_URL;
+  url:string = TDS_URL;
   path:string;
   legendImageURL:string = null;
   opacity:number=1.0;
@@ -117,6 +119,13 @@ export class MainMapComponent implements OnInit {
   chartIsCollapsed: boolean = true;
   chartRange: Array<number> = null;
 
+  thredds(url?:string):CatalogHost{
+    return {
+      software:'tds',
+      url:url||TDS_URL
+    };
+  }
+
   constructor(private _wmsService: WMSService,
     _activatedRoute: ActivatedRoute,
     private selection: SelectionService,
@@ -124,6 +133,8 @@ export class MainMapComponent implements OnInit {
     private http: Http,
     private timeseries:TimeseriesService,
     private layers:LayersService) {
+
+
 
     this.mainLayer = new VisibleLayer(null,null);
 
@@ -164,12 +175,6 @@ export class MainMapComponent implements OnInit {
     }
   }
 
-  thredds(url?:string):CatalogHost{
-    return {
-      software:'tds',
-      url:url||TDS_URL
-    };
-  }
 
   constrain(ll:LatLng){
     return{
@@ -350,7 +355,4 @@ export class MainMapComponent implements OnInit {
     this.mainLayer.opacity = opacity;
   }
 
-  downloadBtnClicked() {
-
-  }
 }
