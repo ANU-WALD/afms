@@ -138,11 +138,11 @@ export class MainMapComponent implements OnInit {
 
     this.mainLayer = new VisibleLayer(null,null);
 
-    this.layers.mask.subscribe(mask=>{
-      this.showMask=true;
-      this.maskLayer = new VisibleLayer(mask,this.selection.effectiveDate());
-      this.maskLayer.opacity = 0.7;
-    });
+    // this.layers.mask.subscribe(mask=>{
+    //   this.showMask=true;
+    //   this.maskLayer = new VisibleLayer(mask,this.selection.effectiveDate());
+    //   this.maskLayer.opacity = 0.7;
+    // });
 
     this.layers.availableLayers.subscribe(available=>{
       this.selection.loadFromURL(_activatedRoute);
