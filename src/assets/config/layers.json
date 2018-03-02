@@ -105,10 +105,10 @@
       "wms_layer": "sm",
       "description": "Volumetric soil moisture (m^3/m^-3) from JASMIN land surface modelling system developed by Bureau of Meteorology (Dharssi and Vinodkumar, 2017)",
       "palette": {
-        "image":true,
+        "image":false,
         "name": "RdYlBu",
         "count": 11,
-        "reverse": true
+        "reverse": false
       },
       "range": [
         0,
@@ -119,7 +119,7 @@
         "end": 2017
       },
       "wms_params":{
-        "styles":"boxfill/rainbow",
+        "styles":"boxfill/rdylbu_11",
         "colorscalerange":"0,0.5",
         "abovemaxcolor":"extend",
         "numcolorbands":11
@@ -143,10 +143,10 @@
       "url_fragment":"sm1035",
       "description": "Volumetric soil moisture (m^3/m^-3) from JASMIN land surface modelling system developed by Bureau of Meteorology (Dharssi and Vinodkumar, 2017)",
       "palette": {
-        "image":true,
+        "image":false,
         "name": "RdYlBu",
         "count": 11,
-        "reverse": true
+        "reverse": false
       },
       "range": [
         0,
@@ -158,7 +158,7 @@
       },
       "wms_params":{
         "elevation":0.25,
-        "styles":"boxfill/rainbow",
+        "styles":"boxfill/rdylbu_11",
         "colorscalerange":"0,0.5",
         "abovemaxcolor":"extend",
         "numcolorbands":11
