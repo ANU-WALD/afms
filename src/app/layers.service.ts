@@ -17,7 +17,7 @@ export class LayersService {
       return new FMCLayer(l.name,l.units,l.icon,l.wms_layer,l.palette,
                           l.range,l.description,DateRange.fromJSON(l.timeperiod),
                           l.legend,l.wms_params,l.source,l.path,l.chart_config,
-                          l.host,l.url_fragment);
+                          l.host,l.url_fragment,l.indexing);
     }
 
     this.mask = layerConfig$.map(data=>newLayer(data.mask));

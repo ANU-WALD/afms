@@ -156,6 +156,9 @@
         "start": 2010,
         "end": 2017
       },
+      "indexing":{
+        "level":1
+      },
       "wms_params":{
         "elevation":0.25,
         "styles":"boxfill/rdylbu_11",

@@ -265,7 +265,7 @@ export class MainMapComponent implements OnInit {
       return;
     }
 
-    this.timeseries.getTimeseries(this.layerHost,fn,this.mainLayer.layer.variable,coords)//,year)
+    this.timeseries.getTimeseries(this.layerHost,fn,this.mainLayer.layer.variable,coords,this.mainLayer.layer.indexing)//,year)
       .subscribe(dapData=>{
         if((year!==this.selection.year)||(coords!==this.marker.loc)){
           return; // Reject the data
