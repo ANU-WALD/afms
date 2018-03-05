@@ -75,8 +75,8 @@
           <div class="card-block control-card-content">
             <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
             <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
-            <fmc-base-layer-selection (baseLayerChanged)="baseLayerChanged($event)"></fmc-base-layer-selection>
-            <fmc-layer-opacity-selector (opacityChanged)="opacityChanged($event)">
+            <fmc-base-layer-selection (baseLayerChanged)="setBaseLayer($event)"></fmc-base-layer-selection>
+            <fmc-layer-opacity-selector (opacityChanged)="setOpacity($event)">
             </fmc-layer-opacity-selector>
           </div>
         </div>
