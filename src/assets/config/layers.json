@@ -17,7 +17,7 @@
         0,
         140
       ],
-      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2017)",
       "timeperiod": {
         "start": 2001,
         "end": "2018/02/14"
@@ -47,7 +47,7 @@
         0,
         50
       ],
-      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2017)",
       "timeperiod": {
         "start": 2001,
         "end": "2018/02/14"
@@ -66,7 +66,7 @@
       "units": "unitless",
       "icon": "fa-fire",
       "wms_layer": "flammability_index",
-      "description": "Flammability Index (0-1) derived from logistic regression models trained on fire events mapped in the MODIS burned area product and four predictor variables calculated from the FMC estimates following the methodology of Yebra and colleagues (ANU)",
+      "description": "Flammability Index (0-1) derived from logistic regression models trained on fire events mapped in the MODIS burned area product and four predictor variables calculated from the FMC estimates following the methodology of Yebra et al. (2017)",
       "palette": {
         "image":false,
         "name": "RdYlBu",
