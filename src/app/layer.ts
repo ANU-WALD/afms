@@ -6,8 +6,9 @@ export class FMCLayer {
   constructor(public name: string, public units:string,public icon:string,public variable:string,public palette:any,
               public range:Array<number>,public description:string,public timePeriod:DateRange,
               public legend:Array<any>,public wmsParams:any,public source:string,public path:string,
-              public chartConfig: any) {
+              public chartConfig: any,public host:string,public urlFragment:string,public indexing:any) {
 
+    this.indexing = this.indexing||{};
     if (chartConfig){
       console.log(chartConfig);
     }
