@@ -112,7 +112,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       var fn = InterpolationService.interpolate(baseFn, {
         year: year
       });
-      const observable = this.timeseries.getTimeseries(host, fn, variable, this.coordinates);//, year);
+      const observable = this.timeseries.getTimeseries(host, fn, variable, this.coordinates, this.layer.layer.indexing);//, year);
 
       const newDataSeries = {
         year: year,

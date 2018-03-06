@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 9001 --aot false --proxy-config proxy.conf.json",
+    "start": "ng serve --port 9001 --aot false",
     "remote": "ng serve --port 9001 --host 0.0.0.0 --aot false --proxy-config proxy.conf.json",
     "build": "if [ $BRANCH = 'production' ]; then export PREFIX='/afms/'; elif [ $BRANCH = 'defence' ]; then export PREFIX='/afms/defence/'; else export PREFIX='/afms/staging/'; fi; npm run build-with-prefix",
     "build-with-prefix": "echo prefix=$PREFIX && ng build --prod --no-aot --base-href $PREFIX",
