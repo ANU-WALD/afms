@@ -172,6 +172,15 @@ export class MainMapComponent implements OnInit {
     this.mapView.update({coords: `${coords.lat.toFixed(3)},${coords.lng.toFixed(3)}`});
   }
 
+  reloadMarkerData(){
+    this.currentYearDataForLocation=null;
+    if(!this.marker){
+      return;
+    }
+    this.marker.value=null;
+    this.updateTimeSeries();
+  }
+
   updateTimeSeries() {
     const coords = this.marker.loc;
     if (this.currentYearDataForLocation && (this.currentYearDataForLocation.coords === coords) &&
@@ -230,6 +239,8 @@ export class MainMapComponent implements OnInit {
     this.dateRange = layer.timePeriod;
     this.selection.range = this.dateRange;
     this.layerHost = MainMapComponent.thredds(layer.host);
+
+    this.reloadMarkerData();
   }
 
 
