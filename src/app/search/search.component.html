@@ -9,7 +9,8 @@
              placeholder="Search (lat/lon or address)"
              [ngbTypeahead]="search"
              [resultFormatter]="formatter"
-             [inputFormatter]="formatter"/>
+             [inputFormatter]="formatter"
+             (keyup.enter)="gotoLocation()"/>
       <div class="input-group-addon" (click)="gotoLocation()">
         <i class="fa fa-search"></i>
       </div>
