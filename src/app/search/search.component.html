@@ -8,8 +8,8 @@
              [(ngModel)]="address"
              placeholder="Search (lat/lon or address)"
              [ngbTypeahead]="search"
-             [resultFormatter]="formatter"
-             [inputFormatter]="formatter"
+             [resultFormatter]="getFormattedAddress"
+             [inputFormatter]="getFormattedAddress"
              (keyup.enter)="gotoLocation()"/>
       <div class="input-group-addon" (click)="gotoLocation()">
         <i class="fa fa-search"></i>
