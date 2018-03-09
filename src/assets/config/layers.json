@@ -116,7 +116,7 @@
       ],
       "timeperiod": {
         "start": 2010,
-        "end": 2017
+        "end": "2018/03/01"
       },
       "wms_params":{
         "styles":"boxfill/rdylbu_11",
@@ -154,7 +154,7 @@
       ],
       "timeperiod": {
         "start": 2010,
-        "end": 2017
+        "end": "2018/03/01"
       },
       "indexing":{
         "level":1
