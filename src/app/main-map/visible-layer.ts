@@ -55,7 +55,7 @@ export class VisibleLayer {
     }
 
     this.wmsParameters = {
-      layers: this.layer.variable,
+      layers: this.layer.variable_name,
       time: this.dateText(currentDate),
       styles: '',
       transparent: true,

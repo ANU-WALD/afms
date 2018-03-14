@@ -31,7 +31,9 @@ export class SearchComponent implements OnInit {
     return result.formatted_address;
   }
 
-  search(term: Observable<string>) {
+  // TODO: Change this to a method. Keep getting errors when I try to do it so leaving it as an arrow function for now.
+  search = (term: Observable<string>) => {
+
     return term
       .debounceTime(200)
       .distinctUntilChanged()

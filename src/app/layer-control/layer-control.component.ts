@@ -23,7 +23,7 @@ export class LayerControlComponent implements OnInit {
 
       var params = this.mapView.current();
       if(params.layer&&params.layer!=='_'){
-        this.selectedLayer=this.layers.find(l=>decodeURIComponent(l.urlFragment||l.variable)===decodeURIComponent(params.layer));
+        this.selectedLayer=this.layers.find(l=>decodeURIComponent(l.urlFragment||l.variable_name)===decodeURIComponent(params.layer));
       }
 
       if(!this.selectedLayer){
@@ -38,7 +38,7 @@ export class LayerControlComponent implements OnInit {
 
   layerChange(event){
     this.layerChanged.emit(this.selectedLayer);
-    this.mapView.update({layer:this.selectedLayer.urlFragment||this.selectedLayer.variable});
+    this.mapView.update({layer:this.selectedLayer.urlFragment||this.selectedLayer.variable_name});
   }
 }
 

@@ -38,8 +38,8 @@
     "dap-query-js": "github:flowmatters/dap-query-js",
     "file-saver": "^1.3.3",
     "font-awesome": "^4.7.0",
-    "map-wald": "ANU-WALD/map-wald",
-    "plotly.js": "git+https://github.com/arlowhite/plotly.js#no-polyfill",
+    "map-wald": "github:ANU-WALD/map-wald",
+    "plotly.js": "git+https://github.com/arlowhite/plotly.js.git#no-polyfill",
     "rxjs": "^5.1.0",
     "typescript": "2.3.4",
     "zone.js": "^0.8.4"
