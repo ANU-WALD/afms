@@ -1,14 +1,11 @@
-// TODO: All plot generating code should be pulled out into a service (e.g.,
-// plotly.service)
+// TODO: All plot generating code should be pulled out into a service (e.g., plotly.service)
 import {Component, ElementRef, AfterViewInit, Input, OnChanges, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-import {ProjectionService, MappedLayer, CatalogHost, InterpolationService} from 'map-wald';
+import {CatalogHost, InterpolationService} from 'map-wald';
 import {SelectionService} from '../selection.service';
-//import { TimeseriesService } from '../timeseries.service';
 import {TimeseriesService} from 'map-wald';
 import {Http} from '@angular/http';
 import {LatLng} from '../latlng';
-import {GeoTransform} from './geotransform';
 import {CsvService} from '../csv.service';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
@@ -40,8 +37,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   constructor(private timeseries: TimeseriesService,
               private http: Http,
               private csv_service: CsvService,
-              private _element: ElementRef,
-              private _selection: SelectionService) {
+              private _element: ElementRef) {
 
     this.coordinates = {
       lat: ALICE[0],
@@ -70,25 +66,25 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   setFullTimeSeries(data: any[]) {
     // TODO: make this more generic - currently only works with the FMC data
 
-    let data_copy = Array.from(data);
+    const data_copy = Array.from(data);
 
     data_copy.reverse();
 
     const fullTimeSeries = {labels: [], columns: []};
 
     let time = [];
-    let lvmc_mean = [];
+    let data_variable = [];
 
-    fullTimeSeries.labels = ['date', 'lvmc_mean'];
+    fullTimeSeries.labels = ['date', this.layer.layer.variable_name];
 
     for (const series of data_copy) {
       time = time.concat(series.dates);
-      lvmc_mean = lvmc_mean.concat(series.values);
+      data_variable = data_variable.concat(series.values);
     }
 
     time = time.map(t => t.toISOString());
 
-    fullTimeSeries.columns = [time, lvmc_mean];
+    fullTimeSeries.columns = [time, data_variable];
 
     this.fullTimeSeries = fullTimeSeries;
 
@@ -104,15 +100,16 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     Plotly.purge(this.node);
 
 
-    var host = this.thredds;
-    var baseFn = this.layer.layer.path;
-    var variable = this.layer.layer.variable;
+    const host = this.thredds;
+    const baseFn = this.layer.layer.path;
+    const variable = this.layer.layer.variable_name;
+
     for (let i = 0; i < CHART_YEARS; i++) {
       const year = selectedYear - i;
-      var fn = InterpolationService.interpolate(baseFn, {
+      const fn = InterpolationService.interpolate(baseFn, {
         year: year
       });
-      const observable = this.timeseries.getTimeseries(host, fn, variable, this.coordinates, this.layer.layer.indexing);//, year);
+      const observable = this.timeseries.getTimeseries(host, fn, variable, this.coordinates, this.layer.layer.indexing);
 
       const newDataSeries = {
         year: year,
@@ -182,7 +179,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     const height: number = this._element.nativeElement.clientHeight;
 
     let y_axis_title: number;
-    let custom = this.layer.layer.chartConfig;
+    const custom = this.layer.layer.chartConfig;
     let yRange: Array<number>;
 
     if (custom && custom.yaxis) {
@@ -230,14 +227,12 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
   downloadData() {
 
-    // TODO: set the filename to something more meaningful!
-
     if (this.fullTimeSeries) {
 
 
       const filename_lat = this.coordinates.lat.toFixed(6).replace('.', '_');
       const filename_lng = this.coordinates.lng.toFixed(6).replace('.', '_');
-      const variable_name = this.layer.layer.variable;
+      const variable_name = this.layer.layer.variable_name;
 
       const fileName = `${variable_name}_${this.year - CHART_YEARS}_${this.year}_${filename_lat}_${filename_lng}.csv`;
 

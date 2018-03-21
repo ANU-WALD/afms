@@ -1,62 +1,48 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class CsvService {
 
-  constructor() { }
+  constructor() {
+  }
 
   public getCsv(labels: string[], columns: Array<number[]>): string {
 
-    if (labels.length != columns.length) {
+    if (labels.length !== columns.length) {
       throw new Error('Number of labels must be same as number of columns');
     }
 
-    let formatted_cols = columns.map(this.convertNullToNAN);
+    const formatted_cols = columns.map(this.convertNullToNAN);
+    const zipped = this.zipColumns.apply(this, formatted_cols);
+    const header = labels.join(',') + '\n';
+    const data_csv = zipped.map(f => f.join(',')).join('\n');
 
-    let zipped = this.zipColumns.apply(this, formatted_cols);
-
-    let output = labels.join(',') + '\n';
-
-    let data_csv = zipped.map(f => f.join(',')).join('\n');
-
-    output = output + data_csv;
-
-    return output
-
+    return header + data_csv;
   }
 
   private zipColumns(...cols: any[][]): any[][] {
 
-    let common_length: number = cols[0].length;
+    const common_length: number = cols[0].length;
     for (let col of cols) {
-      if (col.length != common_length) {
+      if (col.length !== common_length) {
         throw new Error('Columns must be the same length');
       }
     }
 
-    let output = cols[0].map((val, index) => {
-
-      let row = [val];
-
-      for (let col of cols.slice(1)){
+    const output = cols[0].map((val, index) => {
+      const row = [val];
+      for (const col of cols.slice(1)) {
         row.push(col[index]);
       }
 
-      return row
+      return row;
     });
 
     return output;
-
   }
 
-  private convertNullToNAN(column: any[]): any[]{
-
-    let column_copy = Array.from(column);
-
-    column_copy = column_copy.map(e => e? e: 'NA');
-
-    return column_copy;
-
+  private convertNullToNAN(column: any[]): any[] {
+    return column.map(e => e ? e : 'NA');
   }
 
 }
