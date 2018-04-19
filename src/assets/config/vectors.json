@@ -1,23 +1,17 @@
 {
-  "vector_layers": [{
-    "filename": "gfe_fire_weather.json",
-    "title": "Fire Weather Areas",
-    "name_field": "DIST_NAME"
-  }, {
-    "filename": "LGA11aAust.json",
-    "title": "Local Government Areas",
-    "name_field": "LGA_NAME11"
-  }, {
-    "filename": "states4326.json",
-    "title": "States and Territories",
-    "name_field": "STATE_NAME"
-  }, {
-    "filename":"NatParks.json",
-    "title":"National Parks",
-    "name_field":"NAME"
-  }, {
-    "filename":"NRMR_2011_AUST_1.json",
-    "title":"NRM Regions",
-    "name_field":"NRMR_NAME"
-  }]
+  "vector_layers": [
+    { "filename": "defence_and_fire_weather.json",
+      "title": "Defence Training and Fire Weather Areas",
+      "name_field": "DIST_NAME"
+    },
+    { "filename": "DefenceTA.json",
+      "title": "Defence Training Areas",
+      "name_field": "PR_NAME"
+    },
+    {
+      "filename": "gfe_fire_weather.json",
+      "title": "Fire Weather Areas",
+      "name_field": "DIST_NAME"
+    }
+  ]
 }

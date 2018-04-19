@@ -220,7 +220,26 @@ export class MainMapComponent implements OnInit {
     } else {
       currentValue = currentValue.toFixed(3);
     }
-    this.marker.value = currentValue;
+
+    this.marker.value=val;
+  }
+
+  staticStyles:any={
+      clickable: true,
+      fillOpacity: 0,
+      fillColor: null,//'#80F090',
+      strokeWeight: 1,
+      strokeColor: '#444'
+    };
+
+  styleFunc(feature) {
+    return {
+      clickable: true,
+      fillOpacity: 0,
+      fillColor: null,//'#80F090',
+      strokeWeight: 0.5,
+      strokeColor: '#444'
+    };
   }
 
 
