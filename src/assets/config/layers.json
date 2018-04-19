@@ -8,7 +8,7 @@
       "icon": "fa-tint",
       "wms_layer": "lvmc_mean",
       "palette": {
-        "image":false,
+        "image": false,
         "name": "RdYlBu",
         "count": 9,
         "reverse": false
@@ -17,28 +17,27 @@
         0,
         140
       ],
-      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2017)",
       "timeperiod": {
         "start": 2001,
-        "end": "2017/11/21"
+        "end": "2018/03/30"
       },
-      "wms_params":{
-        "styles":"boxfill/anu_fmc_rdylbu_9",
-        "colorscalerange":"0,140",
-        "abovemaxcolor":"extend",
-        "numcolorbands":9
+      "wms_params": {
+        "styles": "boxfill/anu_fmc_rdylbu_9",
+        "colorscalerange": "0,140",
+        "abovemaxcolor": "extend",
+        "numcolorbands": 9
       }
-        
     },
     {
       "source": "tds",
       "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
-      "name": "Uncertainty",
+      "name": "LFMC Uncertainty",
       "units": "%",
       "icon": "fa-percent",
       "wms_layer": "lvmc_stdv",
       "palette": {
-        "image":false,
+        "image": false,
         "name": "RdYlBu",
         "count": 11,
         "reverse": true
@@ -47,27 +46,28 @@
         0,
         50
       ],
-      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
+      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2017)",
       "timeperiod": {
         "start": 2001,
-        "end": "2017/11/21"
+        "end": "2018/03/30"
       },
-      "wms_params":{
-        "styles":"boxfill/anu_fmc_rdylbu_11_rev",
-        "colorscalerange":"0,50",
-        "abovemaxcolor":"extend",
-        "numcolorbands":11
+      "wms_params": {
+        "styles": "boxfill/anu_fmc_rdylbu_11_rev",
+        "colorscalerange": "0,50",
+        "abovemaxcolor": "extend",
+        "numcolorbands": 11
       }
     },
     {
-      "source":"tds",
+      "source": "tds",
       "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "Flammability",
       "units": "unitless",
       "icon": "fa-fire",
       "wms_layer": "flammability_index",
+      "description": "Flammability Index (0-1) derived from logistic regression models trained on fire events mapped in the MODIS burned area product and four predictor variables calculated from the FMC estimates following the methodology of Yebra et al. (2017)",
       "palette": {
-        "image":false,
+        "image": false,
         "name": "RdYlBu",
         "count": 11,
         "reverse": true
@@ -78,115 +78,99 @@
       ],
       "timeperiod": {
         "start": 2001,
-        "end": "2017/11/21"
+        "end": "2018/03/30"
       },
-      "wms_params":{
-        "styles":"boxfill/anu_fmc_rdylbu_11_rev",
-        "colorscalerange":"0,1",
-        "abovemaxcolor":"extend",
-        "numcolorbands":11
+      "wms_params": {
+        "styles": "boxfill/anu_fmc_rdylbu_11_rev",
+        "colorscalerange": "0,1",
+        "abovemaxcolor": "extend",
+        "numcolorbands": 11
       },
       "chart_config": {
         "yaxis": {
           "title": " ",
-          "fixed":true
+          "fixed": true
         }
       }
-    },
+    }
+,
     {
-      "source": "gsky",
-      "name": "Live Fuel Moisture Content (GSKY)",
-      "units": "%",
+      "source": "tds",
+      "host": "http://www.flowmatters.com.au/proxies/bom-dap/thredds",
+      "realhost": "http://opendap.bom.gov.au:8080/thredds",
+      "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.vol.smc.{{year}}.nc",
+      "name": "Soil Moisture 0-10cm (JASMIN)",
+      "units": "m^3.m^-3",
       "icon": "fa-tint",
-      "wms_layer": "Fenner%3AFMC%3AC6",
+      "wms_layer": "sm",
+      "description": "Volumetric soil moisture (m^3/m^-3) from JASMIN land surface modelling system developed by Bureau of Meteorology (Dharssi and Vinodkumar, 2017)",
       "palette": {
-        "name": "RdYlBu",
-        "count": 9,
-        "reverse": false
-      },
-      "range": [
-        0,
-        140
-      ],
-      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
-      "timeperiod": {
-        "start": 2001,
-        "end": "2017/08/05"
-      }
-    },
-    {
-      "source": "gsky",
-      "name": "Uncertainty (GSKY)",
-      "units": "%",
-      "icon": "fa-percent",
-      "wms_layer": "Fenner%3AFMC%3AUncertainty",
-      "palette": {
-        "name": "RdYlBu",
-        "count": 11,
-        "reverse": true
-      },
-      "range": [
-        0,
-        50
-      ],
-      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra and colleagues (ANU).",
-      "timeperiod": {
-        "start": 2001,
-        "end": "2017/08/10"
-      }
-    },
-    {
-      "name": "Flammability (GSKY)",
-      "units": "units",
-      "icon": "fa-fire",
-      "wms_layer": "unknown",
-      "palette": {
+        "image": false,
         "name": "RdYlBu",
         "count": 11,
         "reverse": false
       },
       "range": [
         0,
-        100
+        0.5
       ],
       "timeperiod": {
-        "start": 2013,
-        "end": 2013
-      }
-    },
-    {
-      "name": "Computation Mask",
-      "icon": "fa-fire",
-      "wms_layer": "Modis Land Mask",
-      "legend": [
-        {
-          "r": 34,
-          "g": 139,
-          "b": 34,
-          "label": "Forest"
-        },
-        {
-          "r": 255,
-          "g": 165,
-          "b": 0,
-          "label": "Shrubs"
-        },
-        {
-          "r": 255,
-          "g": 255,
-          "b": 0,
-          "label": "Grass"
+        "start": 2010,
+        "end": "2018/03/01"
+      },
+      "wms_params": {
+        "styles": "boxfill/rdylbu_11",
+        "colorscalerange": "0,0.5",
+        "abovemaxcolor": "extend",
+        "numcolorbands": 11
+      },
+      "chart_config": {
+        "yaxis": {
+          "title": " ",
+          "fixed": true
         }
-      ],
+      }
+    },
+    {
+      "source": "tds",
+      "host": "http://www.flowmatters.com.au/proxies/bom-dap/thredds",
+      "realhost": "http://opendap.bom.gov.au:8080/thredds",
+      "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.vol.smc.{{year}}.nc",
+      "name": "Soil Moisture 10-35cm (JASMIN)",
+      "units": "m^3.m^-3",
+      "icon": "fa-tint",
+      "wms_layer": "sm",
+      "url_fragment": "sm1035",
+      "description": "Volumetric soil moisture (m^3/m^-3) from JASMIN land surface modelling system developed by Bureau of Meteorology (Dharssi and Vinodkumar, 2017)",
+      "palette": {
+        "image": false,
+        "name": "RdYlBu",
+        "count": 11,
+        "reverse": false
+      },
       "range": [
         0,
-        100
+        0.5
       ],
-      "description": "Land cover classification used in computing live fuel moisture.",
       "timeperiod": {
-        "start": 2001,
-        "end": 2013,
-        "format": "{{year}}-01-01T00%3A00%3A00.000Z"
+        "start": 2010,
+        "end": "2018/03/01"
+      },
+      "indexing": {
+        "level": 1
+      },
+      "wms_params": {
+        "elevation": 0.25,
+        "styles": "boxfill/rdylbu_11",
+        "colorscalerange": "0,0.5",
+        "abovemaxcolor": "extend",
+        "numcolorbands": 11
+      },
+      "chart_config": {
+        "yaxis": {
+          "title": " ",
+          "fixed": true
+        }
       }
     }
   ],

@@ -23,7 +23,7 @@ export class LayerControlComponent implements OnInit {
 
       var params = this.mapView.current();
       if(params.layer&&params.layer!=='_'){
-        this.selectedLayer=this.layers.find(l=>decodeURIComponent(l.variable)===decodeURIComponent(params.layer));
+        this.selectedLayer=this.layers.find(l=>decodeURIComponent(l.urlFragment||l.variable_name)===decodeURIComponent(params.layer));
       }
 
       if(!this.selectedLayer){
@@ -38,9 +38,7 @@ export class LayerControlComponent implements OnInit {
 
   layerChange(event){
     this.layerChanged.emit(this.selectedLayer);
-    this.mapView.update({layer:this.selectedLayer.variable});
+    this.mapView.update({layer:this.selectedLayer.urlFragment||this.selectedLayer.variable_name});
   }
 }
-
-//http://130.56.242.21/ows?&service=WMS&version=1.1.1&request=GetMap&BBOX=16123932.49458821676671504974,-4304933.43302112631499767303,16202204.01155224069952964783,-4226661.9160571051761507988&FORMAT=image/png&layers=Fenner%3AFMC%3ANonInterp&time=2010-09-14T00%3A00%3A00.000Z&styles=&transparent=true&tiled=true&feature_count=101&width=512&height=512&SRS=EPSG:3857
 
