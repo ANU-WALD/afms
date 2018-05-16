@@ -60,11 +60,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       return;
     }
 
-    this.updateChart(this.getChartYears());
-  }
-
-  private getChartYears(): number {
-    return Math.min(CHART_YEARS, this.year - this.layer.layer.timePeriod.start.getFullYear());
+    this.updateChart(CHART_YEARS);
   }
 
   setFullTimeSeries(data: any[]) {
@@ -108,7 +104,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     const baseFn = this.layer.layer.path;
     const variable = this.layer.layer.variable_name;
 
-    for (let i = 0; i <= this.getChartYears(); i++) {
+    for (let i = 0; i < CHART_YEARS; i++) {
       const year = selectedYear - i;
       const fn = InterpolationService.interpolate(baseFn, {
         year: year
