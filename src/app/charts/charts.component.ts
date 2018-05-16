@@ -108,7 +108,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     const baseFn = this.layer.layer.path;
     const variable = this.layer.layer.variable_name;
 
-    for (let i = 0; i <= this.getChartYears(); i++) {
+    for (let i = 0; i <= yearCount; i++) {
       const year = selectedYear - i;
       const fn = InterpolationService.interpolate(baseFn, {
         year: year
