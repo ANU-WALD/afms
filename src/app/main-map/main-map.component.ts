@@ -262,4 +262,11 @@ export class MainMapComponent implements OnInit {
     this.mainLayer.opacity = opacity;
   }
 
+  zoomIn(zoom: number) {
+    this.zoom += zoom;
+  }
+
+  zoomOut(zoom: number) {
+    this.zoom -= zoom;
+  }
 }

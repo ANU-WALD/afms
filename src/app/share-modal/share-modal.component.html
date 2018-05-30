@@ -1,0 +1,58 @@
+<div class="modal-header">
+  <h3 class="modal-title">Share</h3>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a [class.active]="isVisible" class="nav-link" (click)="show(true)">Share</a>
+    </li>
+    <li class="nav-item">
+      <a [class.active]="!isVisible" class="nav-link" (click)="show(false)">Embed</a>
+    </li>
+  </ul>
+
+  <div *ngIf="isVisible">
+    <h6>Top-Level Site</h6>
+    <div class="form-group row mb-3">
+      <div class="col">
+        <div class="input-group input-group-sm">
+          <input value="http://wenfo.org/afms/" class="form-control form-control-sm" id="topLevelSite">
+          <button (click)="copyToClipboard('topLevelSite')" class="btn btn-success">Copy</button>
+        </div>
+      </div>
+    </div>
+    <h6>Current View</h6>
+    <div class="form-group row mb-3">
+      <div class="col">
+        <div class="input-group input-group-sm">
+          <input [(ngModel)]="currentView" class="form-control form-control-sm" id="currentSiteView">
+          <button (click)="copyToClipboard('currentSiteView')" class="btn btn-success">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isVisible">
+    <h6>Top-Level Site</h6>
+    <div class="form-group row mb-3">
+      <div class="col">
+        <div class="input-group input-group-sm">
+          <input [(ngModel)]="topLevelSiteEmbed" class="form-control form-control-sm" id="topLevelSiteEmbed">
+          <button (click)="copyToClipboard('topLevelSiteEmbed')" class="btn btn-success">Copy</button>
+        </div>
+      </div>
+    </div>
+    <h6>Current View</h6>
+    <div class="form-group row mb-3">
+      <div class="col">
+        <div class="input-group input-group-sm">
+          <input [(ngModel)]="currentViewEmbed" class="form-control form-control-sm" id="currentSiteViewEmbed">
+          <button (click)="copyToClipboard('currentSiteViewEmbed')" class="btn btn-success">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

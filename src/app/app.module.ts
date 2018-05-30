@@ -25,6 +25,10 @@ import { BaseLayerSelectionComponent } from './base-layer-selection/base-layer-s
 import { LayerOpacitySelectorComponent } from './layer-opacity-selector/layer-opacity-selector.component';
 import { AboutComponent } from './about/about.component';
 import { SplashModalComponent } from './splash-modal/splash-modal.component';
+import {ZoomInButtonComponent} from './zoom-in-map/zoom-in.component';
+import {ZoomOutButtonComponent} from './zoom-out-map/zoom-out.component';
+import {ShareModalComponent} from './share-modal/share-modal.component';
+import {ShareMapComponent} from './share-map/share-map.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +41,10 @@ import { SplashModalComponent } from './splash-modal/splash-modal.component';
     SearchComponent,
     BaseLayerSelectionComponent,
     LayerOpacitySelectorComponent,
+    ZoomInButtonComponent,
+    ZoomOutButtonComponent,
+    ShareModalComponent,
+    ShareMapComponent,
     AboutComponent,
     SplashModalComponent
   ],
@@ -52,7 +60,7 @@ import { SplashModalComponent } from './splash-modal/splash-modal.component';
     MapWaldModule.forRoot({paths:routeParameters}),
     RouterModule.forRoot(routes,{ useHash: true })
   ],
-  entryComponents: [AboutComponent, SplashModalComponent],
+  entryComponents: [AboutComponent, SplashModalComponent, ShareModalComponent],
   providers: [SelectionService,LayersService],
   bootstrap: [AppComponent]
 })
