@@ -80,6 +80,14 @@
             </fmc-layer-opacity-selector>
           </div>
         </div>
+
+        <div class="card buttonContainer map-control">
+          <div class="card-block control-card-content">
+            <zoom-in-button (zoomPress)="zoomIn($event)"></zoom-in-button>
+            <zoom-out-button (zoomPress)="zoomOut($event)"></zoom-out-button>
+            <share-map></share-map>
+          </div>
+        </div>
       </map-control>
 
       <map-control position="LEFT_BOTTOM">
