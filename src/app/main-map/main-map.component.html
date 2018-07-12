@@ -1,27 +1,26 @@
 <div class="main-map">
-    <agm-map
-      [(latitude)]="lat"
-      [(longitude)]="lng"
-      [(zoom)]="zoom"
-      [disableDefaultUI]="false"
-      [mapTypeId]="baseLayer?baseLayer.map_type_id : null"
-      [zoomControl]="false"
-      (mapClick)="mapClick($event)"
-      (centerChange)="moved($event)"
-      (zoomChange)="moved($event)"
-      scaleControl="true">
+  <agm-map  [(latitude)]="lat"
+            [(longitude)]="lng"
+            [(zoom)]="zoom"
+            [disableDefaultUI]="false"
+            [mapTypeId]="baseLayer?baseLayer.map_type_id : null"
+            [zoomControl]="false"
+            (mapClick)="mapClick($event)"
+            (centerChange)="moved($event)"
+            (zoomChange)="moved($event)"
+            scaleControl="true">
 
-      <agm-marker *ngIf="marker"
-                  [longitude]="marker.loc.lng"
-                  [latitude]="marker.loc.lat">
+  <agm-marker *ngIf="marker"
+              [longitude]="marker.loc.lng"
+              [latitude]="marker.loc.lat">
 
-        <agm-info-window [disableAutoPan]="true" [isOpen]="marker.open">
-            <span *ngIf="!marker.value;then markerValueLoading;else markerValueLoaded"></span>
-            <ng-template #markerValueLoading><i class="fa fa-spinner fa-pulse"
-                    aria-hidden="true"></i></ng-template>
-            <ng-template #markerValueLoaded>{{marker.value}}</ng-template>
-        </agm-info-window>
-      </agm-marker>
+    <agm-info-window [disableAutoPan]="true" [isOpen]="marker.open">
+      <span *ngIf="!marker.value;then markerValueLoading;else markerValueLoaded"></span>
+      <ng-template #markerValueLoading><i class="fa fa-spinner fa-pulse"
+          aria-hidden="true"></i></ng-template>
+      <ng-template #markerValueLoaded>{{marker.value}}</ng-template>
+    </agm-info-window>
+  </agm-marker>
 
 <!--
       <wms-layer *ngIf="wmsParametersSat" #wmsSat
@@ -59,10 +58,6 @@
                       [style]="staticStyles">
       </agm-data-layer>
 
-<!--
-      <app-map-control position="RIGHT_BOTTOM">
-      </app-map-control>
--->
       <map-control position="TOP_LEFT" class="test">
         <div class="card dateSearchCard map-control">
           <div class="card-block control-card-content">
@@ -124,7 +119,7 @@
         </div>
       </map-control>
 
-    </agm-map>
+</agm-map>
     <!--
 
       (mapClick)="mapClicked($event)">

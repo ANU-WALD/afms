@@ -1,14 +1,12 @@
 // TODO: All plot generating code should be pulled out into a service (e.g., plotly.service)
 import {Component, ElementRef, AfterViewInit, Input, OnChanges, OnInit} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable, forkJoin} from 'rxjs';
 import {CatalogHost, InterpolationService} from 'map-wald';
 import {SelectionService} from '../selection.service';
 import {TimeseriesService} from 'map-wald';
 import {Http} from '@angular/http';
 import {LatLng} from '../latlng';
 import {CsvService} from '../csv.service';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/operator/map';
 import * as Plotly from 'plotly.js/dist/plotly-basic';
 import * as FileSaver from 'file-saver';
 import {VisibleLayer} from 'app/main-map/visible-layer';
@@ -126,7 +124,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
     const observables = dataSeries.map(s => s.observable);
 
-    Observable.forkJoin(observables)
+    forkJoin(observables)
       .subscribe((data: any) => {
 
           this.setFullTimeSeries(data);

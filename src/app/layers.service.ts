@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import {Observable} from 'rxjs';
+import {publishReplay,map,refCount} from 'rxjs/operators';
 import {FMCLayer,DateRange} from './layer';
+import { HttpClient } from '@angular/common/http';
+
+interface Config {
+  mask:FMCLayer,
+  layers:FMCLayer[]
+}
 
 @Injectable()
 export class LayersService {
@@ -9,9 +15,9 @@ export class LayersService {
 
   availableLayers:Observable<FMCLayer[]>;
 
-  constructor(private _http:Http) {
-    var layerConfig$ = _http.get("assets/config/layers.json")
-      .map(resp=>resp.json()).publishReplay().refCount();
+  constructor(private _http:HttpClient) {
+    var layerConfig$:Observable<Config> = <Observable<Config>>_http.get("assets/config/layers.json").pipe(
+      publishReplay(),refCount());
 
     var newLayer = function(l:any) : FMCLayer{
       return new FMCLayer(l.name,l.units,l.icon,l.wms_layer,l.palette,
@@ -20,7 +26,7 @@ export class LayersService {
                           l.host,l.url_fragment,l.indexing);
     }
 
-    this.mask = layerConfig$.map(data=>newLayer(data.mask));
-    this.availableLayers = layerConfig$.map(data=>data.layers.map(newLayer));
+    this.mask = layerConfig$.pipe(map(data=>newLayer(data.mask)));
+    this.availableLayers = layerConfig$.pipe(map(data=>data.layers.map(newLayer)));
   }
 }
