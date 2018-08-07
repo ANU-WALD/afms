@@ -29,6 +29,11 @@ export class DateRange {
     }
 
     if ('number' === typeof json) {
+      if(json<0){
+        let d = new Date();
+        d.setDate(d.getDate()+json);
+        return d;
+      }
       if (end) {
         return new Date(json, 11, 31);
       }
