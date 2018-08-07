@@ -2,9 +2,10 @@ sudo: false
 language: node_js
 node_js: 8
 install:
-  - npm install '@angular/cli' -g
-  - npm install
-  - gem install compass
+- npm install '@angular/cli' -g
+- npm install
+- gem install compass
+- cd node_modules/map-wald && npm install && rm -rf node_modules && cd -
 script:
   - npm config ls -l
   - echo $TRAVIS_BRANCH
