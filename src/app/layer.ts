@@ -8,9 +8,9 @@ export class FMCLayer {
               public chartConfig: any, public host: string, public urlFragment: string, public indexing: any) {
 
     this.indexing = this.indexing || {};
-    if (chartConfig) {
-      console.log(chartConfig);
-    }
+    // if (chartConfig) {
+    //   console.log(chartConfig);
+    // }
     if (legend) {
       this.colours = legend.map(e => `rgb(${e.r},${e.g},${e.b})`);
       this.labels = legend.map(e => e.label);
