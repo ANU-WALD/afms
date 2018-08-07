@@ -39,6 +39,7 @@
     "font-awesome": "^4.7.0",
     "dap-query-js": "github:flowmatters/dap-query-js",
     "map-wald": "github:ANU-WALD/map-wald",
+    "ngx-pipes": "1.6.5",
     "plotly.js": "git+https://github.com/arlowhite/plotly.js.git#no-polyfill",
     "rxjs": "^6.0.0",
     "typescript": "~2.7.0",
