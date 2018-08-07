@@ -41,6 +41,7 @@
     "map-wald": "github:ANU-WALD/map-wald",
     "ngx-pipes": "1.6.5",
     "plotly.js": "git+https://github.com/arlowhite/plotly.js.git#no-polyfill",
+    "proj4": "^2.3.17",
     "rxjs": "^6.0.0",
     "typescript": "~2.7.0",
     "zone.js": "^0.8.4"
@@ -53,6 +54,7 @@
     "@types/jasmine": "2.5.38",
     "@types/geojson": "^1.0.3",
     "@types/node": "~6.0.60",
+    "@types/proj4": "^2.3.4",
     "codelyzer": "~2.0.0",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
