@@ -5,6 +5,7 @@ $crc-red:rgb(221,34,28);
 $crc-orange:rgb(240,128,0);
 $crc-yellow:rgb(245,221,37);
 $footer-colour:rgb(35,31,32);
+$link-color:rgb(165,169,172);
 
 $font-family-sans-serif: 'Montserrat', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 $font-family-base:       $font-family-sans-serif;
@@ -97,7 +98,13 @@ $font-family-base:       $font-family-sans-serif;
   line-height: 50px; /* Vertically center the text there */
   background-color:$footer-colour;
   font-variant: all-small-caps;
+  a {
+    color: $link-color;
+  }
 
+  a:visited {
+    color: darken($link-color,10%);
+  }
 }
 
 
