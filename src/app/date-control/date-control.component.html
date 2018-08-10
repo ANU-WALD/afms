@@ -7,8 +7,10 @@
                name="dp" [(ngModel)]="selection.date" (ngOnChange)="dateChanged()"
                ngbDatepicker #d="ngbDatepicker"
                [maxDate]="maxDate" [minDate]="minDate">
-        <div class="input-group-addon" for="dateInputGroup"(click)="d.toggle()" >
-          <i class="fa fa-calendar"></i>
+        <div class="input-group-append" for="dateInputGroup"(click)="d.toggle()" >
+          <span class="input-group-text">
+            <i class="fa fa-calendar"></i>
+          </span>
         </div>
       </div>
       <button class="btn btn-sm col-2" [disabled]="atMax"

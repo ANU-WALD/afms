@@ -4,16 +4,26 @@ $fa-font-path: "../node_modules/font-awesome/fonts";
 $crc-red:rgb(221,34,28);
 $crc-orange:rgb(240,128,0);
 $crc-yellow:rgb(245,221,37);
+$footer-colour:rgb(35,31,32);
 
+$font-family-sans-serif: 'Montserrat', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-family-base:       $font-family-sans-serif;
 
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
 @import '../node_modules/bootstrap/scss/bootstrap';
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+.gm-style{
+  font-family: $font-family-sans-serif !important;
+}
 
 .navbar-inverse {
-  background:$crc-yellow;
+  background:white;
+  padding-top:2px;
 
   .navbar-brand{
     color:black;
+    font-weight: bolder;
   }
 
   .navbar-brand:hover{
@@ -21,6 +31,19 @@ $crc-yellow:rgb(245,221,37);
   }
 }
 
+.header-block{
+  margin-right:10px;
+  display:inline-block;
+  height:35px;
+  width: 10px;
+  background-color: rgb(239,56,42);
+}
+
+.header-title{
+  vertical-align: text-bottom;
+  height:35px;
+  display:inline-block;
+}
 
 .main-map{
   position:fixed;
@@ -72,12 +95,9 @@ $crc-yellow:rgb(245,221,37);
   /* Set the fixed height of the footer here */
   height: 50px;
   line-height: 50px; /* Vertically center the text there */
-  background-color:$crc-yellow;
+  background-color:$footer-colour;
+  font-variant: all-small-caps;
 
-  .container-fluid{
-    padding-left:0px;
-    padding-right:0px;
-  }
 }
 
 
