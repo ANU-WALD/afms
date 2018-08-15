@@ -1,19 +1,21 @@
 sudo: false
 language: node_js
-node_js: 7
+node_js: 8
 install:
-  - npm install '@angular/cli' -g
-  - npm install
-  - gem install compass
+- npm install '@angular/cli' -g
+- npm install
+- gem install compass
+- cd node_modules/map-wald && npm install && cd -
 script:
-  - npm config ls -l
-  - echo $TRAVIS_BRANCH
-  - node --version
-  - ng version
-  - SCRIPTS_FN=src/environments/environment.prod.ts
-  - sed "s/WENFO_GOOGLE_MAPS_API_KEY/$GOOGLE_MAPS_API_KEY/g" < $SCRIPTS_FN > tmp
-  - mv tmp $SCRIPTS_FN
-  - env BRANCH=$TRAVIS_BRANCH npm run build
+- npm config ls -l
+- echo $TRAVIS_BRANCH
+- node --version
+- ng version
+- cd node_modules/map-wald && npm run build && rm -rf node_modules && cd -
+- SCRIPTS_FN=src/environments/environment.prod.ts
+- sed "s/WENFO_GOOGLE_MAPS_API_KEY/$GOOGLE_MAPS_API_KEY/g" < $SCRIPTS_FN > tmp
+- mv tmp $SCRIPTS_FN
+- env BRANCH=$TRAVIS_BRANCH npm run build
 deploy:
   # deploy to "wenfo.org/afms/staging" on branch master
   - skip_cleanup: true

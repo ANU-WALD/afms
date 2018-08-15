@@ -9,13 +9,11 @@ import {BaseLayer} from '../base-layer.service';
 import {LayersService} from '../layers.service';
 import {environment} from '../../environments/environment';
 import {DateRange, FMCLayer} from '../layer';
+import {map} from 'rxjs/operators';
 
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/observable/forkJoin';
 import {VisibleLayer} from './visible-layer';
+import {GoogleMapsAPIWrapper, MapsAPILoader, LazyMapsAPILoader} from '@agm/core/services';
+import { WindowRef, DocumentRef } from '@agm/core/utils/browser-globals';
 
 const TDS_URL = environment.tds_server;
 
@@ -31,7 +29,6 @@ class ValueMarker {
   styleUrls: ['./main-map.component.scss']
 })
 export class MainMapComponent implements OnInit {
-
   @ViewChild('mapDiv') mapDiv: Component;
   @ViewChild('wms') wmsLayer: WMSLayerComponent;
   layerHost: CatalogHost;
@@ -247,8 +244,8 @@ export class MainMapComponent implements OnInit {
   vectorLayerChanged(layer: VectorLayer) {
     this.geoJsonObject = null;
     this.vectorLayer = layer;
-    this.http.get(`assets/selection_layers/${layer.jsonFilename}`)
-      .map((r) => r.json())
+    this.http.get(`assets/selection_layers/${layer.jsonFilename}`).pipe(
+      map((r) => r.json()))
       .subscribe((data) => {
         this.geoJsonObject = data;
       });

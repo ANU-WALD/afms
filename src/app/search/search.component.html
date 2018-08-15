@@ -11,8 +11,10 @@
              [resultFormatter]="getFormattedAddress"
              [inputFormatter]="getFormattedAddress"
              (keyup.enter)="gotoLocation()"/>
-      <div class="input-group-addon" (click)="gotoLocation()">
-        <i class="fa fa-search"></i>
+      <div class="input-group-append" (click)="gotoLocation()">
+        <span class="input-group-text">
+          <i class="fa fa-search"></i>
+        </span>
       </div>
     </div>
   </div>
