@@ -1,29 +1,22 @@
   <nav class="navbar navbar-fixed-top navbar-inverse">
       <div class="navbar-header">
-<!--
-        <button type="button" class="navbar-toggle collapsed" ng-click="selection.navbarCollapsed = !selection.navbarCollapsed" collapse="selection.navbarCollapsed" data-toggle="collapse" data-target="#navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
--->
         <span class="navbar-brand">
-<!--
-          <img class="visible-lg main-logo navbar-icon pull-left" src="images/2x_anu_logo_small.png">
-          <img class="hidden-lg main-logo navbar-icon pull-left" src="images/2x_anu_logo_only.png">
--->
-          <img src="assets/BNHCRC_Logo.png" height="35">
-          <span>Australian Flammability Monitoring System</span>
+          <div class="header-block"></div>
+          <span class="header-title">Australian Flammability Monitoring System</span>
         </span>
-        <!--
-        <span class="float-right">
-          <img clas="img-responsive" src="assets/under_construction_small.png">
-          Under Construction
-        </span>
-        -->
 
       </div>
+      <div class="navbar-right">
+        <span>
+          <a href="http://www.bnhcrc.com.au" target="_blank">
+            <img  class="bnhcrc-logo"
+                  alt="Bushfires and Natural Hazards CRC"
+                  src="assets/logo_BNHCRC.png"
+                  height="40">
+          </a>
+        </span>
+      </div>
+
       <div ng-if="!embedded" id="navbar" class="navbar-collapse collapse" ng-class="{'in':!selection.navbarCollapsed}">
           <form class="hidden-xs fullscreen-form navbar-form navbar-right">
             <button ngsf-toggle-fullscreen class="btn btn-primary" uib-tooltip="Toggle Fullscreen"
@@ -33,9 +26,6 @@
             </button>
           </form>
 
-<!--
-          <div ng-include="'views/navbar/themes.html'" ng-controller="ThemeswitcherCtrl"></div>
--->
       </div>
   </nav>
 <div class="container-fluid">
@@ -44,34 +34,21 @@
   </div>
 
   <footer class="footer">
-    <div class="no-gutters container-fluid">
-      <div class="row no-gutters">
-        <div class="col-2">
-          <img class="float-left" src="assets/Footer-Left.png">
-        </div>
+    <div class="container-fluid">
+      <div class="row">
         <div class="col-4">
           <span>
-<!--            <a href="#" target="_blank">Fact Sheet</a> | -->
             <a href="#" (click)="aboutSite($event)" >About this site</a> |
-<!--            <a href="#" target="_blank">Disclaimer</a> | -->
-<!--            <a href="#" target="_blank">Download Data</a> | -->
-            <a href="mailto:marta.yebra@anu.edu.au?subject=Feedback from Australian Flammability Monitoring System">Send feedback</a>
+            <a href="mailto:marta.yebra@anu.edu.au?subject=Feedback from Australian Flammability Monitoring System">Send feedback</a> |
+            <a href="https://www.youtube.com/watch?v=mfFjmuIS3RQ" target="_blank">Site Tour</a>
           </span>
         </div>
-        <div class="col-3">
+        <div class="col-6">
         </div>
-        <div class="col-1">
-          <a href="http://www.anu.edu.au" target="_blank">
-            <img alt="Australian National University" height="35" src="assets/ANU_logo.svg">
+        <div class="col-2">
+          <a class="pull-right" href="http://www.anu.edu.au" target="_blank">
+            <img alt="Australian National University" height="35" src="assets/logo_ANU.png">
           </a>
-        </div>
-        <div class="col-1">
-          <a href="http://www.bnhcrc.com.au" target="_blank">
-            <img alt="Bushfires and Natural Hazards CRC" src="assets/BNHCRC_Logo.png" height="35">
-          </a>
-        </div>
-        <div class="col-1">
-          <img class="float-right" src="assets/Footer-Right.png">
         </div>
       </div>
     </div>

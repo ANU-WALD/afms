@@ -8,9 +8,9 @@ export class FMCLayer {
               public chartConfig: any, public host: string, public urlFragment: string, public indexing: any) {
 
     this.indexing = this.indexing || {};
-    if (chartConfig) {
-      console.log(chartConfig);
-    }
+    // if (chartConfig) {
+    //   console.log(chartConfig);
+    // }
     if (legend) {
       this.colours = legend.map(e => `rgb(${e.r},${e.g},${e.b})`);
       this.labels = legend.map(e => e.label);
@@ -29,6 +29,11 @@ export class DateRange {
     }
 
     if ('number' === typeof json) {
+      if(json<0){
+        let d = new Date();
+        d.setDate(d.getDate()+json);
+        return d;
+      }
       if (end) {
         return new Date(json, 11, 31);
       }

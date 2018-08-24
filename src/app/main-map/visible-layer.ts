@@ -1,4 +1,4 @@
-import {InterpolationService} from 'map-wald/src/interpolation.service';
+import {InterpolationService} from 'map-wald';
 import {FMCLayer} from '../layer';
 import {environment} from '../../environments/environment';
 
