@@ -175,16 +175,18 @@
     }
   ],
   "mask": {
+    "source": "tds",
+    "path": "ub8/au/FMC/{{year}}_latlon_masks.nc",
     "name": "Computation Mask",
     "icon": "fa-fire",
-    "wms_layer": "Modis Land Mask (Inverted)",
+    "wms_layer": "forest",
     "range": [
       0,
       100
     ],
     "timeperiod": {
       "start": 2001,
-      "end": 2017,
+      "end": 2013,
       "format": "{{year}}-01-01T00%3A00%3A00.000Z"
     }
   }

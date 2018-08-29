@@ -18,7 +18,7 @@
       <span *ngIf="!marker.value;then markerValueLoading;else markerValueLoaded"></span>
       <ng-template #markerValueLoading><i class="fa fa-spinner fa-pulse"
           aria-hidden="true"></i></ng-template>
-      <ng-template #markerValueLoaded>{{marker.value}}</ng-template>
+      <ng-template #markerValueLoaded>{{marker.label}}: {{marker.value}}</ng-template>
     </agm-info-window>
   </agm-marker>
 
