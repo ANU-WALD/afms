@@ -237,10 +237,11 @@ export class MainMapComponent implements OnInit {
     if(!this.marker){
       return;
     }
+    this.marker = Object.assign({},this.marker);
     this.marker.label=null;
     this.marker.value=null;
     this.updateTimeSeries();
-    this.updateLandcover(); // may be too often...
+    this.updateLandcover();
   }
 
   updateTimeSeries() {
@@ -288,6 +289,7 @@ export class MainMapComponent implements OnInit {
 
   setDate(newDate: Date) {
     this.mainLayer.setDate(newDate);
+    this.reloadMarkerData();
   }
 
   ngOnInit() {
