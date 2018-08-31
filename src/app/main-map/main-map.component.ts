@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Http} from '@angular/http';
 import {CatalogHost, MapViewParameterService, TimeseriesService, WMSLayerComponent, WMSService, InterpolationService, OpendapService, MetadataService} from 'map-wald';
-import {SelectionService} from '../selection.service';
+import {SelectionService, previousTimeStep} from '../selection.service';
 import {VectorLayer} from '../vector-layer-selection/vector-layer-selection.component';
 import {LatLng} from '../latlng';
 import {BaseLayer} from '../base-layer.service';
@@ -314,11 +314,22 @@ export class MainMapComponent implements OnInit {
 
   layerChanged(layer: FMCLayer) {
     const opacity = this.mainLayer.opacity;
+    let date:Date;
+    if(this.selection.year===0){
+      date = previousTimeStep(previousTimeStep(previousTimeStep(layer.timePeriod.end)));
+    }
     this.mainLayer = new VisibleLayer(layer, this.selection.effectiveDate());
     this.mainLayer.opacity = opacity;
 
     this.dateRange = layer.timePeriod;
     this.selection.range = this.dateRange;
+    if(date){
+      this.selection.date = {
+        year:date.getFullYear(),
+        month:date.getMonth()+1,
+        day:date.getDate()
+      };
+    }
     this.layerHost = MainMapComponent.thredds(layer.host);
 
     this.reloadMarkerData();

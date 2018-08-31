@@ -11,9 +11,9 @@ export const DEFAULT_TIMESTEP=4;
 @Injectable()
 export class SelectionService {
   _struct:NgbDateStruct={
-    day:5,
-    month:5,
-    year:2018
+    day:0,
+    month:0,
+    year:0
   };
   _range:DateRange;
 
