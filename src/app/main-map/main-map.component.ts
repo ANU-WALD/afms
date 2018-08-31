@@ -1,23 +1,26 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Http} from '@angular/http';
-import {CatalogHost, MapViewParameterService, TimeseriesService, WMSLayerComponent, WMSService} from 'map-wald';
-import {SelectionService} from '../selection.service';
+import {CatalogHost, MapViewParameterService, TimeseriesService, WMSLayerComponent, WMSService, InterpolationService, OpendapService, MetadataService} from 'map-wald';
+import {SelectionService, previousTimeStep} from '../selection.service';
 import {VectorLayer} from '../vector-layer-selection/vector-layer-selection.component';
 import {LatLng} from '../latlng';
 import {BaseLayer} from '../base-layer.service';
 import {LayersService} from '../layers.service';
 import {environment} from '../../environments/environment';
 import {DateRange, FMCLayer} from '../layer';
-import {map} from 'rxjs/operators';
+import {map, tap, switchAll} from 'rxjs/operators';
+import { DapDAS, DapDDX } from 'dap-query-js/dist/dap-query';
 
 import {VisibleLayer} from './visible-layer';
 import {GoogleMapsAPIWrapper, MapsAPILoader, LazyMapsAPILoader} from '@agm/core/services';
 import { WindowRef, DocumentRef } from '@agm/core/utils/browser-globals';
+import { forkJoin, of } from 'rxjs';
 
 const TDS_URL = environment.tds_server;
 
 class ValueMarker {
+  label: string;
   loc: LatLng;
   value: string;
   open: boolean;
@@ -83,7 +86,9 @@ export class MainMapComponent implements OnInit {
               private mapView: MapViewParameterService,
               private http: Http,
               private timeseries: TimeseriesService,
-              private layers: LayersService) {
+              private layers: LayersService,
+              private metadata:MetadataService,
+              private dap:OpendapService) {
 
 
     this.mainLayer = new VisibleLayer(null, null);
@@ -138,35 +143,108 @@ export class MainMapComponent implements OnInit {
   moveAndZoom(coords: LatLng) {
     this.selectLocation(coords);
     this.moved(coords);
-    this.moved(12);
+    this.zoomed(12);
 
     // Zoom
   }
 
+  private moving:any = null;
   moved(event) {
-    if (event.lat) {
+    clearTimeout(this.moving);
+    this.moving = setTimeout(()=>{
       this.lat = event.lat;
       this.lng = event.lng;
-    } else {
-      this.zoom = event;
-    }
-    this.mapView.update({
-      lat: this.lat.toFixed(2),
-      lng: this.lng.toFixed(2),
-      zm: this.zoom
-    });
+      this.moving=null;
+      this.mapView.update({
+        lat: this.lat.toFixed(2),
+        lng: this.lng.toFixed(2),
+        zm: this.zoom
+      });
+    },500);
+  }
+
+  private zooming:any = null;
+  zoomed(zm:number){
+    clearTimeout(this.zooming);
+    this.zooming = setTimeout(()=>{
+      this.zoom = zm;
+      this.zooming=null;
+      this.mapView.update({
+        lat: this.lat.toFixed(2),
+        lng: this.lng.toFixed(2),
+        zm: this.zoom
+      });
+    },500);
   }
 
   selectLocation(coords: LatLng) {
     this.marker = {
+      label: '-',
       loc: coords,
       value: null,
       open: true
     };
+    this.updateLandcover();
     this.updateTimeSeries();
 
     this.selectedCoordinates = coords;
     this.mapView.update({coords: `${coords.lat.toFixed(3)},${coords.lng.toFixed(3)}`});
+  }
+
+  updateLandcover(){
+    const variables = [
+      'forest',
+      'grass',
+      'shrub'
+    ];
+    this.layers.mask.pipe(
+      map(m=>{
+        const host = MainMapComponent.thredds(m.host);
+        const year = Math.max(
+          m.timePeriod.start.getFullYear(),
+          Math.min(this.selection.year,m.timePeriod.end.getFullYear())
+        );
+        const file = InterpolationService.interpolate(m.path,{
+          year:year
+        })
+        var url = this.dap.makeURL(host,file);
+        return url;
+      }),
+      map(maskURL=>{
+        const ddx$ = this.metadata.ddxForUrl(maskURL);
+        const das$ = this.metadata.dasForUrl(maskURL);
+        const grid$ = this.metadata.getGridForURL(maskURL);
+        return forkJoin(ddx$,das$,grid$,of(maskURL))
+      }),
+      switchAll(),
+      map(meta=>{
+        return {
+          ddx:<DapDDX>meta[0],
+          das:<DapDAS>meta[1],
+          grid:<number[][]>meta[2],
+          url:<string>meta[3]
+        };
+      }),
+      map(meta=>{
+        const lats:number[] = (<number[][]>meta.grid)[0];
+        const lngs:number[] = (<number[][]>meta.grid)[1];
+        const pt = this.marker.loc;
+        const latIndex = this.timeseries.indexInDimension(pt.lat,lats);
+        const lngIndex = this.timeseries.indexInDimension(pt.lng,lngs);
+        const query = `${this.timeseries.dapRangeQuery(latIndex)}${this.timeseries.dapRangeQuery(lngIndex)}`;
+        return forkJoin(variables.map(v=>{
+          return this.dap.getData(`${meta.url}.ascii?${v}${query}`,meta.das);
+        }));
+      }),
+      switchAll()
+    ).subscribe((data)=>{
+      this.marker.label = 'Masked';
+      for(let i = 0; i < variables.length; i++){
+        if(data[i][variables[i]]){
+          this.marker.label = variables[i][0].toUpperCase()+variables[i].slice(1);
+        }
+      }
+    });
   }
 
   reloadMarkerData(){
@@ -174,8 +252,11 @@ export class MainMapComponent implements OnInit {
     if(!this.marker){
       return;
     }
+    this.marker = Object.assign({},this.marker);
+    this.marker.label=null;
     this.marker.value=null;
     this.updateTimeSeries();
+    this.updateLandcover();
   }
 
   updateTimeSeries() {
@@ -198,6 +279,8 @@ export class MainMapComponent implements OnInit {
             return; // Reject the data
           }
           this.currentYearDataForLocation = dapData;
+          this.currentYearDataForLocation.dates = 
+            this.currentYearDataForLocation.dates.map((d:Date)=>this.mainLayer.layer.reverseDate(d));
           this.currentYearDataForLocation.year = year;
           this.currentYearDataForLocation.coords = coords;
           this.updateMarker();
@@ -215,7 +298,7 @@ export class MainMapComponent implements OnInit {
     if (currentValue === null || isNaN(currentValue)) {
       currentValue = '-';
     } else {
-      currentValue = currentValue.toFixed(3);
+      currentValue = currentValue.toFixed(this.mainLayer.layer.precision);
     }
     this.marker.value = currentValue;
   }
@@ -223,6 +306,7 @@ export class MainMapComponent implements OnInit {
 
   setDate(newDate: Date) {
     this.mainLayer.setDate(newDate);
+    this.reloadMarkerData();
   }
 
   ngOnInit() {
@@ -230,11 +314,22 @@ export class MainMapComponent implements OnInit {
 
   layerChanged(layer: FMCLayer) {
     const opacity = this.mainLayer.opacity;
+    let date:Date;
+    if(this.selection.year===0){
+      date = previousTimeStep(previousTimeStep(previousTimeStep(layer.timePeriod.end)));
+    }
     this.mainLayer = new VisibleLayer(layer, this.selection.effectiveDate());
     this.mainLayer.opacity = opacity;
 
     this.dateRange = layer.timePeriod;
     this.selection.range = this.dateRange;
+    if(date){
+      this.selection.date = {
+        year:date.getFullYear(),
+        month:date.getMonth()+1,
+        day:date.getDate()
+      };
+    }
     this.layerHost = MainMapComponent.thredds(layer.host);
 
     this.reloadMarkerData();

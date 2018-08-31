@@ -5,6 +5,7 @@
       "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "Live Fuel Moisture Content",
       "units": "%",
+      "suffix": "%",
       "icon": "fa-tint",
       "wms_layer": "lvmc_mean",
       "palette": {
@@ -13,15 +14,17 @@
         "count": 9,
         "reverse": false
       },
+      "precision":0,
       "range": [
         0,
         140
       ],
-      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2017)",
+      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2018)",
       "timeperiod": {
         "start": 2001,
-        "end": -8
+        "end": 0
       },
+      "timeshift":-2,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_9",
         "colorscalerange": "0,140",
@@ -34,6 +37,7 @@
       "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "LFMC Uncertainty",
       "units": "%",
+      "suffix": "%",
       "icon": "fa-percent",
       "wms_layer": "lvmc_stdv",
       "palette": {
@@ -42,15 +46,17 @@
         "count": 11,
         "reverse": true
       },
+      "precision":0,
       "range": [
         0,
         50
       ],
-      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2017)",
+      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2018)",
       "timeperiod": {
         "start": 2001,
-        "end": -8
+        "end": 0
       },
+      "timeshift":-2,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_11_rev",
         "colorscalerange": "0,50",
@@ -65,21 +71,23 @@
       "units": "unitless",
       "icon": "fa-fire",
       "wms_layer": "flammability_index",
-      "description": "Flammability Index (0-1) derived from logistic regression models trained on fire events mapped in the MODIS burned area product and four predictor variables calculated from the FMC estimates following the methodology of Yebra et al. (2017)",
+      "description": "Flammability Index (0-1) derived from logistic regression models trained on fire events mapped in the MODIS burned area product and four predictor variables calculated from the FMC estimates following the methodology of Yebra et al. (2018)",
       "palette": {
         "image": false,
         "name": "RdYlBu",
         "count": 11,
         "reverse": true
       },
+      "precision":1,
       "range": [
         0,
         1
       ],
       "timeperiod": {
         "start": 2001,
-        "end": -8
+        "end": 0
       },
+      "timeshift":-2,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_11_rev",
         "colorscalerange": "0,1",
@@ -99,7 +107,7 @@
       "realhost": "http://opendap.bom.gov.au:8080/thredds",
       "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.vol.smc.{{year}}.nc",
       "name": "Soil Moisture 0-10cm (JASMIN)",
-      "units": "m^3.m^-3",
+      "units": "m<sup>3</sup>;.m<sup>-3</sup>",
       "icon": "fa-tint",
       "wms_layer": "sm",
       "description": "Volumetric soil moisture (m^3/m^-3) from JASMIN land surface modelling system developed by Bureau of Meteorology (Dharssi and Vinodkumar, 2017)",
@@ -113,6 +121,7 @@
         0,
         0.5
       ],
+      "precision":2,
       "timeperiod": {
         "start": 2010,
         "end": "2018/07/31"
@@ -147,6 +156,7 @@
         "count": 11,
         "reverse": false
       },
+      "precision":2,
       "range": [
         0,
         0.5
@@ -174,16 +184,18 @@
     }
   ],
   "mask": {
+    "source": "tds",
+    "path": "ub8/au/FMC/{{year}}_latlon_masks.nc",
     "name": "Computation Mask",
     "icon": "fa-fire",
-    "wms_layer": "Modis Land Mask (Inverted)",
+    "wms_layer": "forest",
     "range": [
       0,
       100
     ],
     "timeperiod": {
       "start": 2001,
-      "end": 2017,
+      "end": 2013,
       "format": "{{year}}-01-01T00%3A00%3A00.000Z"
     }
   }

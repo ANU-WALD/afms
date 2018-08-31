@@ -2,7 +2,7 @@
 
 import {Location} from '@angular/common';
 import { TestBed, inject } from '@angular/core/testing';
-import { SelectionService } from './selection.service';
+import { SelectionService, mostRecentTimestep, previousTimeStep } from './selection.service';
 import {MapViewParameterService} from 'map-wald';
 import {customMatchers} from '../testing/custom.matchers';
 
@@ -20,14 +20,14 @@ describe('SelectionService', () => {
   });
 
   it('should find most recent date', inject([SelectionService], (service: SelectionService) => {
-    expect(service.mostRecentTimestep(new Date(2012,0,5))).toMatchDate(new Date(2012,0,1));
-    expect(service.mostRecentTimestep(new Date(2012,0,17))).toMatchDate(new Date(2012,0,17));
-    expect(service.mostRecentTimestep(new Date(2012,0,16))).toMatchDate(new Date(2012,0,9));
+    expect(mostRecentTimestep(new Date(2012,0,5),service.timeStep)).toMatchDate(new Date(2012,0,1));
+    expect(mostRecentTimestep(new Date(2012,0,17),service.timeStep)).toMatchDate(new Date(2012,0,17));
+    expect(mostRecentTimestep(new Date(2012,0,16),service.timeStep)).toMatchDate(new Date(2012,0,9));
   }));
 
   it('should find the previous date', inject([SelectionService], (service: SelectionService) => {
-    expect(service.previousTimeStep(new Date(2012,0,17))).toMatchDate(new Date(2012,0,9));
-    expect(service.previousTimeStep(new Date(2012,0,1))).toMatchDate(new Date(2011,11,27));
+    expect(previousTimeStep(new Date(2012,0,17),service.timeStep)).toMatchDate(new Date(2012,0,9));
+    expect(previousTimeStep(new Date(2012,0,1),service.timeStep)).toMatchDate(new Date(2011,11,27));
   }));
 
 });

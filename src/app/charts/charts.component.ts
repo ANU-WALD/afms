@@ -119,7 +119,6 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       };
 
       dataSeries.push(newDataSeries);
-
     }
 
     const observables = dataSeries.map(s => s.observable);
@@ -137,8 +136,9 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
             // each other rather than shown sequentially
 
             const chartTimestamps: Date[] = dataset.dates.map(d => {
-              const modifiedDate = new Date(d);
-              modifiedDate.setFullYear(selectedYear);
+              const yearOffset = selectedYear-d.getFullYear();
+              const modifiedDate = this.layer.layer.reverseDate(d);
+              modifiedDate.setFullYear(modifiedDate.getFullYear()+yearOffset);
               return modifiedDate;
             });
 
