@@ -18,7 +18,7 @@
         0,
         140
       ],
-      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2017)",
+      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2018)",
       "timeperiod": {
         "start": 2001,
         "end": 0
@@ -49,7 +49,7 @@
         0,
         50
       ],
-      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2017)",
+      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2018)",
       "timeperiod": {
         "start": 2001,
         "end": 0
@@ -69,7 +69,7 @@
       "units": "unitless",
       "icon": "fa-fire",
       "wms_layer": "flammability_index",
-      "description": "Flammability Index (0-1) derived from logistic regression models trained on fire events mapped in the MODIS burned area product and four predictor variables calculated from the FMC estimates following the methodology of Yebra et al. (2017)",
+      "description": "Flammability Index (0-1) derived from logistic regression models trained on fire events mapped in the MODIS burned area product and four predictor variables calculated from the FMC estimates following the methodology of Yebra et al. (2018)",
       "palette": {
         "image": false,
         "name": "RdYlBu",
@@ -105,7 +105,7 @@
       "realhost": "http://opendap.bom.gov.au:8080/thredds",
       "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.vol.smc.{{year}}.nc",
       "name": "Soil Moisture 0-10cm (JASMIN)",
-      "units": "m^3.m^-3",
+      "units": "m<sup>3</sup>;.m<sup>-3</sup>",
       "icon": "fa-tint",
       "wms_layer": "sm",
       "description": "Volumetric soil moisture (m^3/m^-3) from JASMIN land surface modelling system developed by Bureau of Meteorology (Dharssi and Vinodkumar, 2017)",
