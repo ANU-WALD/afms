@@ -226,7 +226,7 @@ export class MainMapComponent implements OnInit {
       this.marker.label = 'Masked';
       for(let i = 0; i < variables.length; i++){
         if(data[i][variables[i]]){
-          this.marker.label = variables[i][0].toUpperCase();
+          this.marker.label = variables[i][0].toUpperCase()+variables[i].slice(1);
         }
       }
     });
