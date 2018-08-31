@@ -1,6 +1,7 @@
 import {InterpolationService} from 'map-wald';
 import {FMCLayer} from '../layer';
 import {environment} from '../../environments/environment';
+import { previousTimeStep } from '../selection.service';
 
 const TDS_URL = environment.tds_server;
 
@@ -44,6 +45,7 @@ export class VisibleLayer {
   };
 
   updateParameters(currentDate: Date) {
+    currentDate = this.layer.effectiveDate(currentDate);
     this.path = InterpolationService.interpolate(this.layer.path, {
       year: currentDate.getFullYear(),
       month: VisibleLayer.leading0(currentDate.getMonth() + 1),

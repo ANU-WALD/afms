@@ -264,6 +264,8 @@ export class MainMapComponent implements OnInit {
             return; // Reject the data
           }
           this.currentYearDataForLocation = dapData;
+          this.currentYearDataForLocation.dates = 
+            this.currentYearDataForLocation.dates.map((d:Date)=>this.mainLayer.layer.reverseDate(d));
           this.currentYearDataForLocation.year = year;
           this.currentYearDataForLocation.coords = coords;
           this.updateMarker();
