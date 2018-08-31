@@ -2,22 +2,22 @@ import { Injectable, EventEmitter } from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import { MapViewParameterService, TimeUtilsService } from 'map-wald';
-import {DateRange} from "./layer";
+import {DateRange} from './layer';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
 const MILLISECONDS_PER_DAY=24*60*60*1000;
+export const DEFAULT_TIMESTEP=4;
 
 @Injectable()
 export class SelectionService {
   _struct:NgbDateStruct={
-    day:29,
-    month:5,
-    year:2018
+    day:0,
+    month:0,
+    year:0
   };
   _range:DateRange;
 
-  timeStep:number=4;
-
+  timeStep=DEFAULT_TIMESTEP;
 
   constructor(private mapView:MapViewParameterService,
               private timeUtils:TimeUtilsService,
@@ -37,7 +37,6 @@ export class SelectionService {
   get year():number {return this._struct.year;}
   get month():number {return this._struct.month;}
   get day():number {return this._struct.day;}
-
 
   get date():NgbDateStruct{
     return this._struct;
@@ -71,12 +70,12 @@ export class SelectionService {
 
     var now = this.effectiveDate();
     if(now<this.range.start){
-      this.goto(this.range.start);
+      this.goto(nextTimeStep(this.range.start,this.timeStep));
       return true;
     }
 
     if(now>this.range.end){
-      this.goto(this.range.end);
+      this.goto(mostRecentTimestep(this.range.end,this.timeStep));
       return true;
     }
 
@@ -113,21 +112,31 @@ export class SelectionService {
   dateChange: EventEmitter<Date> = new EventEmitter<Date>();
 
   effectiveDate():Date{
-    return this.mostRecentTimestep(new Date(this._struct.year,this._struct.month-1,this._struct.day,12));
+    return mostRecentTimestep(
+      new Date(this._struct.year,this._struct.month-1,this._struct.day,12),
+      this.timeStep);
   }
+}
 
-  previousTimeStep(now:Date):Date{
-    now.setDate(now.getDate()-1);
-    return this.mostRecentTimestep(now);
-  }
+export function previousTimeStep(now:Date,timestep?:number):Date{
+  now = new Date(now);
+  now.setDate(now.getDate()-1);
+  return mostRecentTimestep(now,timestep||DEFAULT_TIMESTEP);
+}
 
-  mostRecentTimestep(d:Date):Date{
-    var newT = d.getTime();
-    var refT = new Date(d.getFullYear(),0,1,12).getTime();
-    var deltaT = MILLISECONDS_PER_DAY/2 + newT-refT;
-    var timeStep=(this.timeStep*MILLISECONDS_PER_DAY);
-    var offset=+Math.floor(deltaT/timeStep);
+export function nextTimeStep(now:Date,timestep?:number):Date{
+  timestep = timestep||DEFAULT_TIMESTEP;
+  now = mostRecentTimestep(now,timestep);
+  now.setDate(now.getDate()+timestep);
+  return now;
+}
 
-    return new Date(refT+offset*timeStep);
-  }
+export function mostRecentTimestep(d:Date,timestep:number):Date{
+  const newT = d.getTime();
+  const refT = new Date(d.getFullYear(),0,1,12).getTime();
+  const deltaT = MILLISECONDS_PER_DAY/2 + newT-refT;
+  const timeStepMS=(timestep*MILLISECONDS_PER_DAY);
+  const offset=+Math.floor(deltaT/timeStepMS);
+
+  return new Date(refT+offset*timeStepMS);
 }

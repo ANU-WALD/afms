@@ -1,3 +1,5 @@
+import { previousTimeStep, nextTimeStep } from "./selection.service";
+
 export class FMCLayer {
   colours: Array<string>;
   labels: Array<string>;
@@ -5,7 +7,8 @@ export class FMCLayer {
   constructor(public name: string, public units: string, public icon: string, public variable_name: string, public palette: any,
               public range: Array<number>, public description: string, public timePeriod: DateRange,
               public legend: Array<any>, public wmsParams: any, public source: string, public path: string,
-              public chartConfig: any, public host: string, public urlFragment: string, public indexing: any) {
+              public chartConfig: any, public host: string, public urlFragment: string, public indexing: any,
+              public suffix: string, public timeshift:number, public precision:number) {
 
     this.indexing = this.indexing || {};
     // if (chartConfig) {
@@ -15,6 +18,20 @@ export class FMCLayer {
       this.colours = legend.map(e => `rgb(${e.r},${e.g},${e.b})`);
       this.labels = legend.map(e => e.label);
     }
+  }
+
+  effectiveDate(d:Date):Date{
+    for(let i = 0; i < Math.abs(this.timeshift); i++){
+      d = previousTimeStep(d);
+    }
+    return d;
+  }
+
+  reverseDate(d:Date):Date{
+    for(let i = 0; i < Math.abs(this.timeshift); i++){
+      d = nextTimeStep(d);
+    }
+    return d;
   }
 }
 
