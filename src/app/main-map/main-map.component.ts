@@ -143,23 +143,38 @@ export class MainMapComponent implements OnInit {
   moveAndZoom(coords: LatLng) {
     this.selectLocation(coords);
     this.moved(coords);
-    this.moved(12);
+    this.zoomed(12);
 
     // Zoom
   }
 
+  private moving:any = null;
   moved(event) {
-    if (event.lat) {
+    clearTimeout(this.moving);
+    this.moving = setTimeout(()=>{
       this.lat = event.lat;
       this.lng = event.lng;
-    } else {
-      this.zoom = event;
-    }
-    this.mapView.update({
-      lat: this.lat.toFixed(2),
-      lng: this.lng.toFixed(2),
-      zm: this.zoom
-    });
+      this.moving=null;
+      this.mapView.update({
+        lat: this.lat.toFixed(2),
+        lng: this.lng.toFixed(2),
+        zm: this.zoom
+      });
+    },500);
+  }
+
+  private zooming:any = null;
+  zoomed(zm:number){
+    clearTimeout(this.zooming);
+    this.zooming = setTimeout(()=>{
+      this.zoom = zm;
+      this.zooming=null;
+      this.mapView.update({
+        lat: this.lat.toFixed(2),
+        lng: this.lng.toFixed(2),
+        zm: this.zoom
+      });
+    },500);
   }
 
   selectLocation(coords: LatLng) {

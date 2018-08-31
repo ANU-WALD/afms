@@ -7,7 +7,7 @@
             [zoomControl]="false"
             (mapClick)="mapClick($event)"
             (centerChange)="moved($event)"
-            (zoomChange)="moved($event)"
+            (zoomChange)="zoomed($event)"
             scaleControl="true">
 
   <agm-marker *ngIf="marker"
