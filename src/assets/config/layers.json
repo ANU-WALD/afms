@@ -14,6 +14,7 @@
         "count": 9,
         "reverse": false
       },
+      "precision":0,
       "range": [
         0,
         140
@@ -45,6 +46,7 @@
         "count": 11,
         "reverse": true
       },
+      "precision":0,
       "range": [
         0,
         50
@@ -76,6 +78,7 @@
         "count": 11,
         "reverse": true
       },
+      "precision":1,
       "range": [
         0,
         1
@@ -119,6 +122,7 @@
         0,
         0.5
       ],
+      "precision":2,
       "timeperiod": {
         "start": 2010,
         "end": "2018/07/31"
@@ -153,6 +157,7 @@
         "count": 11,
         "reverse": false
       },
+      "precision":2,
       "range": [
         0,
         0.5

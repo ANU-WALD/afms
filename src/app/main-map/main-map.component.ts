@@ -283,7 +283,7 @@ export class MainMapComponent implements OnInit {
     if (currentValue === null || isNaN(currentValue)) {
       currentValue = '-';
     } else {
-      currentValue = currentValue.toFixed(3);
+      currentValue = currentValue.toFixed(this.mainLayer.layer.precision);
     }
     this.marker.value = currentValue;
   }
