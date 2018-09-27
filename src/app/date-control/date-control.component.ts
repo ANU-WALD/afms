@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, Input, ViewChild } from '@angular/core';
 import {SelectionService} from '../selection.service';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { TimeUtilsService, MetadataService, InterpolationService } from "map-wald";
 import { VisibleLayer } from '../main-map/visible-layer';
 import { NgbDatepickerNavigateEvent, NgbDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker';
@@ -16,7 +16,7 @@ export class DateControlComponent implements OnInit, OnChanges {
   @Input() start:Date;
   @Input() end:Date;
   @Input() layer:VisibleLayer;
-  @ViewChild('d') datePicker: NgbDatepicker;
+  @ViewChild('d') datePicker: NgbInputDatepicker;
   minDate:NgbDateStruct;
   maxDate:NgbDateStruct;
 
@@ -56,6 +56,10 @@ export class DateControlComponent implements OnInit, OnChanges {
       this.maxDate = this.timeUtils.convertDate(this.end);
     }
 
+    if(changes.layer){
+      this.findValidDates(this.selection.year);
+    }
+
     this.checkLimits();
   }
 
@@ -92,6 +96,8 @@ export class DateControlComponent implements OnInit, OnChanges {
       this.validDates = dates;
       this.validDateYear = year;
       this.datePicker.navigateTo();
+      this.datePicker.toggle();
+      this.datePicker.toggle();
     });
   }
 
@@ -104,6 +110,5 @@ export class DateControlComponent implements OnInit, OnChanges {
     if(evt.next.year!==this.validDateYear){
       this.findValidDates(evt.next.year);
     }
-    console.log(evt);
   }
 }
