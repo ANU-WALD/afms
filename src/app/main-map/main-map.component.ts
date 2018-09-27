@@ -13,8 +13,6 @@ import {map, tap, switchAll} from 'rxjs/operators';
 import { DapDAS, DapDDX } from 'dap-query-js/dist/dap-query';
 
 import {VisibleLayer} from './visible-layer';
-import {GoogleMapsAPIWrapper, MapsAPILoader, LazyMapsAPILoader} from '@agm/core/services';
-import { WindowRef, DocumentRef } from '@agm/core/utils/browser-globals';
 import { forkJoin, of } from 'rxjs';
 
 const TDS_URL = environment.tds_server;
@@ -34,9 +32,6 @@ class ValueMarker {
 export class MainMapComponent implements OnInit {
   @ViewChild('mapDiv') mapDiv: Component;
   @ViewChild('wms') wmsLayer: WMSLayerComponent;
-  layerHost: CatalogHost;
-  showMask: boolean;
-  maskLayer: VisibleLayer;
   mainLayer: VisibleLayer;
 
   baseLayer: BaseLayer;
@@ -273,7 +268,10 @@ export class MainMapComponent implements OnInit {
       return;
     }
 
-    this.timeseries.getTimeseries(this.layerHost, fn, this.mainLayer.layer.variable_name, coords, this.mainLayer.layer.indexing)// ,year)
+    this.timeseries.getTimeseries(this.mainLayer.host, fn, 
+                                  this.mainLayer.layer.variable_name, 
+                                  coords, 
+                                  this.mainLayer.layer.indexing)// ,year)
       .subscribe(dapData => {
           if ((year !== this.selection.year) || (coords !== this.marker.loc)) {
             return; // Reject the data
@@ -330,7 +328,7 @@ export class MainMapComponent implements OnInit {
         day:date.getDate()
       };
     }
-    this.layerHost = MainMapComponent.thredds(layer.host);
+    this.mainLayer.host = MainMapComponent.thredds(layer.host);
 
     this.reloadMarkerData();
   }

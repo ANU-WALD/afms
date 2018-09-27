@@ -1,4 +1,4 @@
-import {InterpolationService} from 'map-wald';
+import {InterpolationService, CatalogHost} from 'map-wald';
 import {FMCLayer} from '../layer';
 import {environment} from '../../environments/environment';
 import { previousTimeStep } from '../selection.service';
@@ -6,7 +6,9 @@ import { previousTimeStep } from '../selection.service';
 const TDS_URL = environment.tds_server;
 
 export class VisibleLayer {
+  host:CatalogHost;
   url: string = TDS_URL;
+  downloadURL: string;
   path: string;
   legendImageURL: string = null;
   opacity = 1.0;

@@ -25,7 +25,6 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   @Input() coordinates: LatLng;
   @Input() year: number;
   @Input() layer: VisibleLayer;
-  @Input() thredds: CatalogHost;
 
   fullTimeSeries = null;
   havePlot = false;
@@ -102,7 +101,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     Plotly.purge(this.node);
 
 
-    const host = this.thredds;
+    const host = this.layer.host;
     const baseFn = this.layer.layer.path;
     const variable = this.layer.layer.variable_name;
 

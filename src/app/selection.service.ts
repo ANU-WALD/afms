@@ -5,6 +5,7 @@ import { MapViewParameterService, TimeUtilsService } from 'map-wald';
 import {DateRange} from './layer';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
+const OFFSET_HOURS=12;
 const MILLISECONDS_PER_DAY=24*60*60*1000;
 export const DEFAULT_TIMESTEP=4;
 
@@ -113,27 +114,27 @@ export class SelectionService {
 
   effectiveDate():Date{
     return mostRecentTimestep(
-      new Date(this._struct.year,this._struct.month-1,this._struct.day,12),
+      new Date(Date.UTC(this._struct.year,this._struct.month-1,this._struct.day)),
       this.timeStep);
   }
 }
 
 export function previousTimeStep(now:Date,timestep?:number):Date{
   now = new Date(now);
-  now.setDate(now.getDate()-1);
+  now.setUTCDate(now.getUTCDate()-1);
   return mostRecentTimestep(now,timestep||DEFAULT_TIMESTEP);
 }
 
 export function nextTimeStep(now:Date,timestep?:number):Date{
   timestep = timestep||DEFAULT_TIMESTEP;
   now = mostRecentTimestep(now,timestep);
-  now.setDate(now.getDate()+timestep);
+  now.setUTCDate(now.getUTCDate()+timestep);
   return now;
 }
 
 export function mostRecentTimestep(d:Date,timestep:number):Date{
   const newT = d.getTime();
-  const refT = new Date(d.getFullYear(),0,1,12).getTime();
+  const refT = new Date(Date.UTC(d.getUTCFullYear(),0,1)).getTime();
   const deltaT = MILLISECONDS_PER_DAY/2 + newT-refT;
   const timeStepMS=(timestep*MILLISECONDS_PER_DAY);
   const offset=+Math.floor(deltaT/timeStepMS);
