@@ -61,7 +61,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   }
 
   private getChartRange(): number {
-    return Math.min(CHART_YEARS, this.year - this.layer.layer.timePeriod.start.getFullYear())
+    return Math.min(CHART_YEARS, this.year - this.layer.layer.timePeriod.start.getUTCFullYear())
   }
 
   setFullTimeSeries(data: any[]) {
@@ -137,7 +137,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
             const chartTimestamps: Date[] = dataset.dates.map(d => {
               const yearOffset = selectedYear-d.getFullYear();
               const modifiedDate = this.layer.layer.reverseDate(d);
-              modifiedDate.setFullYear(modifiedDate.getFullYear()+yearOffset);
+              modifiedDate.setUTCFullYear(modifiedDate.getUTCFullYear()+yearOffset);
               return modifiedDate;
             });
 

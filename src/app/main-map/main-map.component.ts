@@ -1,7 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Http} from '@angular/http';
-import {CatalogHost, MapViewParameterService, TimeseriesService, WMSLayerComponent, WMSService, InterpolationService, OpendapService, MetadataService} from 'map-wald';
+import {CatalogHost, MapViewParameterService, TimeseriesService, WMSLayerComponent,
+        WMSService, InterpolationService, OpendapService, MetadataService,
+        UTCDate} from 'map-wald';
 import {SelectionService, previousTimeStep} from '../selection.service';
 import {VectorLayer} from '../vector-layer-selection/vector-layer-selection.component';
 import {LatLng} from '../latlng';
@@ -196,8 +198,8 @@ export class MainMapComponent implements OnInit {
       map(m=>{
         const host = MainMapComponent.thredds(m.host);
         const year = Math.max(
-          m.timePeriod.start.getFullYear(),
-          Math.min(this.selection.year,m.timePeriod.end.getFullYear())
+          m.timePeriod.start.getUTCFullYear(),
+          Math.min(this.selection.year,m.timePeriod.end.getUTCFullYear())
         );
         const file = InterpolationService.interpolate(m.path,{
           year:year
@@ -289,7 +291,7 @@ export class MainMapComponent implements OnInit {
   }
 
   updateMarker() {
-    const now = this.selection.effectiveDate();
+    const now = <Date>this.selection.effectiveDate();
     const deltas = this.currentYearDataForLocation.dates.map(t => Math.abs(t.getTime() - now.getTime()));
     const closest = deltas.indexOf(Math.min(...deltas));
     let currentValue = this.currentYearDataForLocation.values[closest];
@@ -312,7 +314,7 @@ export class MainMapComponent implements OnInit {
 
   layerChanged(layer: FMCLayer) {
     const opacity = this.mainLayer.opacity;
-    let date:Date;
+    let date:UTCDate;
     if(this.selection.year===0){
       date = previousTimeStep(previousTimeStep(previousTimeStep(layer.timePeriod.end)));
     }
@@ -323,9 +325,9 @@ export class MainMapComponent implements OnInit {
     this.selection.range = this.dateRange;
     if(date){
       this.selection.date = {
-        year:date.getFullYear(),
-        month:date.getMonth()+1,
-        day:date.getDate()
+        year:date.getUTCFullYear(),
+        month:date.getUTCMonth()+1,
+        day:date.getUTCDate()
       };
     }
     this.mainLayer.host = MainMapComponent.thredds(layer.host);

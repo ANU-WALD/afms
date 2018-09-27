@@ -1,4 +1,4 @@
-import {InterpolationService, CatalogHost} from 'map-wald';
+import {InterpolationService, CatalogHost, UTCDate} from 'map-wald';
 import {FMCLayer} from '../layer';
 import {environment} from '../../environments/environment';
 import { previousTimeStep } from '../selection.service';
@@ -27,12 +27,12 @@ export class VisibleLayer {
     }
   }
 
-  dateText(date: Date): string {
+  dateText(date: UTCDate): string {
     const fmt = this.layer.timePeriod.format || '{{year}}-{{month}}-{{day}}T00%3A00%3A00.000Z';
     return InterpolationService.interpolate(fmt, {
-      year: date.getFullYear(),
-      month: VisibleLayer.leading0(date.getMonth() + 1),
-      day: VisibleLayer.leading0(date.getDate())
+      year: date.getUTCFullYear(),
+      month: VisibleLayer.leading0(date.getUTCMonth() + 1),
+      day: VisibleLayer.leading0(date.getUTCDate())
     });
   }
 
@@ -40,18 +40,18 @@ export class VisibleLayer {
     this.updateParameters(newDate);
   }
 
-  constructor(public layer: FMCLayer, currentDate: Date) {
+  constructor(public layer: FMCLayer, currentDate: UTCDate) {
     if (layer) {
       this.updateParameters(currentDate);
     }
   };
 
-  updateParameters(currentDate: Date) {
+  updateParameters(currentDate: UTCDate) {
     currentDate = this.layer.effectiveDate(currentDate);
     this.path = InterpolationService.interpolate(this.layer.path, {
-      year: currentDate.getFullYear(),
-      month: VisibleLayer.leading0(currentDate.getMonth() + 1),
-      day: VisibleLayer.leading0(currentDate.getDate())
+      year: currentDate.getUTCFullYear(),
+      month: VisibleLayer.leading0(currentDate.getUTCMonth() + 1),
+      day: VisibleLayer.leading0(currentDate.getUTCDate())
     });
 
     if (this.layer.source === 'tds') {

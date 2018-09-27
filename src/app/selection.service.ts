@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
-import { MapViewParameterService, TimeUtilsService } from 'map-wald';
+import { MapViewParameterService, TimeUtilsService, UTCDate, utcDateCopy } from 'map-wald';
 import {DateRange} from './layer';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
@@ -49,7 +49,7 @@ export class SelectionService {
     this.dateChanged();
   }
 
-  private goto(d:Date){
+  private goto(d:UTCDate){
     this._struct = this.timeUtils.convertDate(d);
   }
 
@@ -101,7 +101,7 @@ export class SelectionService {
   }
 
   move(n:number){
-    var d = new Date(this._struct.year,this._struct.month-1,this._struct.day+n,12);
+    var d:UTCDate = new Date(this._struct.year,this._struct.month-1,this._struct.day+n,12);
     this._struct = this.timeUtils.convertDate(d);
     d = this.effectiveDate();
     this._struct = this.timeUtils.convertDate(d);
@@ -110,30 +110,30 @@ export class SelectionService {
     this.dateChanged();
   }
 
-  dateChange: EventEmitter<Date> = new EventEmitter<Date>();
+  dateChange: EventEmitter<UTCDate> = new EventEmitter<UTCDate>();
 
-  effectiveDate():Date{
+  effectiveDate():UTCDate{
     return mostRecentTimestep(
       new Date(Date.UTC(this._struct.year,this._struct.month-1,this._struct.day)),
       this.timeStep);
   }
 }
 
-export function previousTimeStep(now:Date,timestep?:number):Date{
-  now = new Date(now);
+export function previousTimeStep(now:UTCDate,timestep?:number):UTCDate{
+  now = utcDateCopy(now);
   now.setUTCDate(now.getUTCDate()-1);
   return mostRecentTimestep(now,timestep||DEFAULT_TIMESTEP);
 }
 
-export function nextTimeStep(now:Date,timestep?:number):Date{
+export function nextTimeStep(now:UTCDate,timestep?:number):UTCDate{
   timestep = timestep||DEFAULT_TIMESTEP;
   now = mostRecentTimestep(now,timestep);
   now.setUTCDate(now.getUTCDate()+timestep);
   return now;
 }
 
-export function mostRecentTimestep(d:Date,timestep:number):Date{
-  const newT = d.getTime();
+export function mostRecentTimestep(d:UTCDate,timestep:number):UTCDate{
+  const newT = (<Date>d).getTime();
   const refT = new Date(Date.UTC(d.getUTCFullYear(),0,1)).getTime();
   const deltaT = MILLISECONDS_PER_DAY/2 + newT-refT;
   const timeStepMS=(timestep*MILLISECONDS_PER_DAY);

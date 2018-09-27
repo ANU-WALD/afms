@@ -1,4 +1,5 @@
 import { previousTimeStep, nextTimeStep } from "./selection.service";
+import { UTCDate, utcDate} from 'map-wald';
 
 export class FMCLayer {
   colours: Array<string>;
@@ -20,14 +21,14 @@ export class FMCLayer {
     }
   }
 
-  effectiveDate(d:Date):Date{
+  effectiveDate(d:UTCDate):UTCDate{
     for(let i = 0; i < Math.abs(this.timeshift); i++){
       d = previousTimeStep(d);
     }
     return d;
   }
 
-  reverseDate(d:Date):Date{
+  reverseDate(d:UTCDate):UTCDate{
     for(let i = 0; i < Math.abs(this.timeshift); i++){
       d = nextTimeStep(d);
     }
@@ -36,11 +37,11 @@ export class FMCLayer {
 }
 
 export class DateRange {
-  start: Date;
-  end: Date;
+  start: UTCDate;
+  end: UTCDate;
   format: string;
 
-  static dateFromConfig(json: any, end?: boolean): Date {
+  static dateFromConfig(json: any, end?: boolean): UTCDate {
     if (!json) {
       return new Date();
     }
@@ -48,14 +49,14 @@ export class DateRange {
     if ('number' === typeof json) {
       if(json<0){
         let d = new Date();
-        d.setDate(d.getDate()+json);
+        d.setUTCDate(d.getUTCDate()+json);
         return d;
       }
       if (end) {
-        return new Date(json, 11, 31);
+        return utcDate(json, 11, 31);
       }
 
-      return new Date(json, 0, 1);
+      return utcDate(json, 0, 1);
     }
 
     // ? expect a string and parse out dd/mm/yyyy?
