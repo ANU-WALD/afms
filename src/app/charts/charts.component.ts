@@ -1,7 +1,7 @@
 // TODO: All plot generating code should be pulled out into a service (e.g., plotly.service)
 import {Component, ElementRef, AfterViewInit, Input, OnChanges, OnInit} from '@angular/core';
 import {Observable, forkJoin} from 'rxjs';
-import {CatalogHost, InterpolationService} from 'map-wald';
+import {CatalogHost, InterpolationService, TimeSeries, UTCDate} from 'map-wald';
 import {SelectionService} from '../selection.service';
 import {TimeseriesService} from 'map-wald';
 import {Http} from '@angular/http';
@@ -93,7 +93,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
   updateChart(yearCount: number) {
     const selectedYear = this.year;
-    const dataSeries = [];
+    const dataSeries: {year:number,observable:Observable<TimeSeries>}[] = [];
 
     this.havePlot = false;
     this.hasBeenLoaded = true;
@@ -123,18 +123,18 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     const observables = dataSeries.map(s => s.observable);
 
     forkJoin(observables)
-      .subscribe((data: any) => {
+      .subscribe((data) => {
 
           this.setFullTimeSeries(data);
 
           const traces = [];
-          for (const index in data) {
+          for (let index=0;index<data.length;index++) {
             const dataset = data[index];
 
             // Set all datasets to the same year so that they are overlayed with
             // each other rather than shown sequentially
 
-            const chartTimestamps: Date[] = dataset.dates.map(d => {
+            const chartTimestamps: UTCDate[] = dataset.dates.map(d => {
               const yearOffset = selectedYear-d.getFullYear();
               const modifiedDate = this.layer.layer.reverseDate(d);
               modifiedDate.setUTCFullYear(modifiedDate.getUTCFullYear()+yearOffset);
