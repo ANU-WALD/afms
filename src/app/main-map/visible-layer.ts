@@ -1,7 +1,6 @@
 import {InterpolationService, CatalogHost, UTCDate} from 'map-wald';
 import {FMCLayer} from '../layer';
 import {environment} from '../../environments/environment';
-import { previousTimeStep } from '../selection.service';
 
 const TDS_URL = environment.tds_server;
 
@@ -36,12 +35,12 @@ export class VisibleLayer {
     });
   }
 
-  setDate(newDate: Date) {
+  setDate(newDate: UTCDate) {
     this.updateParameters(newDate);
   }
 
-  constructor(public layer: FMCLayer, currentDate: UTCDate) {
-    if (layer) {
+  constructor(public layer: FMCLayer, currentDate?: UTCDate) {
+    if (layer&&currentDate) {
       this.updateParameters(currentDate);
     }
   };

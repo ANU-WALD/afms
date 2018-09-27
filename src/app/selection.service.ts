@@ -4,10 +4,11 @@ import {ActivatedRoute} from '@angular/router';
 import { MapViewParameterService, TimeUtilsService, UTCDate, utcDateCopy } from 'map-wald';
 import {DateRange} from './layer';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { VisibleLayer } from './main-map/visible-layer';
 
-const OFFSET_HOURS=12;
-const MILLISECONDS_PER_DAY=24*60*60*1000;
-export const DEFAULT_TIMESTEP=4;
+// const OFFSET_HOURS=12;
+// const MILLISECONDS_PER_DAY=24*60*60*1000;
+// export const DEFAULT_TIMESTEP=4;
 
 @Injectable()
 export class SelectionService {
@@ -16,9 +17,9 @@ export class SelectionService {
     month:0,
     year:0
   };
-  _range:DateRange;
+  _layer:VisibleLayer;
 
-  timeStep=DEFAULT_TIMESTEP;
+  // timeStep=DEFAULT_TIMESTEP;
 
   constructor(private mapView:MapViewParameterService,
               private timeUtils:TimeUtilsService,
@@ -53,30 +54,29 @@ export class SelectionService {
     this._struct = this.timeUtils.convertDate(d);
   }
 
-  get range():DateRange{ return this._range; }
-  set range(dr:DateRange){
-    this._range = dr;
-    if(this.constrain()){
-      this.dateChanged();
-    }
+  get currentLayer(): VisibleLayer{ return this._layer; }
+  set currentLayer(l:VisibleLayer){ this._layer = l; }
+
+  get range(): DateRange{
+    return this._layer && this._layer.layer && this._layer.layer.timePeriod;
   }
 
   // Constrain the selected date to be within the
   // configured range (if any).
   // Returns true if the date was changed, false otherwise
-  constrain(): boolean{
-    if(!this.range){
+  private constrain(): boolean{
+    if(!this.currentLayer){
       return false;
     }
 
     var now = this.effectiveDate();
     if(now<this.range.start){
-      this.goto(nextTimeStep(this.range.start,this.timeStep));
+      this.goto(this.currentLayer.layer.nextTimeStep(now));
       return true;
     }
 
     if(now>this.range.end){
-      this.goto(mostRecentTimestep(this.range.end,this.timeStep));
+      this.goto(this.currentLayer.layer.mostRecentTimestep(this.range.end));
       return true;
     }
 
@@ -113,31 +113,30 @@ export class SelectionService {
   dateChange: EventEmitter<UTCDate> = new EventEmitter<UTCDate>();
 
   effectiveDate():UTCDate{
-    return mostRecentTimestep(
-      new Date(Date.UTC(this._struct.year,this._struct.month-1,this._struct.day)),
-      this.timeStep);
+    return this.currentLayer.layer.mostRecentTimestep(
+      new Date(Date.UTC(this._struct.year,this._struct.month-1,this._struct.day)));
   }
 }
 
-export function previousTimeStep(now:UTCDate,timestep?:number):UTCDate{
-  now = utcDateCopy(now);
-  now.setUTCDate(now.getUTCDate()-1);
-  return mostRecentTimestep(now,timestep||DEFAULT_TIMESTEP);
-}
+// export function previousTimeStep(now:UTCDate,timestep?:number):UTCDate{
+//   now = utcDateCopy(now);
+//   now.setUTCDate(now.getUTCDate()-1);
+//   return mostRecentTimestep(now,timestep||DEFAULT_TIMESTEP);
+// }
 
-export function nextTimeStep(now:UTCDate,timestep?:number):UTCDate{
-  timestep = timestep||DEFAULT_TIMESTEP;
-  now = mostRecentTimestep(now,timestep);
-  now.setUTCDate(now.getUTCDate()+timestep);
-  return now;
-}
+// export function nextTimeStep(now:UTCDate,timestep?:number):UTCDate{
+//   timestep = timestep||DEFAULT_TIMESTEP;
+//   now = mostRecentTimestep(now,timestep);
+//   now.setUTCDate(now.getUTCDate()+timestep);
+//   return now;
+// }
 
-export function mostRecentTimestep(d:UTCDate,timestep:number):UTCDate{
-  const newT = (<Date>d).getTime();
-  const refT = new Date(Date.UTC(d.getUTCFullYear(),0,1)).getTime();
-  const deltaT = MILLISECONDS_PER_DAY/2 + newT-refT;
-  const timeStepMS=(timestep*MILLISECONDS_PER_DAY);
-  const offset=+Math.floor(deltaT/timeStepMS);
+// export function mostRecentTimestep(d:UTCDate,timestep:number):UTCDate{
+//   const newT = (<Date>d).getTime();
+//   const refT = new Date(Date.UTC(d.getUTCFullYear(),0,1)).getTime();
+//   const deltaT = MILLISECONDS_PER_DAY/2 + newT-refT;
+//   const timeStepMS=(timestep*MILLISECONDS_PER_DAY);
+//   const offset=+Math.floor(deltaT/timeStepMS);
 
-  return new Date(refT+offset*timeStepMS);
-}
+//   return new Date(refT+offset*timeStepMS);
+// }

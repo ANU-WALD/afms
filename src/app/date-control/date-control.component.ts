@@ -1,11 +1,12 @@
 import { Component, OnInit, OnChanges, Input, ViewChild } from '@angular/core';
 import {SelectionService} from '../selection.service';
 import { NgbDateStruct, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
-import { TimeUtilsService, MetadataService, InterpolationService } from "map-wald";
+import { TimeUtilsService, MetadataService, InterpolationService, UTCDate } from "map-wald";
 import { VisibleLayer } from '../main-map/visible-layer';
 import { NgbDatepickerNavigateEvent, NgbDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 import { Observable, of } from 'rxjs';
+import { DatesService } from '../dates.service';
 
 @Component({
   selector: 'app-date-control',
@@ -24,11 +25,11 @@ export class DateControlComponent implements OnInit, OnChanges {
   atMin:boolean=false;
 
   validDateYear:number;
-  validDates: Date[] = [];
+  validDates: UTCDate[] = [];
   dateDisabled: (date: NgbDate, current: { year: number; month: number; })=>boolean
 
   constructor(private selection:SelectionService, private timeUtils:TimeUtilsService,
-              private metadata:MetadataService ) {
+              private metadata:MetadataService, private datesService:DatesService ) {
     this.selection.dateChange.subscribe(()=>this.dateChanged());
     let __this__ = this;
     this.dateDisabled = function(date: NgbDate, current: { year: number; month: number; }):boolean{
@@ -69,11 +70,11 @@ export class DateControlComponent implements OnInit, OnChanges {
   }
 
   stepForward(){
-    this.move(this.selection.timeStep);
+    this.move(this.layer.layer.timestep);
   }
 
   stepBackward(){
-    this.move(-this.selection.timeStep);
+    this.move(-this.layer.layer.timestep);
   }
 
   dateChanged(){
@@ -88,17 +89,16 @@ export class DateControlComponent implements OnInit, OnChanges {
       this.validDateYear=null;
       return;
     }
-    const fn = InterpolationService.interpolate(this.layer.layer.path, {
-      year: year
-    });
 
-    this.metadata.getTimeDimension(this.layer.host,fn).subscribe(dates=>{
+    this.datesService.availableDates(this.layer,year).subscribe(dates=>{
       this.validDates = dates;
       this.validDateYear = year;
       this.datePicker.navigateTo();
       this.datePicker.toggle();
       this.datePicker.toggle();
+
     });
+
   }
 
   checkLimits(){

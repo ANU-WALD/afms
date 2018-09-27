@@ -4,7 +4,7 @@ import {Http} from '@angular/http';
 import {CatalogHost, MapViewParameterService, TimeseriesService, WMSLayerComponent,
         WMSService, InterpolationService, OpendapService, MetadataService,
         UTCDate} from 'map-wald';
-import {SelectionService, previousTimeStep} from '../selection.service';
+import {SelectionService} from '../selection.service';
 import {VectorLayer} from '../vector-layer-selection/vector-layer-selection.component';
 import {LatLng} from '../latlng';
 import {BaseLayer} from '../base-layer.service';
@@ -90,7 +90,8 @@ export class MainMapComponent implements OnInit {
 
     this.mainLayer = new VisibleLayer(null, null);
 
-    this.layers.availableLayers.subscribe(() => {
+    this.layers.availableLayers.subscribe(layers => {
+      this.layerChanged(layers[0]);
       this.selection.loadFromURL(_activatedRoute);
       this.selection.dateChange.subscribe((newDate: Date) => {
         this.setDate(newDate);
@@ -316,13 +317,14 @@ export class MainMapComponent implements OnInit {
     const opacity = this.mainLayer.opacity;
     let date:UTCDate;
     if(this.selection.year===0){
-      date = previousTimeStep(previousTimeStep(previousTimeStep(layer.timePeriod.end)));
+      date = layer.previousTimeStep(layer.previousTimeStep(layer.previousTimeStep(layer.timePeriod.end)));
+      // TODO Find latest available!
     }
-    this.mainLayer = new VisibleLayer(layer, this.selection.effectiveDate());
+    this.mainLayer = new VisibleLayer(layer);
     this.mainLayer.opacity = opacity;
-
+    this.mainLayer.host = MainMapComponent.thredds(layer.host);
+    this.selection.currentLayer = this.mainLayer;
     this.dateRange = layer.timePeriod;
-    this.selection.range = this.dateRange;
     if(date){
       this.selection.date = {
         year:date.getUTCFullYear(),
@@ -330,7 +332,7 @@ export class MainMapComponent implements OnInit {
         day:date.getUTCDate()
       };
     }
-    this.mainLayer.host = MainMapComponent.thredds(layer.host);
+    this.mainLayer.setDate(this.selection.effectiveDate());
 
     this.reloadMarkerData();
   }
