@@ -2,7 +2,7 @@
   "layers": [
     {
       "source": "tds",
-      "path": "ub8/au/FMC/c6/{{year}}_fmc.nc",
+      "path": "ub8/au/FMC/c6/mosaics/fmc_c6_{{year}}.nc",
       "name": "NEW - Live Fuel Moisture Content",
       "units": "%",
       "suffix": "%",
@@ -21,7 +21,7 @@
       ],
       "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2018)",
       "timeperiod": {
-        "start": 2018,
+        "start": 2001,
         "end": 0
       },
       "timestepMultiplier": 4,
@@ -36,7 +36,7 @@
     },
     {
       "source": "tds",
-      "path": "ub8/au/FMC/c6/{{year}}_flammability.nc",
+      "path": "ub8/au/FMC/c6/mosaics/flam_c6_{{year}}.nc",
       "name": "NEW - Flammability",
       "units": "unitless",
       "icon": "fa-fire",
@@ -54,7 +54,7 @@
         1
       ],
       "timeperiod": {
-        "start": 2018,
+        "start": 2001,
         "end": 0
       },
       "timestepMultiplier": 4,
