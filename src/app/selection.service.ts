@@ -12,7 +12,7 @@ import { VisibleLayer } from './main-map/visible-layer';
 
 @Injectable()
 export class SelectionService {
-  _struct:NgbDateStruct={
+  private _struct:NgbDateStruct={
     day:0,
     month:0,
     year:0

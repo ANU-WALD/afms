@@ -37,6 +37,10 @@ export class DateControlComponent implements OnInit, OnChanges {
         return false;
       }
 
+      if(date.year !== __this__.validDateYear){
+        return false;
+      }
+
       return !__this__.validDates.some(d=>{
         return (d.getUTCFullYear()===date.year) &&
                (d.getUTCMonth()+1===date.month) &&
@@ -83,22 +87,22 @@ export class DateControlComponent implements OnInit, OnChanges {
     this.findValidDates(this.selection.year);
   }
 
-  findValidDates(year:number){
+  navigatingTo:any = null;
+  findValidDates(year:number,month?:number){
     if(!this.layer||!this.layer.layer){
       this.validDates=[];
       this.validDateYear=null;
       return;
     }
-
+    this.navigatingTo={year:year,month:month||this.selection.month};
     this.datesService.availableDates(this.layer,year).subscribe(dates=>{
       this.validDates = dates;
       this.validDateYear = year;
-      this.datePicker.navigateTo();
+      this.datePicker.navigateTo(this.navigatingTo);
       this.datePicker.toggle();
       this.datePicker.toggle();
-
+      this.navigatingTo = null;
     });
-
   }
 
   checkLimits(){
@@ -107,8 +111,13 @@ export class DateControlComponent implements OnInit, OnChanges {
   }
 
   datePickerMoved(evt:NgbDatepickerNavigateEvent){
+    if(this.navigatingTo){
+      this.datePicker.navigateTo(this.navigatingTo);
+      return;
+    }
+
     if(evt.next.year!==this.validDateYear){
-      this.findValidDates(evt.next.year);
+      this.findValidDates(evt.next.year,evt.next.month);
     }
   }
 }
