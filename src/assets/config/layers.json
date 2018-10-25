@@ -75,10 +75,10 @@
     },
     {
       "source": "tds",
-      "path": "ub8/au/FMC/c6/{{year}}_fmc.nc",
+      "path": "ub8/au/FMC/c6/mosaics/fmc_c6_{{year}}.nc",
       "name": "NEW - Quality Mask",
-      "units": "%",
-      "suffix": "%",
+      "units": "",
+      "suffix": "",
       "icon": "fa-tint",
       "wms_layer": "quality_mask",
       "palette": {
@@ -94,7 +94,7 @@
       ],
       "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2018)",
       "timeperiod": {
-        "start": 2018,
+        "start": 2001,
         "end": 0
       },
       "timestepMultiplier": 4,
