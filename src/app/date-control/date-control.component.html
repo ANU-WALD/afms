@@ -8,7 +8,8 @@
                ngbDatepicker #d="ngbDatepicker"
                [maxDate]="maxDate" [minDate]="minDate"
                (navigate)="datePickerMoved($event)"
-               [markDisabled]="dateDisabled">
+               [markDisabled]="dateDisabled"
+               [outsideDays]="'collapsed'">
         <div class="input-group-append" for="dateInputGroup"(click)="d.toggle()" >
           <span class="input-group-text">
             <i class="fa fa-calendar"></i>
