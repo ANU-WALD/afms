@@ -33,8 +33,14 @@ export class DatesService {
     }
 
     return res$.pipe(
+        map(dates=>{
+          return dates.map(d=>{
+            let res = new Date(d);
+            res.setUTCDate(d.getUTCDate()-layer.layer.timeshift*layer.layer.timestep);
+            return res;
+          });
+        }),
         map(dates=>dates.filter((d,i)=>(i>=Math.abs(layer.layer.timeshift))&&(d.getUTCFullYear()===year)))
-      )
-    // TODO: Account for time shift...
+    );
   }
 }
