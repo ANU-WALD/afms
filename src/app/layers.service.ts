@@ -23,7 +23,8 @@ export class LayersService {
       return new FMCLayer(l.name,l.units,l.icon,l.wms_layer,l.palette,
                           l.range,l.description,DateRange.fromJSON(l.timeperiod),
                           l.legend,l.wms_params,l.source,l.path,l.chart_config,
-                          l.host,l.url_fragment,l.indexing,l.suffix||'',l.timeshift||0,l.precision);
+                          l.host,l.url_fragment,l.indexing,l.suffix||'',l.timeshift||0,
+                          l.timestepMultiplier||1,l.precision,l.timestepReference);
     }
 
     this.mask = layerConfig$.pipe(map(data=>newLayer(data.mask)));

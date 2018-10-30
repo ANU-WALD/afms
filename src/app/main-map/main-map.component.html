@@ -45,14 +45,16 @@
                      [position]="0">
       </wms-layer>
 
-      <wms-layer #wmsMask *ngIf="showMask"
+<!--
+        <wms-layer #wmsMask *ngIf="showMask"
         [url]="maskLayer.url"
         [params]="maskLayer.wmsParameters"
         [opacity]="maskLayer.opacity"
         [position]="1">
       </wms-layer>
+    -->
 
-      <agm-data-layer *ngIf="geoJsonObject"
+    <agm-data-layer *ngIf="geoJsonObject"
                       [geoJson]="geoJsonObject"
                       (layerClick)="clicked($event)"
                       [style]="staticStyles">
@@ -61,7 +63,9 @@
       <map-control position="TOP_LEFT" class="test">
         <div class="card dateSearchCard map-control">
           <div class="card-block control-card-content">
-            <app-date-control [start]="dateRange.start" [end]="dateRange.end"></app-date-control>
+            <app-date-control [start]="dateRange.start"
+                              [end]="dateRange.end"
+                              [layer]="mainLayer"></app-date-control>
             <fmc-search (coordinatesSelected)="moveAndZoom($event)"></fmc-search>
           </div>
         </div>
@@ -112,7 +116,6 @@
             <div class="card-block control-card-content">
               <app-charts [coordinates]="selectedCoordinates"
                           [year] = "selection.year"
-                          [thredds] = "layerHost"
                           [layer] = "mainLayer"></app-charts>
             </div>
           </div>

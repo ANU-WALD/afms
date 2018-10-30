@@ -1,8 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Http} from '@angular/http';
-import {CatalogHost, MapViewParameterService, TimeseriesService, WMSLayerComponent, WMSService, InterpolationService, OpendapService, MetadataService} from 'map-wald';
-import {SelectionService, previousTimeStep} from '../selection.service';
+import {CatalogHost, MapViewParameterService, TimeseriesService, WMSLayerComponent,
+        WMSService, InterpolationService, OpendapService, MetadataService,
+        UTCDate} from 'map-wald';
+import {SelectionService} from '../selection.service';
 import {VectorLayer} from '../vector-layer-selection/vector-layer-selection.component';
 import {LatLng} from '../latlng';
 import {BaseLayer} from '../base-layer.service';
@@ -13,8 +15,6 @@ import {map, tap, switchAll} from 'rxjs/operators';
 import { DapDAS, DapDDX } from 'dap-query-js/dist/dap-query';
 
 import {VisibleLayer} from './visible-layer';
-import {GoogleMapsAPIWrapper, MapsAPILoader, LazyMapsAPILoader} from '@agm/core/services';
-import { WindowRef, DocumentRef } from '@agm/core/utils/browser-globals';
 import { forkJoin, of } from 'rxjs';
 
 const TDS_URL = environment.tds_server;
@@ -34,9 +34,6 @@ class ValueMarker {
 export class MainMapComponent implements OnInit {
   @ViewChild('mapDiv') mapDiv: Component;
   @ViewChild('wms') wmsLayer: WMSLayerComponent;
-  layerHost: CatalogHost;
-  showMask: boolean;
-  maskLayer: VisibleLayer;
   mainLayer: VisibleLayer;
 
   baseLayer: BaseLayer;
@@ -93,7 +90,8 @@ export class MainMapComponent implements OnInit {
 
     this.mainLayer = new VisibleLayer(null, null);
 
-    this.layers.availableLayers.subscribe(() => {
+    this.layers.availableLayers.subscribe(layers => {
+      this.layerChanged(layers[0]);
       this.selection.loadFromURL(_activatedRoute);
       this.selection.dateChange.subscribe((newDate: Date) => {
         this.setDate(newDate);
@@ -201,8 +199,8 @@ export class MainMapComponent implements OnInit {
       map(m=>{
         const host = MainMapComponent.thredds(m.host);
         const year = Math.max(
-          m.timePeriod.start.getFullYear(),
-          Math.min(this.selection.year,m.timePeriod.end.getFullYear())
+          m.timePeriod.start.getUTCFullYear(),
+          Math.min(this.selection.year,m.timePeriod.end.getUTCFullYear())
         );
         const file = InterpolationService.interpolate(m.path,{
           year:year
@@ -273,7 +271,10 @@ export class MainMapComponent implements OnInit {
       return;
     }
 
-    this.timeseries.getTimeseries(this.layerHost, fn, this.mainLayer.layer.variable_name, coords, this.mainLayer.layer.indexing)// ,year)
+    this.timeseries.getTimeseries(this.mainLayer.host, fn, 
+                                  this.mainLayer.layer.variable_name, 
+                                  coords, 
+                                  this.mainLayer.layer.indexing)// ,year)
       .subscribe(dapData => {
           if ((year !== this.selection.year) || (coords !== this.marker.loc)) {
             return; // Reject the data
@@ -291,7 +292,7 @@ export class MainMapComponent implements OnInit {
   }
 
   updateMarker() {
-    const now = this.selection.effectiveDate();
+    const now = <Date>this.selection.effectiveDate();
     const deltas = this.currentYearDataForLocation.dates.map(t => Math.abs(t.getTime() - now.getTime()));
     const closest = deltas.indexOf(Math.min(...deltas));
     let currentValue = this.currentYearDataForLocation.values[closest];
@@ -314,23 +315,24 @@ export class MainMapComponent implements OnInit {
 
   layerChanged(layer: FMCLayer) {
     const opacity = this.mainLayer.opacity;
-    let date:Date;
+    let date:UTCDate;
     if(this.selection.year===0){
-      date = previousTimeStep(previousTimeStep(previousTimeStep(layer.timePeriod.end)));
+      date = layer.previousTimeStep(layer.previousTimeStep(layer.previousTimeStep(layer.timePeriod.end)));
+      // TODO Find latest available!
     }
-    this.mainLayer = new VisibleLayer(layer, this.selection.effectiveDate());
+    this.mainLayer = new VisibleLayer(layer);
     this.mainLayer.opacity = opacity;
-
+    this.mainLayer.host = MainMapComponent.thredds(layer.host);
+    this.selection.currentLayer = this.mainLayer;
     this.dateRange = layer.timePeriod;
-    this.selection.range = this.dateRange;
     if(date){
       this.selection.date = {
-        year:date.getFullYear(),
-        month:date.getMonth()+1,
-        day:date.getDate()
+        year:date.getUTCFullYear(),
+        month:date.getUTCMonth()+1,
+        day:date.getUTCDate()
       };
     }
-    this.layerHost = MainMapComponent.thredds(layer.host);
+    this.mainLayer.setDate(this.selection.effectiveDate());
 
     this.reloadMarkerData();
   }

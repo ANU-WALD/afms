@@ -2,6 +2,113 @@
   "layers": [
     {
       "source": "tds",
+      "path": "ub8/au/FMC/c6/mosaics/fmc_c6_{{year}}.nc",
+      "name": "NEW - Live Fuel Moisture Content",
+      "units": "%",
+      "suffix": "%",
+      "icon": "fa-tint",
+      "wms_layer": "fmc_mean",
+      "palette": {
+        "image": false,
+        "name": "RdYlBu",
+        "count": 9,
+        "reverse": false
+      },
+      "precision":0,
+      "range": [
+        0,
+        140
+      ],
+      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2018)",
+      "timeperiod": {
+        "start": 2001,
+        "end": 0
+      },
+      "timestepMultiplier": 4,
+      "timestepReference": "{{year}}-01-01",
+      "timeshift":-2,
+      "wms_params": {
+        "styles": "boxfill/anu_fmc_rdylbu_9",
+        "colorscalerange": "0,140",
+        "abovemaxcolor": "extend",
+        "numcolorbands": 9
+      }
+    },
+    {
+      "source": "tds",
+      "path": "ub8/au/FMC/c6/mosaics/flam_c6_{{year}}.nc",
+      "name": "NEW - Flammability",
+      "units": "unitless",
+      "icon": "fa-fire",
+      "wms_layer": "flammability",
+      "description": "Flammability Index (0-1) derived from logistic regression models trained on fire events mapped in the MODIS burned area product and four predictor variables calculated from the FMC estimates following the methodology of Yebra et al. (2018)",
+      "palette": {
+        "image": false,
+        "name": "RdYlBu",
+        "count": 11,
+        "reverse": true
+      },
+      "precision":1,
+      "range": [
+        0,
+        1
+      ],
+      "timeperiod": {
+        "start": 2001,
+        "end": 8
+      },
+      "timestepMultiplier": 4,
+      "timestepReference": "{{year}}-01-01",
+      "timeshift":-2,
+      "wms_params": {
+        "styles": "boxfill/anu_fmc_rdylbu_11_rev",
+        "colorscalerange": "0,1",
+        "abovemaxcolor": "extend",
+        "numcolorbands": 11
+      },
+      "chart_config": {
+        "yaxis": {
+          "title": " ",
+          "fixed": true
+        }
+      }
+    },
+    {
+      "source": "tds",
+      "path": "ub8/au/FMC/c6/mosaics/fmc_c6_{{year}}.nc",
+      "name": "NEW - Quality Mask",
+      "units": "",
+      "suffix": "",
+      "icon": "fa-tint",
+      "wms_layer": "quality_mask",
+      "palette": {
+        "image": false,
+        "name": "RdYlBu",
+        "count": 9,
+        "reverse": false
+      },
+      "precision":0,
+      "range": [
+        0,
+        3
+      ],
+      "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2018)",
+      "timeperiod": {
+        "start": 2001,
+        "end": 0
+      },
+      "timestepMultiplier": 4,
+      "timestepReference": "{{year}}-01-01",
+      "timeshift":-2,
+      "wms_params": {
+        "styles": "boxfill/anu_fmc_rdylbu_9",
+        "colorscalerange": "0,3",
+        "abovemaxcolor": "extend",
+        "numcolorbands": 9
+      }
+    },
+    {
+      "source": "tds",
       "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
       "name": "Live Fuel Moisture Content",
       "units": "%",
@@ -24,6 +131,8 @@
         "start": 2001,
         "end": 0
       },
+      "timestepMultiplier": 4,
+      "timestepReference": "{{year}}-01-01",
       "timeshift":-2,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_9",
@@ -56,6 +165,8 @@
         "start": 2001,
         "end": 0
       },
+      "timestepMultiplier": 4,
+      "timestepReference": "{{year}}-01-01",
       "timeshift":-2,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_11_rev",
@@ -87,6 +198,8 @@
         "start": 2001,
         "end": 0
       },
+      "timestepMultiplier": 4,
+      "timestepReference": "{{year}}-01-01",
       "timeshift":-2,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_11_rev",
