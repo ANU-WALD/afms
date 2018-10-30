@@ -1,5 +1,7 @@
 import { UTCDate, utcDate, utcDateCopy, InterpolationService } from 'map-wald';
 
+const MAXIMUM_DATE_SHIFT=60;
+
 export class FMCLayer {
   colours: Array<string>;
   labels: Array<string>;
@@ -112,7 +114,7 @@ export class DateRange {
     }
 
     if ('number' === typeof json) {
-      if (json < 0) {
+      if (json < MAXIMUM_DATE_SHIFT) {
         let d = new Date();
         d.setUTCDate(d.getUTCDate() + json);
         return d;

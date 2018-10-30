@@ -55,7 +55,7 @@
       ],
       "timeperiod": {
         "start": 2001,
-        "end": 0
+        "end": 8
       },
       "timestepMultiplier": 4,
       "timestepReference": "{{year}}-01-01",
