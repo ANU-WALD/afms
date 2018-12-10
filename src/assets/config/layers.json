@@ -153,7 +153,7 @@
       "wms_layer": "sm",
       "description": "Volumetric soil moisture (m^3/m^-3) from JASMIN land surface modelling system developed by Bureau of Meteorology (Dharssi and Vinodkumar, 2017)",
       "palette": {
-        "image": false,
+        "image": true,
         "name": "RdYlBu",
         "count": 11,
         "reverse": false
@@ -193,7 +193,7 @@
       "url_fragment": "sm1035",
       "description": "Volumetric soil moisture (m^3/m^-3) from JASMIN land surface modelling system developed by Bureau of Meteorology (Dharssi and Vinodkumar, 2017)",
       "palette": {
-        "image": false,
+        "image": true,
         "name": "RdYlBu",
         "count": 11,
         "reverse": false
