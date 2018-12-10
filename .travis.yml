@@ -17,24 +17,21 @@ script:
 - mv tmp $SCRIPTS_FN
 - env BRANCH=$TRAVIS_BRANCH npm run build
 deploy:
-  # deploy to "wenfo.org/afms/staging" on branch master
-  - skip_cleanup: true
-    provider: script
-    script: bash -c "cd dist && find . -type f -exec curl -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org/staging/{} \;"
-    on:
-      branch: master
-  # deploy to "wenfo.org/afms" on branch production
-  - skip_cleanup: true
-    provider: script
-    script: bash -c "cd dist && find . -type f -exec curl -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org{} \;"
-    on:
-      branch: production
-  # deploy to "wenfo.org/afms/defence" on branch defence
-  - skip_cleanup: true
-    provider: script
-    script: bash -c "cd dist && find . -type f -exec curl -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org/defence/{} \;"
-    on:
-      branch: defence
+- skip_cleanup: true
+  provider: script
+  script: bash -c "cd dist && find . -type f -exec curl -v -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org/staging/{} \;"
+  on:
+    branch: master
+- skip_cleanup: true
+  provider: script
+  script: bash -c "cd dist && find . -type f -exec curl -v -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org{} \;"
+  on:
+    branch: production
+- skip_cleanup: true
+  provider: script
+  script: bash -c "cd dist && find . -type f -exec curl -v -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org/defence/{} \;"
+  on:
+    branch: defence
 notifications:
   email: false
   slack:
