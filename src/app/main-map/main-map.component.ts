@@ -16,6 +16,7 @@ import { DapDAS, DapDDX } from 'dap-query-js/dist/dap-query';
 
 import {VisibleLayer} from './visible-layer';
 import { forkJoin, of } from 'rxjs';
+import { IncidentsService } from 'app/incidents.service';
 
 const TDS_URL = environment.tds_server;
 
@@ -46,6 +47,8 @@ export class MainMapComponent implements OnInit {
   // initial center position for the map
   lat: number = -22.673858;
   lng = 129.815982;
+
+  incidentsData: any = null;
 
   geoJsonObject: Object = null;
   vectorLayer: VectorLayer;
@@ -85,7 +88,8 @@ export class MainMapComponent implements OnInit {
               private timeseries: TimeseriesService,
               private layers: LayersService,
               private metadata:MetadataService,
-              private dap:OpendapService) {
+              private dap:OpendapService,
+              private incidents:IncidentsService) {
 
 
     this.mainLayer = new VisibleLayer(null, null);
@@ -120,6 +124,10 @@ export class MainMapComponent implements OnInit {
         this.zoom = +view.zm;
       }
     }
+
+    this.incidents.all().subscribe(data=>{
+      this.incidentsData=data
+    });
   }
 
   mapClick(clickEvent) {

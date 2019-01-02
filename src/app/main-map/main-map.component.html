@@ -54,11 +54,15 @@
       </wms-layer>
     -->
 
+    <agm-data-layer *ngIf="incidentsData"
+                    [geoJson]="incidentsData"
+    ></agm-data-layer>
+
     <agm-data-layer *ngIf="geoJsonObject"
                       [geoJson]="geoJsonObject"
                       (layerClick)="clicked($event)"
                       [style]="staticStyles">
-      </agm-data-layer>
+    </agm-data-layer>
 
       <map-control position="TOP_LEFT" class="test">
         <div class="card dateSearchCard map-control">

@@ -240,5 +240,39 @@
       "end": 2013,
       "format": "{{year}}-01-01T00%3A00%3A00.000Z"
     }
+  },
+  "incidents": {
+    "NSW":{
+      "format":"GeoJSON",
+      "url":"http://feeds.rfs.nsw.gov.au/majorincidents.json"
+    },
+    "WA":{
+      "format":"GeoJSON",
+      "url":"https://www.emergency.wa.gov.au/data/incident_FCAD.json"
+    },
+    "VIC":{
+      "format":"GeoJSON",
+      "url":"https://emergency.vic.gov.au/public/osom-geojson.json"
+    },
+    "ACT":{
+      "format":"Custom",
+      "url":"https://esa.act.gov.au/feeds/allincidents.json"
+    },
+    "SA":{
+      "format":"Custom",
+      "url":"https://data.eso.sa.gov.au/prod/cfs/criimson/cfs_current_incidents.json"
+    },
+    "NT":{
+      "format":"Custom",
+      "url":"http://www.pfes.nt.gov.au/incidentmap/json/ntfrsincidents.json"
+    },
+    "TAS":{
+      "format":"KML",
+      "url":"http://www.fire.tas.gov.au/Show?pageId=bfKml2"
+    },
+    "QLD":{
+      "format":"GeoRSS",
+      "url":"https://www.qfes.qld.gov.au/data/alerts/bushfireAlert.xml"
+    }
   }
 }

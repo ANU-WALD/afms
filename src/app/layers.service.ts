@@ -5,8 +5,18 @@ import {FMCLayer,DateRange} from './layer';
 import { HttpClient } from '@angular/common/http';
 
 interface Config {
-  mask:FMCLayer,
-  layers:FMCLayer[]
+  mask:FMCLayer;
+  layers:FMCLayer[];
+  incidents:IncidentFeeds;
+}
+
+export interface IncidentFeed{
+  url:string;
+  format:'GeoJSON'|'GeoRSS'|'KML'|'Custom';
+}
+
+interface IncidentFeeds {
+  [key:string]:IncidentFeed;
 }
 
 @Injectable()
@@ -14,6 +24,8 @@ export class LayersService {
   mask:Observable<FMCLayer>;
 
   availableLayers:Observable<FMCLayer[]>;
+
+  incidentFeeds:Observable<IncidentFeeds>;
 
   constructor(private _http:HttpClient) {
     var layerConfig$:Observable<Config> = <Observable<Config>>_http.get("assets/config/layers.json").pipe(
@@ -29,5 +41,6 @@ export class LayersService {
 
     this.mask = layerConfig$.pipe(map(data=>newLayer(data.mask)));
     this.availableLayers = layerConfig$.pipe(map(data=>data.layers.map(newLayer)));
+    this.incidentFeeds = layerConfig$.pipe(map(data=>data.incidents));
   }
 }
