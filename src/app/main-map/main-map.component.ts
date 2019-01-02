@@ -49,6 +49,10 @@ export class MainMapComponent implements OnInit {
   lng = 129.815982;
 
   incidentsData: any = null;
+  incidentLng: number;
+  incidentLat: number;
+  showIncidentDetails = false;
+  incidentContent: string = null;
 
   geoJsonObject: Object = null;
   vectorLayer: VectorLayer;
@@ -364,4 +368,34 @@ export class MainMapComponent implements OnInit {
     this.mainLayer.opacity = opacity;
   }
 
+  incidentClicked(incident:any){
+    let tmp = incident.feature.getGeometry();
+    let geo;
+    if(tmp.getLength){
+      geo = tmp.getAt(0).get();
+    } else {
+      geo = tmp.get();
+    }
+    this.incidentLat = geo.lat();
+    this.incidentLng = geo.lng();
+    this.showIncidentDetails = false;
+    this.incidentContent = incident.feature.getProperty('_display');
+    setTimeout(()=>{
+      this.showIncidentDetails=true;
+    });
+  }
+
+  incidentStyle(incident:any){
+    const colours = {
+      NA:'aaaaaa',
+      Warning:'FF0000',
+      WatchAct:'f4f442',
+      Advice:'ef3cf2'
+    }
+
+    const icon = `https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|${colours[incident.getProperty('_style')]}`;
+    return {
+      icon:icon
+    };
+  }
 }

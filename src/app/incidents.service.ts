@@ -149,7 +149,16 @@ export class IncidentsService {
     return this.layers.incidentFeeds.pipe(
       map(feeds=>{
         const keys = Object.keys(feeds);
-        return forkJoin(keys.map(k=>this.get(feeds[k],k)))
+        const obs$ = keys.map(k=>this.get(feeds[k],k).pipe(
+          tap(feed=>{
+            feed.features.forEach(f=>{
+              f.properties._display = f.properties[feeds[k].displayProperty];
+              const icon = feeds[k].icon;
+              f.properties._style = icon.translation[f.properties[icon.property]] || 'NA';
+            });
+          })
+        ));
+        return forkJoin(obs$)
       }),
       switchAll(),
       map((data:any[])=>{

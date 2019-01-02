@@ -53,9 +53,14 @@
         [position]="1">
       </wms-layer>
     -->
+    <agm-info-window [(isOpen)]="showIncidentDetails" [latitude]="incidentLat" [longitude]="incidentLng">
+      <div [innerHTML]="incidentContent"></div>
+    </agm-info-window>
 
     <agm-data-layer *ngIf="incidentsData"
                     [geoJson]="incidentsData"
+                    (layerClick)="incidentClicked($event)"
+                    [style]="incidentStyle"
     ></agm-data-layer>
 
     <agm-data-layer *ngIf="geoJsonObject"

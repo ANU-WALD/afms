@@ -13,6 +13,13 @@ interface Config {
 export interface IncidentFeed{
   url:string;
   format:'GeoJSON'|'GeoRSS'|'KML'|'Custom';
+  displayProperty:string;
+  icon:{
+    property:string;
+    translation:{
+      [key:string]:'NA'|'Advice'|'WatchAct'|'Warning'
+    }
+  };
 }
 
 interface IncidentFeeds {

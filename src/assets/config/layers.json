@@ -244,35 +244,124 @@
   "incidents": {
     "NSW":{
       "format":"GeoJSON",
-      "url":"http://feeds.rfs.nsw.gov.au/majorincidents.json"
+      "url":"http://feeds.rfs.nsw.gov.au/majorincidents.json",
+      "displayProperty":"description",
+      "icon":{
+        "property":"category",
+        "translation":{
+          "Not Applicable":"NA",
+          "Advice":"Advice",
+          "Watch and Act":"WatchAct",
+          "EmergencyWarning":"Warning"
+        }
+      }
     },
     "WA":{
       "format":"GeoJSON",
-      "url":"https://www.emergency.wa.gov.au/data/incident_FCAD.json"
+      "url":"https://www.emergency.wa.gov.au/data/incident_FCAD.json",
+      "displayProperty":"description",
+      "icon":{
+        "property":"type",
+        "translation":{
+          "other":"NA",
+          "Not Applicable":"NA",
+          "Bushfire":"Advice",
+          "Burn off":"Advice",
+          "Controlled Burn":"Advice",
+          "Fire":"Advice"
+        }
+      }
     },
     "VIC":{
       "format":"GeoJSON",
-      "url":"https://emergency.vic.gov.au/public/osom-geojson.json"
+      "url":"https://emergency.vic.gov.au/public/osom-geojson.json",
+      "displayProperty":"category2",
+      "icon":{
+        "property":"category",
+        "translation":{
+          "ar-road":"NA",
+          "ar-rescue":"NA",
+          "other":"NA",
+          "Not Applicable":"NA",
+          "planned burn":"Advice",
+          "fire-active":"Advice",
+          "Fire":"Advice",
+          "Watch and Act":"WatchAct",
+          "Emergency Warning":"Warning"
+        }
+      }
     },
     "ACT":{
       "format":"Custom",
-      "url":"https://esa.act.gov.au/feeds/allincidents.json"
+      "url":"https://esa.act.gov.au/feeds/allincidents.json",
+      "displayProperty":"description",
+      "icon":{
+        "property":"icon",
+        "translation":{
+          "iconFireNotApplicable":"NA",
+          "iconFireClosed":"NA",
+          "iconFire":"Advice",
+          "Watch and act":"WatchAct",
+          "Emergency Warning":"Warning",
+          "other":"NA"
+        }
+      }
     },
     "SA":{
       "format":"Custom",
-      "url":"https://data.eso.sa.gov.au/prod/cfs/criimson/cfs_current_incidents.json"
+      "url":"https://data.eso.sa.gov.au/prod/cfs/criimson/cfs_current_incidents.json",
+      "displayProperty":"Type",
+      "icon":{
+        "property":"Type",
+        "translation":{
+          "other":"NA",
+          "Not Applicable":"NA",
+          "Grass Fire":"Advice",
+          "Forest Fire":"Advice"
+        }
+      }
     },
     "NT":{
       "format":"Custom",
-      "url":"http://www.pfes.nt.gov.au/incidentmap/json/ntfrsincidents.json"
+      "url":"http://www.pfes.nt.gov.au/incidentmap/json/ntfrsincidents.json",
+      "displayProperty":"eventtype",
+      "icon":{
+        "property":"category",
+        "translation":{
+          "other":"NA",
+          "fire":"Advice",
+          "bushfire-emergency":"Warning",
+          "advice":"Advice"
+        }
+      }
     },
     "TAS":{
       "format":"KML",
-      "url":"http://www.fire.tas.gov.au/Show?pageId=bfKml2"
+      "url":"http://www.fire.tas.gov.au/Show?pageId=bfKml2",
+      "displayProperty":"description",
+      "icon":{
+        "property":"styleUrl",
+        "translation":{
+          "other":"NA",
+          "#adviceStyle":"Advice",
+          "#watchAndActStyle":"WatchAct",
+          "#emergencyWarningStyle":"Warning",
+          "#noAlertLevelStyle":"NA"
+        }
+      }
     },
     "QLD":{
       "format":"GeoRSS",
-      "url":"https://www.qfes.qld.gov.au/data/alerts/bushfireAlert.xml"
+      "url":"https://www.qfes.qld.gov.au/data/alerts/bushfireAlert.xml",
+      "displayProperty":"content"
+    },
+    "icon":{
+      "property":"fireword",
+      "translation":{
+        "other":"NA",
+        "Notification":"NA",
+        "fire":"Advice"
+      }
     }
   }
 }
