@@ -273,6 +273,7 @@
       }
     },
     "VIC":{
+      "hide":false,
       "format":"GeoJSON",
       "url":"https://emergency.vic.gov.au/public/osom-geojson.json",
       "displayProperty":"category2",
@@ -351,6 +352,7 @@
       }
     },
     "QLD":{
+      "hide":true,
       "format":"GeoRSS",
       "url":"https://www.qfes.qld.gov.au/data/alerts/bushfireAlert.xml",
       "displayProperty":"content"

@@ -72,10 +72,22 @@ export class IncidentsService {
 
   private get(feed:IncidentFeed,name:string):Observable<any> {
     const url = `${CORS_PROXY}${feed.url}`;
+    if(feed.hide){
+      return of({
+        features:[]
+      });
+    }
 
     if(feed.format==='GeoJSON'){
       const retrieval = this.http.get(url);
-      return retrieval;
+      return retrieval.pipe(tap((coll:any)=>{
+        const features:any[] = coll.features;
+        features.forEach(f=>{
+          if(f.geometry.type==='Point'){
+            f.geometry.coordinates = (<any[]>f.geometry.coordinates).map(c=>+c);
+          }
+        });
+      }));
     }
 
     // if(feed.format==='GeoRSS'){
