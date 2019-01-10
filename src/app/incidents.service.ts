@@ -1,4 +1,4 @@
-import { Injectable, getModuleFactory } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { of, Observable, forkJoin } from 'rxjs';
 import { LayersService, IncidentFeed } from './layers.service';
 import { map, switchAll, tap } from 'rxjs/operators';

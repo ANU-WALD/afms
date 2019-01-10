@@ -203,6 +203,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
         yaxis: {
           hoverformat: '.2f',
           title: y_axis_title ? y_axis_title : '%',
+          fixedrange: true,
           range: yRange
         },
         height: height,

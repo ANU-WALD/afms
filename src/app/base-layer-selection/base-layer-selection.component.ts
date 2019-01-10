@@ -6,7 +6,7 @@ import { MapViewParameterService } from 'map-wald';
   selector: 'fmc-base-layer-selection',
   templateUrl: './base-layer-selection.component.html',
   styleUrls: ['./base-layer-selection.component.scss'],
-  providers: [ BaseLayerService ],
+  providers: [  ],
 })
 export class BaseLayerSelectionComponent implements OnInit {
 
