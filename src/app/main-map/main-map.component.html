@@ -120,16 +120,23 @@
       </div>
     </map-control>
 
-    <map-control position="TOP_LEFT" class="test">
+    <map-control position="TOP_CENTER" class="test">
       <div *ngIf="showWindows" class="card dateSearchCard map-control">
         <div class="card-block control-card-content">
-          <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
-          <app-date-control [start]="dateRange.start" [end]="dateRange.end" [layer]="mainLayer"></app-date-control>
-          <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
+          <div class="row">
+            <div class="col">
+              <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
+            </div>
+            <div class="col">
+              <app-date-control [start]="dateRange.start" [end]="dateRange.end" [layer]="mainLayer"></app-date-control>
+            </div>
+            <div class="col">
+              <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
+            </div>
+          </div>
         </div>
       </div>
-
-<!--      <div *ngIf="showWindows" class="card layerSelectorCard map-control">
+      <!--      <div *ngIf="showWindows" class="card layerSelectorCard map-control">
         <div class="card-block control-card-content">
           <fmc-base-layer-selection (baseLayerChanged)="setBaseLayer($event)"></fmc-base-layer-selection>
           <fmc-layer-opacity-selector (opacityChanged)="setOpacity($event)">
