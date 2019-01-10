@@ -81,6 +81,13 @@ export class DateControlComponent implements OnInit, OnChanges {
     this.move(-this.layer.layer.timestep);
   }
 
+  stepYear(n:number){
+    const d = Object.assign({},this.selection.date);
+    d.year += n;
+    this.selection.date = d;
+    this.dateChanged();
+
+  }
   dateChanged(){
     this.checkLimits();
 
