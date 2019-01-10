@@ -40,6 +40,7 @@ export class MainMapComponent implements OnInit {
   mainLayer: VisibleLayer;
 
   showWindows = true;
+  showIncidents = true;
 
   baseLayer: BaseLayer;
   chartIsCollapsed = true;
