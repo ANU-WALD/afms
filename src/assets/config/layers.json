@@ -227,10 +227,10 @@
   ],
   "mask": {
     "source": "tds",
-    "path": "ub8/au/FMC/{{year}}_latlon_masks.nc",
+    "path": "ub8/au/FMC/c6/mosaics/mask_{{year}}.nc",
     "name": "Computation Mask",
     "icon": "fa-fire",
-    "wms_layer": "forest",
+    "wms_layer": "quality_mask",
     "range": [
       0,
       100

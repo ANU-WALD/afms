@@ -265,11 +265,13 @@ export class MainMapComponent implements OnInit {
   }
 
   updateLandcover() {
-    const variables = [
-      'forest',
-      'grass',
-      'shrub'
-    ];
+    const variable='quality_mask';
+    const lookup = {
+      0:'Masked',
+      1:'Grass',
+      2:'Shrub',
+      3:'Forest'
+    }
     this.layers.mask.pipe(
       map(m => {
         const host = MainMapComponent.thredds(m.host);
@@ -304,19 +306,12 @@ export class MainMapComponent implements OnInit {
         const pt = this.marker.loc;
         const latIndex = this.timeseries.indexInDimension(pt.lat, lats);
         const lngIndex = this.timeseries.indexInDimension(pt.lng, lngs);
-        const query = `${this.timeseries.dapRangeQuery(latIndex)}${this.timeseries.dapRangeQuery(lngIndex)}`;
-        return forkJoin(variables.map(v => {
-          return this.dap.getData(`${meta.url}.ascii?${v}${query}`, meta.das);
-        }));
+        const query = `${this.timeseries.dapRangeQuery(0)}${this.timeseries.dapRangeQuery(latIndex)}${this.timeseries.dapRangeQuery(lngIndex)}`;
+        return this.dap.getData(`${meta.url}.ascii?${variable}${query}`, meta.das);
       }),
       switchAll()
     ).subscribe((data) => {
-      this.marker.label = 'Masked';
-      for (let i = 0; i < variables.length; i++) {
-        if (data[i][variables[i]]) {
-          this.marker.label = variables[i][0].toUpperCase() + variables[i].slice(1);
-        }
-      }
+      this.marker.label = lookup[<number>data[variable]];
     });
   }
 
