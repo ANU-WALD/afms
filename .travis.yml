@@ -6,7 +6,7 @@ install:
   - npm install
   - npm list || true
   - gem install compass
-  - cd node_modules/map-wald && npm install && npm list && cd -
+  - cd node_modules/map-wald && npm install && (npm list || true) && cd -
 script:
   - npm config ls -l
   - echo $TRAVIS_BRANCH
