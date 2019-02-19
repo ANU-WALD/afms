@@ -22,7 +22,7 @@ script:
 deploy:
   - skip_cleanup: true
     provider: script
-    script: SSHPASS=$FTP_PASSWORD cd dist && sshpass -e scp -r . $FTP_USER@ftp.wenfo.org/staging
+    script: export SSHPASS=$FTP_PASSWORD && cd dist && sshpass -e scp -r . $FTP_USER@ftp.wenfo.org/staging
 #    script: bash -c "cd dist && find . -type f -exec curl -v -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org/staging/{} \;"
     on:
       branch: master
