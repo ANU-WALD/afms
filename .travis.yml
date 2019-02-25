@@ -1,41 +1,45 @@
 sudo: false
 language: node_js
-node_js: 8
+node_js: 9
 before_install:
-  - sudo apt-get install -y sshpass
+- openssl aes-256-cbc -K $encrypted_5c6a1a93b635_key -iv $encrypted_5c6a1a93b635_iv
+  -in id_rsa_deploy.enc -out id_rsa_deploy -d
+- ssh-add ./id_rsa_deploy
+- sudo apt-get install -y sshpass
 install:
-  - npm install '@angular/cli' -g
-  - npm install
-  - npm list || true
-  - gem install compass
-  - cd node_modules/map-wald && npm install && (npm list || true) && cd -
+- npm install '@angular/cli' -g
+- npm install
+- npm list || true
+- gem install compass
+- cd node_modules/map-wald && npm install && (npm list || true) && cd -
 script:
-  - npm config ls -l
-  - echo $TRAVIS_BRANCH
-  - node --version
-  - ng version
-  - cd node_modules/map-wald && npm run build && rm -rf node_modules && cd -
-  - SCRIPTS_FN=src/environments/environment.prod.ts
-  - sed "s/WENFO_GOOGLE_MAPS_API_KEY/$GOOGLE_MAPS_API_KEY/g" < $SCRIPTS_FN > tmp
-  - mv tmp $SCRIPTS_FN
-  - env BRANCH=$TRAVIS_BRANCH npm run build
+- npm config ls -l
+- echo $TRAVIS_BRANCH
+- node --version
+- ng version
+- cd node_modules/map-wald && npm run build && rm -rf node_modules && cd -
+- SCRIPTS_FN=src/environments/environment.prod.ts
+- sed "s/WENFO_GOOGLE_MAPS_API_KEY/$GOOGLE_MAPS_API_KEY/g" < $SCRIPTS_FN > tmp
+- mv tmp $SCRIPTS_FN
+- env BRANCH=$TRAVIS_BRANCH npm run build
 deploy:
-  - skip_cleanup: true
-    provider: script
-    script: export SSHPASS=$FTP_PASSWORD && cd dist && sshpass -e scp -r . $FTP_USER@ftp.wenfo.org:/staging
-#    script: bash -c "cd dist && find . -type f -exec curl -v -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org/staging/{} \;"
-    on:
-      branch: master
-  - skip_cleanup: true
-    provider: script
-    script: bash -c "cd dist && find . -type f -exec curl -v -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org{} \;"
-    on:
-      branch: production
-  - skip_cleanup: true
-    provider: script
-    script: bash -c "cd dist && find . -type f -exec curl -v -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org/defence/{} \;"
-    on:
-      branch: defence
+- skip_cleanup: true
+  provider: script
+  script: cd dist && scp -r . $FTP_USER@wenfo.org:/home/$FTP_USER/afms/staging
+  on:
+    branch: master
+- skip_cleanup: true
+  provider: script
+  script: bash -c "cd dist && find . -type f -exec curl -v -u $FTP_USER:$FTP_PASSWORD
+    --ftp-create-dirs -T {} ftp.wenfo.org{} \;"
+  on:
+    branch: production
+- skip_cleanup: true
+  provider: script
+  script: bash -c "cd dist && find . -type f -exec curl -v -u $FTP_USER:$FTP_PASSWORD
+    --ftp-create-dirs -T {} ftp.wenfo.org/defence/{} \;"
+  on:
+    branch: defence
 notifications:
   email: false
   slack:
