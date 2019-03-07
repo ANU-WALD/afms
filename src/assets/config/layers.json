@@ -165,7 +165,7 @@
       "precision":2,
       "timeperiod": {
         "start": 2010,
-        "end": "2018/10/14"
+        "end": -1
       },
       "wms_params": {
         "styles": "boxfill/rdylbu_11",
@@ -205,7 +205,7 @@
       ],
       "timeperiod": {
         "start": 2010,
-        "end": "2018/10/14"
+        "end": -1
       },
       "indexing": {
         "level": 1
