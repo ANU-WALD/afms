@@ -4,12 +4,12 @@ import { Http } from '@angular/http';
 import {
   CatalogHost, MapViewParameterService, TimeseriesService, WMSLayerComponent,
   WMSService, InterpolationService, OpendapService, MetadataService,
-  UTCDate, Bounds
+  UTCDate, Bounds, BaseLayer
 } from 'map-wald';
 import { SelectionService } from '../selection.service';
 import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.component';
 import { LatLng } from '../latlng';
-import { BaseLayer, BaseLayerService } from '../base-layer.service';
+import { BaseLayerService } from '../base-layer.service';
 import { LayersService } from '../layers.service';
 import { environment } from '../../environments/environment';
 import { DateRange, FMCLayer } from '../layer';
