@@ -450,8 +450,8 @@ export class MainMapComponent implements OnInit {
       WatchAct: 'f4f442',
       Advice: 'ef3cf2'
     }
-
-    const icon = `https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|${colours[incident.getProperty('_style')]}`;
+    const colour = colours[incident.getProperty('_style')] || colours.Advice;
+    const icon = `https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|${colour}`;
     return {
       icon: icon
     };

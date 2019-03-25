@@ -90,27 +90,22 @@ export class IncidentsService {
       }));
     }
 
-    // if(feed.format==='GeoRSS'){
-    //   return this.http.get(url,{
-    //     responseType:'text'
-    //   }).pipe(
-    //     map(body=>{
-    //       console.log(body);
-    //       let doc = new DOMParser().parseFromString(body, 'text/xml');
-    //       console.log(doc);
-    //       return {
-    //         features:[]
-    //       };
-    //     })
-    //   );
-    // }
+    if(feed.format==='GeoRSS'){
+      return this.http.get(url,{
+        responseType:'text'
+      }).pipe(
+        map(body=>{
+          let doc = new DOMParser().parseFromString(body, 'text/xml');
+          return this.geoRSSToFeatureCollection(doc);
+        })
+      );
+    }
 
     if(feed.format==='KML'){
       return this.http.get(url,{
         responseType:'text'
       }).pipe(
         map(body=>{
-          // console.log(body);
           let doc = new DOMParser().parseFromString(body, 'text/xml');
           return this.kmlToFeatureCollection(doc);
         })
@@ -150,11 +145,46 @@ export class IncidentsService {
       };
       features.push(feature);
     }
+    return {
+      type:'FeatureCollection',
+      features:features
+    };
+  }
+
+  private geoRSSToFeatureCollection(feed:Document):any{
+    const entries = feed.getElementsByTagName('entry');
+    const features:any[] = [];
+    for(let i = 0; i< entries.length; i++){
+      const entry = entries.item(i);
+      const feature = {
+        type:'Feature',
+        geometry:null,
+        properties:{
+          name:entry.getElementsByTagName('title').item(0).textContent,
+          description:entry.getElementsByTagName('content').item(0).textContent,
+          category:entry.getElementsByTagName('category').item(0).attributes.getNamedItem('term').value
+        }
+      };
+      const coords = entry
+                    .getElementsByTagName('georss:point')
+                    .item(0)
+                    .textContent
+                    .split(' ')
+                    .map(c=>+c)
+                    .reverse();
+
+      feature.geometry = {
+        type:'Point',
+        coordinates: coords
+      };
+      features.push(feature);
+    }
 
     return {
       type:'FeatureCollection',
       features:features
     };
+
   }
 
   all():Observable<any>{
@@ -163,11 +193,24 @@ export class IncidentsService {
         const keys = Object.keys(feeds);
         const obs$ = keys.map(k=>this.get(feeds[k],k).pipe(
           tap(feed=>{
+            const icon = feeds[k].icon;
             feed.features.forEach(f=>{
               f.properties._display = f.properties[feeds[k].displayProperty];
-              const icon = feeds[k].icon;
-              f.properties._style = icon.translation[f.properties[icon.property]] || 'NA';
+              if(icon&&icon.property){
+                const val = f.properties[icon.property];
+                if(icon.translation){
+                  f.properties._style = icon.translation[val] || 'NA';
+                } else {
+                  f.properties._style = val;
+                }
+              } else {
+                f.properties._style = 'NA';
+              }
             });
+          }),
+          map(feed=>{
+           feed.features = feed.features.filter(f=>f.properties._style!=='NA')
+            return feed;
           })
         ));
         return forkJoin(obs$)
