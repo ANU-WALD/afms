@@ -451,7 +451,8 @@ export class MainMapComponent implements OnInit {
       Advice: 'ef3cf2'
     }
     const colour = colours[incident.getProperty('_style')] || colours.Advice;
-    const icon = `https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|${colour}`;
+    //const icon = `https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|${colour}`;
+    const icon = 'assets/FireIconSmall.png';
     return {
       icon: icon
     };
