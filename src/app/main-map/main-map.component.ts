@@ -39,6 +39,7 @@ export class MainMapComponent implements OnInit {
   @ViewChild('wms') wmsLayer: WMSLayerComponent;
   mainLayer: VisibleLayer;
 
+  currentConditions = true
   showWindows = true;
   showIncidents = true;
 
@@ -378,6 +379,9 @@ export class MainMapComponent implements OnInit {
   setDate(newDate: Date) {
     this.mainLayer.setDate(newDate);
     this.reloadMarkerData();
+    const timeDiff = (new Date()).getTime() - newDate.getTime();
+    const timeDiffDays = timeDiff / (1000 * 60 * 60 * 24);
+    this.currentConditions = timeDiffDays < 31;
   }
 
   ngOnInit() {
