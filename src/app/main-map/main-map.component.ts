@@ -19,6 +19,7 @@ import { DapDAS, DapDDX } from 'dap-query-js/dist/dap-query';
 import { VisibleLayer } from './visible-layer';
 import { forkJoin, of } from 'rxjs';
 import { IncidentsService } from 'app/incidents.service';
+import { ContextualDataService } from 'app/contextual-data.service';
 
 const TDS_URL = environment.tds_server;
 
@@ -109,7 +110,8 @@ export class MainMapComponent implements OnInit {
     private metadata: MetadataService,
     private dap: OpendapService,
     private incidents: IncidentsService,
-    private baseLayerService: BaseLayerService) {
+    private baseLayerService: BaseLayerService,
+    private contextualData:ContextualDataService) {
 
 
     this.mainLayer = new VisibleLayer(null, null);
@@ -266,53 +268,8 @@ export class MainMapComponent implements OnInit {
   }
 
   updateLandcover() {
-    const variable='quality_mask';
-    const lookup = {
-      0:'Masked',
-      1:'Grass',
-      2:'Shrub',
-      3:'Forest'
-    }
-    this.layers.mask.pipe(
-      map(m => {
-        const host = MainMapComponent.thredds(m.host);
-        const year = Math.max(
-          m.timePeriod.start.getUTCFullYear(),
-          Math.min(this.selection.year, m.timePeriod.end.getUTCFullYear())
-        );
-        const file = InterpolationService.interpolate(m.path, {
-          year: year
-        })
-        var url = this.dap.makeURL(host, file);
-        return url;
-      }),
-      map(maskURL => {
-        const ddx$ = this.metadata.ddxForUrl(maskURL);
-        const das$ = this.metadata.dasForUrl(maskURL);
-        const grid$ = this.metadata.getGridForURL(maskURL);
-        return forkJoin(ddx$, das$, grid$, of(maskURL))
-      }),
-      switchAll(),
-      map(meta => {
-        return {
-          ddx: <DapDDX>meta[0],
-          das: <DapDAS>meta[1],
-          grid: <number[][]>meta[2],
-          url: <string>meta[3]
-        };
-      }),
-      map(meta => {
-        const lats: number[] = (<number[][]>meta.grid)[0];
-        const lngs: number[] = (<number[][]>meta.grid)[1];
-        const pt = this.marker.loc;
-        const latIndex = this.timeseries.indexInDimension(pt.lat, lats);
-        const lngIndex = this.timeseries.indexInDimension(pt.lng, lngs);
-        const query = `${this.timeseries.dapRangeQuery(0)}${this.timeseries.dapRangeQuery(latIndex)}${this.timeseries.dapRangeQuery(lngIndex)}`;
-        return this.dap.getData(`${meta.url}.ascii?${variable}${query}`, meta.das);
-      }),
-      switchAll()
-    ).subscribe((data) => {
-      this.marker.label = lookup[<number>data[variable]];
+    this.contextualData.landcover(this.selection.year,this.marker.loc).subscribe(lc => {
+      this.marker.label = lc;
     });
   }
 

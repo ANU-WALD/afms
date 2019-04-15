@@ -25,6 +25,7 @@ import { LayerOpacitySelectorComponent } from './layer-opacity-selector/layer-op
 import { AboutComponent } from './about/about.component';
 import { SplashModalComponent } from './splash-modal/splash-modal.component';
 import { BaseLayerService } from './base-layer.service';
+import { ContextualDataService } from './contextual-data.service';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,7 @@ import { BaseLayerService } from './base-layer.service';
     MapWaldModule.forRoot({paths:routeParameters})
 ],
   entryComponents: [AboutComponent, SplashModalComponent],
-  providers: [SelectionService,LayersService,BaseLayerService],
+  providers: [SelectionService,LayersService,BaseLayerService,ContextualDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
