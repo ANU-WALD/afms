@@ -2,32 +2,28 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
 import {
-  CatalogHost, MapViewParameterService, TimeseriesService, WMSLayerComponent,
-  WMSService, InterpolationService, OpendapService, MetadataService,
+  MapViewParameterService, TimeseriesService, WMSLayerComponent,
+  WMSService, OpendapService, MetadataService,
   UTCDate, Bounds, BaseLayer
 } from 'map-wald';
 import { SelectionService } from '../selection.service';
 import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.component';
 import { LatLng } from '../latlng';
 import { BaseLayerService } from '../base-layer.service';
-import { LayersService } from '../layers.service';
-import { environment } from '../../environments/environment';
+import { LayersService, thredds } from '../layers.service';
 import { DateRange, FMCLayer } from '../layer';
-import { map, tap, switchAll } from 'rxjs/operators';
-import { DapDAS, DapDDX } from 'dap-query-js/dist/dap-query';
+import { map } from 'rxjs/operators';
 
 import { VisibleLayer } from './visible-layer';
-import { forkJoin, of } from 'rxjs';
 import { IncidentsService } from 'app/incidents.service';
 import { ContextualDataService } from 'app/contextual-data.service';
-
-const TDS_URL = environment.tds_server;
 
 class ValueMarker {
   label: string;
   loc: LatLng;
   value: string;
   open: boolean;
+  context: string[];
 }
 
 @Component({
@@ -90,13 +86,6 @@ export class MainMapComponent implements OnInit {
     return {
       lat: Math.min(-7, Math.max(-45, +ll.lat)),
       lng: Math.min(170, Math.max(110, +ll.lng))
-    };
-  }
-
-  static thredds(url?: string): CatalogHost {
-    return {
-      software: 'tds',
-      url: url || TDS_URL
     };
   }
 
@@ -258,18 +247,24 @@ export class MainMapComponent implements OnInit {
       label: '-',
       loc: coords,
       value: null,
-      open: true
+      open: true,
+      context: []
     };
-    this.updateLandcover();
+    this.updateContextualData();
     this.updateTimeSeries();
 
     this.selectedCoordinates = coords;
     this.mapView.update({ coords: `${coords.lat.toFixed(3)},${coords.lng.toFixed(3)}` });
   }
 
-  updateLandcover() {
+  updateContextualData(){
+    this.marker.context = [];
     this.contextualData.landcover(this.selection.year,this.marker.loc).subscribe(lc => {
-      this.marker.label = lc;
+      this.marker.context.unshift(`Land cover: ${lc}`);
+    });
+
+    this.contextualData.contextualData(this.selection.effectiveDate(),this.marker.loc).subscribe(data=>{
+      this.marker.context = this.marker.context.concat(Object.keys(data).map(k=>`${k}: ${data[k]}`));
     });
   }
 
@@ -282,7 +277,7 @@ export class MainMapComponent implements OnInit {
     this.marker.label = null;
     this.marker.value = null;
     this.updateTimeSeries();
-    this.updateLandcover();
+    this.updateContextualData();
   }
 
   updateTimeSeries() {
@@ -329,6 +324,7 @@ export class MainMapComponent implements OnInit {
     } else {
       currentValue = currentValue.toFixed(this.mainLayer.layer.precision);
     }
+    this.marker.label = this.mainLayer.layer.name;
     this.marker.value = currentValue;
   }
 
@@ -353,7 +349,7 @@ export class MainMapComponent implements OnInit {
     }
     this.mainLayer = new VisibleLayer(layer);
     this.mainLayer.opacity = opacity;
-    this.mainLayer.host = MainMapComponent.thredds(layer.host);
+    this.mainLayer.host = thredds(layer.host);
     this.selection.currentLayer = this.mainLayer;
     this.dateRange = layer.timePeriod;
     if (date) {
@@ -367,7 +363,6 @@ export class MainMapComponent implements OnInit {
 
     this.reloadMarkerData();
   }
-
 
   vectorLayerChanged(layer: VectorLayer) {
     this.geoJsonObject = null;

@@ -11,7 +11,7 @@ export class FMCLayer {
     public legend: Array<any>, public wmsParams: any, public source: string, public path: string,
     public chartConfig: any, public host: string, public urlFragment: string, public indexing: any,
     public suffix: string, public timeshift: number, public timestep: number, public precision: number,
-    public refDate: string) {
+    public refDate: string,public op:string, public window:number) {
 
     this.indexing = this.indexing || {};
     // if (chartConfig) {
@@ -133,9 +133,13 @@ export class DateRange {
 
   static fromJSON(json: any): DateRange {
     var result = new DateRange();
-    result.start = DateRange.dateFromConfig(json.start);
-    result.end = DateRange.dateFromConfig(json.end, true);
-    result.format = json.format || result.format;
+
+    if(json){
+      result.start = DateRange.dateFromConfig(json.start);
+      result.end = DateRange.dateFromConfig(json.end, true);
+      result.format = json.format || result.format;
+    }
+
     return result;
   }
 

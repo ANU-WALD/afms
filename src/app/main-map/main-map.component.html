@@ -8,7 +8,12 @@
       <agm-info-window [disableAutoPan]="true" [isOpen]="marker.open">
         <span *ngIf="!marker.value;then markerValueLoading;else markerValueLoaded"></span>
         <ng-template #markerValueLoading><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></ng-template>
-        <ng-template #markerValueLoaded>{{marker.label}}: {{marker.value}}{{mainLayer.layer.suffix}}</ng-template>
+        <ng-template #markerValueLoaded>{{marker.label}}: {{marker.value}}{{mainLayer.layer.suffix}}
+            <span *ngFor="let c of marker.context">
+              <br/>
+              {{c}}
+            </span>
+        </ng-template>
       </agm-info-window>
     </agm-marker>
 

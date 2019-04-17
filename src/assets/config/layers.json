@@ -225,6 +225,22 @@
       }
     }
   ],
+  "contextual":[
+    {
+      "source":"tds",
+      "path":"ub8/au/treecover/250m/ANUWALD.TreeCover.{{year}}.250m.nc",
+      "wms_layer":"TreeCover",
+      "name":"Tree cover",
+      "op":"mean",
+      "window":0.025,
+      "units":"%",
+      "timeperiod": {
+        "start": 2004,
+        "end": 2017,
+        "format": "{{year}}-01-01T00%3A00%3A00.000Z"
+      }
+    }
+  ],
   "mask": {
     "source": "tds",
     "path": "ub8/au/FMC/c6/mosaics/mask_{{year}}.nc",
