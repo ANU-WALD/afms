@@ -57,7 +57,7 @@ export class LayersService {
                           l.legend,l.wms_params,l.source,l.path,l.chart_config,
                           l.host,l.url_fragment,l.indexing,l.suffix||'',l.timeshift||0,
                           l.timestepMultiplier||1,l.precision,l.timestepReference,
-                          l.op,l.window,l.labels);
+                          l.op,l.window,l.labels,l.contextual||[]);
     }
 
     this.mask = layerConfig$.pipe(map(data=>newLayer(data.mask)));

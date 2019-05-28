@@ -10,7 +10,7 @@ export class FMCLayer {
     public legend: Array<any>, public wmsParams: any, public source: string, public path: string,
     public chartConfig: any, public host: string, public urlFragment: string, public indexing: any,
     public suffix: string, public timeshift: number, public timestep: number, public precision: number,
-    public refDate: string,public op:string, public window:number, public labels:string[]) {
+    public refDate: string,public op:string, public window:number, public labels:string[],public contextual:string[]) {
 
     this.indexing = this.indexing || {};
     // if (chartConfig) {

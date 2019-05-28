@@ -32,7 +32,10 @@
         "colorscalerange": "0,140",
         "abovemaxcolor": "extend",
         "numcolorbands": 9
-      }
+      },
+      "contextual":[
+        "LFMC Uncertainty"
+      ]
     },
     {
       "source": "tds",

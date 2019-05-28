@@ -259,11 +259,12 @@ export class MainMapComponent implements OnInit {
 
   updateContextualData(){
     this.marker.context = [];
+
     this.contextualData.landcover(this.selection.year,this.marker.loc).subscribe(lc => {
       this.marker.context.unshift(`Land cover: ${lc}`);
     });
 
-    this.contextualData.contextualData(this.selection.effectiveDate(),this.marker.loc).subscribe(data=>{
+    this.contextualData.contextualData(this.mainLayer.layer,this.selection.effectiveDate(),this.marker.loc).subscribe(data=>{
       this.marker.context = this.marker.context.concat(Object.keys(data).map(k=>`${k}: ${data[k]}`));
     });
   }

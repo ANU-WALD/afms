@@ -33,17 +33,19 @@ export class ContextualDataService {
     );
   }
 
-  private getAllMetadata(url):Observable<any>{
+  private getAllMetadata(url,time:boolean):Observable<any>{
     const ddx$ = this.metadata.ddxForUrl(url);
     const das$ = this.metadata.dasForUrl(url);
     const grid$ = this.metadata.getGridForURL(url);
-    return forkJoin(ddx$, das$, grid$, of(url)).pipe(
+    const time$ = time? this.metadata.getTimeDimensionForURL(url) : of([])
+    return forkJoin(ddx$, das$, grid$, time$, of(url)).pipe(
       map(meta => {
         return {
           ddx: <DapDDX>meta[0],
           das: <DapDAS>meta[1],
           grid: <number[][]>meta[2],
-          url: <string>meta[3]
+          time: <Date[]>meta[3],
+          url: <string>meta[4]
         };
       })
     );
@@ -67,7 +69,7 @@ export class ContextualDataService {
         var url = this.dap.makeURL(host, file);
         return url;
       }),
-      map(maskURL => this.getAllMetadata(maskURL)),
+      map(maskURL => this.getAllMetadata(maskURL,false)),
       switchAll(),
       map(meta => {
         const lats: number[] = (<number[][]>meta.grid)[0];
@@ -93,13 +95,16 @@ export class ContextualDataService {
 
   private getContextualLayer(l:FMCLayer,date:UTCDate,pt:LatLng):Observable<any[]>{
     const host = thredds(l.host);
+    date = l.effectiveDate(date);
     const year = this.effectiveYear(date.getUTCFullYear(),l);
     const file = InterpolationService.interpolate(l.path, {
-      year: year
+      year: year,
+      month: date.getUTCMonth()+1,
+      date: date.getUTCDate()
     });
     var url = this.dap.makeURL(host, file);
-    return this.getAllMetadata(url).pipe(
-      tap(d=>console.log(d)),
+    return this.getAllMetadata(url,l.timestep!==undefined).pipe(
+      // tap(d=>console.log(d)),
       map(meta=>{
         const lats: number[] = (<number[][]>meta.grid)[0];
         const lngs: number[] = (<number[][]>meta.grid)[1];
@@ -107,16 +112,28 @@ export class ContextualDataService {
 
         const latQuery = this.rangeQuery(pt.lat,window,lats);
         const lngQuery = this.rangeQuery(pt.lng,window,lngs);
-        console.log(latQuery,lngQuery);
-        const query = `${this.ts.dapRangeQuery(0)}${lngQuery}${latQuery}`;
-        console.log(query);
+        let closest = 0
+        if(meta.time&&meta.time.length){
+          const dates:Date[] = meta.time;
+          const deltas = dates.map(t => Math.abs(t.getTime() - date.getTime()));
+          closest = deltas.indexOf(Math.min(...deltas));
+
+        }
+        const dateQuery = this.ts.dapRangeQuery(closest)
+        const dims:string[] = meta.ddx.variables[l.variable_name].dimensions.map(dim=>dim.name);
+        const queries = {
+          time:dateQuery,
+          longitude:lngQuery,
+          latitude:latQuery
+        };
+
+        const query = dims.map(d=>queries[d]).join('');
         return this.dap.getData(`${meta.url}.ascii?${l.variable_name}${query}`, meta.das);
       }),
       switchAll(),
-      tap(d=>console.log(d)),
+      // tap(d=>console.log(d)),
       map(d=>d[l.variable_name]),
       map(d=>{
-
         if((<any>d).length && d[0].length){
           let values:number[] = [].concat(...<any>d);
           let valid = values.filter(v=>!isNaN(v));
@@ -129,14 +146,21 @@ export class ContextualDataService {
               return sum/valid.length
           }
         }
+        return +d;
       }),
       map(d=>[l.name,`${d.toFixed()}${l.units}`])
     );
 
   }
 
-  contextualData(date:UTCDate,pt:LatLng):Observable<ContextualInfo>{
-    return this.layers.contextual.pipe(
+  contextualData(layer:FMCLayer,date:UTCDate,pt:LatLng):Observable<ContextualInfo>{
+    const additionalContext = layer.contextual||[];
+
+    const additionalLayers = this.layers.availableLayers.pipe(
+      map(layers=>layers.filter(lyr=>additionalContext.indexOf(lyr.name)>=0)));
+
+    return forkJoin(this.layers.contextual,additionalLayers).pipe(
+      map(combined=>(<FMCLayer[]>[]).concat(...combined)),
       map(layers=>{
         return forkJoin(layers.map(l=>this.getContextualLayer(l,date,pt)));
       }),
