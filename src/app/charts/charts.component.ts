@@ -91,7 +91,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
   }
 
-  updateChart(yearCount: number) {
+  updateChart() {
     const selectedYear = this.year;
     const dataSeries: {year:number,observable:Observable<TimeSeries>}[] = [];
 
@@ -100,67 +100,80 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
     Plotly.purge(this.node);
 
-
     const host = this.layer.host;
-    const baseFn = this.layer.layer.path;
+    const baseFn = this.layer.layer.pathTimeSeries;
     const variable = this.layer.layer.variable_name;
 
-    for (let i = 0; i <= yearCount; i++) {
-      const year = selectedYear - i;
+    let timePeriod = this.layer.layer.timePeriod;
+    let startYear = timePeriod.start.getUTCFullYear();
+    let endYear = timePeriod.end.getUTCFullYear() -1; // -1 is a hack because 2019 data not available
+
+    for (let yr = startYear; yr <= endYear; yr++) {
       const fn = InterpolationService.interpolate(baseFn, {
-        year: year
+        year: yr
       });
       const observable = this.timeseries.getTimeseries(host, fn, variable, this.coordinates, this.layer.layer.indexing);
 
       const newDataSeries = {
-        year: year,
+        year: yr,
         observable: observable
       };
 
-      dataSeries.push(newDataSeries);
+      if(yr===selectedYear){
+        dataSeries.unshift(newDataSeries);
+      } else {
+        dataSeries.push(newDataSeries);
+      }
     }
 
     const observables = dataSeries.map(s => s.observable);
 
     forkJoin(observables)
       .subscribe((data) => {
-
           this.setFullTimeSeries(data);
+          const chartTimestamps: UTCDate[] = data[0].dates;
 
-          const traces = [];
-          for (let index=0;index<data.length;index++) {
-            const dataset = data[index];
-
-            // Set all datasets to the same year so that they are overlayed with
-            // each other rather than shown sequentially
-
-            const chartTimestamps: UTCDate[] = dataset.dates.map(d => {
-              const yearOffset = selectedYear-d.getFullYear();
-              const modifiedDate = this.layer.layer.reverseDate(d);
-              modifiedDate.setUTCFullYear(modifiedDate.getUTCFullYear()+yearOffset);
-              return modifiedDate;
-            });
-
-            const color = +index ? 'rgb(198,219,239)' : 'rgb(33,113,181)';
-            const trace = {
+          let values = data[0].dates.map((_,i)=>data.map(ts=>ts.values[i]).filter(v=>!isNaN(v)));
+          let minimums = values.map(vals=>Math.min(...vals));
+          let maximums = values.map(vals=>Math.max(...vals));
+          const mainColour = 'rgb(33,113,181)';
+          const traces = [
+            {
               x: chartTimestamps,
-              y: dataset.values,
-              name: dataSeries[index].year.toString(),
+              y: data[0].values,
+              name: ''+selectedYear,
               mode: 'lines+markers',
               connectgaps: true,
-
+              fillcolor:'rgb(198,219,239)',
               marker: {
-                size: +index ? 4 : 6,
-                color: color
+                size: 6,
+                color: mainColour
               },
               line: {
-                color: color
+                color: mainColour
               }
-            };
-
-            traces.push(trace);
-
-          }
+            },
+            {
+              x: chartTimestamps,
+              y: minimums,
+              name: 'min',
+              mode:'none',
+              type:'scatter',
+              fill:'tozeroy',
+              fillcolor:'white'
+              // hoverinfo:'skip'
+            },
+            {
+              x: chartTimestamps,
+              y: maximums,
+              name: 'max',
+              mode:'none',
+              type:'scatter',
+              fill:'tozeroy',
+              fillcolor:'rgb(198,219,239)'
+              // hoverinfo:'skip'
+            }
+          ]
 
           traces.reverse();
           this.buildChart(traces);

@@ -3,6 +3,7 @@
     {
       "source": "tds",
       "path": "ub8/au/FMC/c6/mosaics/fmc_c6_{{year}}.nc",
+      "pathTimeSeries": "ub8/au/FMC/c6/mosaics/perf_prof2/fmc_c6_{{year}}.nc",
       "name": "Live Fuel Moisture Content",
       "units": "%",
       "suffix": "%",
