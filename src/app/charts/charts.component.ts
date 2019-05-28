@@ -57,19 +57,17 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       return;
     }
 
-    this.updateChart(this.getChartRange());
+    this.updateChart();
   }
 
-  private getChartRange(): number {
-    return Math.min(CHART_YEARS, this.year - this.layer.layer.timePeriod.start.getUTCFullYear())
-  }
-
-  setFullTimeSeries(data: any[]) {
+  // TODO used for downloads, but won't currently keep things in correct order!
+  setFullTimeSeries(data: TimeSeries[]) {
     // TODO: make this more generic - currently only works with the FMC data
 
     const data_copy = Array.from(data);
 
-    data_copy.reverse();
+    data_copy.sort((a,b)=>a.dates[0].getUTCFullYear()-b.dates[0].getUTCFullYear());
+    // data_copy.reverse();
 
     const fullTimeSeries = {labels: [], columns: []};
 
