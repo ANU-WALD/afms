@@ -203,6 +203,17 @@ export class IncidentsService {
                 } else {
                   f.properties._style = val;
                 }
+
+                if(icon.exclude){
+                  const exclude = icon.exclude.some(excl=>{
+                    let prop:string = f.properties[excl.property]||'';
+                    return !!prop.match(excl.pattern);
+                  });
+                  if(exclude){
+                    f.properties._style = 'NA';
+                  }
+                }
+
               } else {
                 f.properties._style = 'NA';
               }

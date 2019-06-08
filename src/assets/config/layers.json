@@ -369,7 +369,13 @@
           "Watch and act":"WatchAct",
           "Emergency Warning":"Warning",
           "other":"NA"
-        }
+        },
+        "exclude":[
+          {
+            "property":"title",
+            "pattern":"^AMBULANCE RESPONSE"
+          }
+        ]
       }
     },
     "SA":{

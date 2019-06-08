@@ -24,7 +24,11 @@ export interface IncidentFeed{
     property:string;
     translation:{
       [key:string]:'NA'|'Advice'|'WatchAct'|'Warning'
-    }
+    },
+    exclude?:{
+      property:string,
+      pattern:string
+    }[]
   };
 }
 
