@@ -104,7 +104,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
     let timePeriod = this.layer.layer.timePeriod;
     let startYear = timePeriod.start.getUTCFullYear();
-    let endYear = timePeriod.end.getUTCFullYear() -1; // -1 is a hack because 2019 data not available
+    let endYear = timePeriod.end.getUTCFullYear();
 
     for (let yr = startYear; yr <= endYear; yr++) {
       const fn = InterpolationService.interpolate(baseFn, {
@@ -129,9 +129,9 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     forkJoin(observables)
       .subscribe((data) => {
           this.setFullTimeSeries(data);
-          const chartTimestamps: UTCDate[] = data[0].dates;
+          const chartTimestamps: UTCDate[] = data[data.length-1].dates;
 
-          let values = data[0].dates.map((_,i)=>data.map(ts=>ts.values[i]).filter(v=>!isNaN(v)));
+          let values = chartTimestamps.map((_,i)=>data.map(ts=>ts.values[i]).filter(v=>!isNaN(v)));
           let minimums = values.map(vals=>Math.min(...vals));
           let maximums = values.map(vals=>Math.max(...vals));
           const mainColour = 'rgb(33,113,181)';
