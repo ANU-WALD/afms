@@ -355,6 +355,10 @@ export class MainMapComponent implements OnInit {
     const timeDiff = (new Date()).getTime() - newDate.getTime();
     const timeDiffDays = timeDiff / (1000 * 60 * 60 * 24);
     this.currentConditions = timeDiffDays < 31;
+
+    if(this.zonal){
+      this.updateZonal();
+    }
   }
 
   ngOnInit() {
@@ -447,30 +451,36 @@ export class MainMapComponent implements OnInit {
     this.zonal=!this.zonal;
 
     if(this.zonal){
-      let values$ = this.zonalService.getForDate(this.mainLayer.layer,
-                                                 this.vectorLayer,
-                                                 this.selection.effectiveDate());
-      let colours$ = this.palettes.getPalette(this.mainLayer.layer.palette.name,
-                                              this.mainLayer.layer.palette.reverse,
-                                              this.mainLayer.layer.palette.count);
-
-      forkJoin(values$,colours$).subscribe(resp=>{
-        let data = resp[0];
-        let colours = resp[1];
-        console.log('zonal data',data);
-        console.log('palette',colours);
-        this.zonalValues = data;
-        this.zonalPalette = colours;
-
-        if(!Object.keys(data).length){
-          this.zonal = false;
-        }
-
-        if(this.zonal){
-          this.vectorStyles = (f)=>this.zonalStyles(f);
-        }
-      });
+      this.updateZonal();
     }
+  }
+
+  updateZonal(){
+    let values$ = this.zonalService.getForDate(this.mainLayer.layer,
+      this.vectorLayer,
+      this.selection.effectiveDate());
+
+    let colours$ = this.palettes.getPalette(this.mainLayer.layer.palette.name,
+      this.mainLayer.layer.palette.reverse,
+      this.mainLayer.layer.palette.count);
+
+    forkJoin(values$,colours$).subscribe(resp=>{
+      let data = resp[0];
+      let colours = resp[1];
+
+      this.zonalValues = data;
+      this.zonalPalette = colours;
+
+      if(!Object.keys(data).length){
+        this.zonal = false;
+      }
+
+      if(this.zonal){
+        this.vectorStyles = (f)=>this.zonalStyles(f);
+      } else {
+        this.vectorStyles = this.staticStyles;
+      }
+    });
   }
 
   zonalStyles(f:any){
