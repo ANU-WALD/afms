@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import {
   MapViewParameterService, TimeseriesService, WMSLayerComponent,
   WMSService, OpendapService, MetadataService,
-  UTCDate, Bounds, BaseLayer
+  UTCDate, Bounds, BaseLayer, PaletteService, ColourPalette
 } from 'map-wald';
 import { SelectionService } from '../selection.service';
 import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.component';
@@ -17,6 +17,9 @@ import { map } from 'rxjs/operators';
 import { VisibleLayer } from './visible-layer';
 import { IncidentsService } from 'app/incidents.service';
 import { ContextualDataService } from 'app/contextual-data.service';
+import { ZonalService } from 'app/zonal.service';
+import { StaticSymbol } from '@angular/compiler';
+import { forkJoin } from 'rxjs';
 
 class ValueMarker {
   label: string;
@@ -48,6 +51,11 @@ export class MainMapComponent implements OnInit {
   minZoom = 3;
   maxZoom = 16;
   zoom = 4;
+
+  zonal=false;
+  zonalAvailable=false;
+  zonalValues:any;
+  zonalPalette:ColourPalette;
 
   // initial center position for the map
   lat: number = -22.673858;
@@ -82,6 +90,15 @@ export class MainMapComponent implements OnInit {
     strokeColor: '#444'
   };
 
+  dynamicStyles: any = {
+    clickable: true,
+    fillOpacity: 1,
+    strokeWeight: 1.0,
+    strokeColor: '#444'
+  };
+
+  vectorStyles = this.staticStyles;
+
   static constrainCoords(ll: LatLng) {
     return {
       lat: Math.min(-7, Math.max(-45, +ll.lat)),
@@ -100,7 +117,9 @@ export class MainMapComponent implements OnInit {
     private dap: OpendapService,
     private incidents: IncidentsService,
     private baseLayerService: BaseLayerService,
-    private contextualData:ContextualDataService) {
+    private contextualData:ContextualDataService,
+    private zonalService:ZonalService,
+    private palettes:PaletteService) {
 
 
     this.mainLayer = new VisibleLayer(null, null);
@@ -363,6 +382,7 @@ export class MainMapComponent implements OnInit {
     this.mainLayer.setDate(this.selection.effectiveDate());
 
     this.reloadMarkerData();
+    this.assessZonal();
   }
 
   vectorLayerChanged(layer: VectorLayer) {
@@ -372,7 +392,14 @@ export class MainMapComponent implements OnInit {
       map((r) => r.json()))
       .subscribe((data) => {
         this.geoJsonObject = data;
-      });
+        this.assessZonal();
+    });
+  }
+
+  assessZonal() {
+    this.zonalAvailable = (this.mainLayer&&this.mainLayer.layer.zonal) &&
+                          (this.vectorLayer&&this.vectorLayer.zonal);
+    this.zonal = this.zonal && this.zonalAvailable;
   }
 
   setBaseLayer(layer: BaseLayer) {
@@ -413,5 +440,53 @@ export class MainMapComponent implements OnInit {
     return {
       icon: icon
     };
+  }
+
+  toggleZonal(){
+    this.vectorStyles = this.staticStyles;
+    this.zonal=!this.zonal;
+
+    if(this.zonal){
+      let values$ = this.zonalService.getForDate(this.mainLayer.layer,
+                                                 this.vectorLayer,
+                                                 this.selection.effectiveDate());
+      let colours$ = this.palettes.getPalette(this.mainLayer.layer.palette.name,
+                                              this.mainLayer.layer.palette.reverse,
+                                              this.mainLayer.layer.palette.count);
+
+      forkJoin(values$,colours$).subscribe(resp=>{
+        let data = resp[0];
+        let colours = resp[1];
+        console.log('zonal data',data);
+        console.log('palette',colours);
+        this.zonalValues = data;
+        this.zonalPalette = colours;
+
+        if(!Object.keys(data).length){
+          this.zonal = false;
+        }
+
+        if(this.zonal){
+          this.vectorStyles = (f)=>this.zonalStyles(f);
+        }
+      });
+    }
+  }
+
+  zonalStyles(f:any){
+    let id = f.getProperty(this.vectorLayer.idField);
+    if(!isNaN(+id)){
+      id = +id;
+    }
+    let zonalValue = this.zonalValues[id]
+
+    let result = Object.assign({},this.dynamicStyles);
+
+    let colourIndex = this.palettes.colourIndex(zonalValue,
+                                                this.mainLayer.layer.range[0],
+                                                this.mainLayer.layer.range[1],
+                                                this.zonalPalette.length)
+    result.fillColor = this.zonalPalette[colourIndex];
+    return result;
   }
 }

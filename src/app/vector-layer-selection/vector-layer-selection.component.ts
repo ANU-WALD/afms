@@ -3,14 +3,8 @@ import { Http, Response } from '@angular/http';
 import {MapViewParameterService} from 'map-wald';
 
 export class VectorLayer {
-  jsonFilename: string;
-  name: string;
-  nameField: string;
-
-  constructor(fn: string, n: string, nf: string) {
-    this.jsonFilename = fn;
-    this.name = n;
-    this.nameField = nf;
+  constructor(public jsonFilename: string, public name: string, public nameField: string,
+              public idField:string, public zonal: boolean) {
   }
 
   baseFilename():string{
@@ -35,7 +29,7 @@ export class VectorLayerSelectionComponent implements OnInit {
     _http.get("assets/config/vectors.json").toPromise().then(resp=>{
       var json = resp.json();
       var layers:Array<any> = json.vector_layers;
-      this.vectorLayers = layers.map(l=>new VectorLayer(l.filename,l.title,l.name_field));
+      this.vectorLayers = layers.map(l=>new VectorLayer(l.filename,l.title,l.name_field,l.id_field,l.zonal));
 
       var params = this.mapView.current();
       if(params.layer&&params.layer!=='_'){

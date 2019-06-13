@@ -6,7 +6,9 @@
   }, {
     "filename": "LGA11aAust.json",
     "title": "Local Government Areas",
-    "name_field": "LGA_NAME11"
+    "name_field": "LGA_NAME11",
+    "id_field": "LGA_CODE11",
+    "zonal":true
   }, {
     "filename": "states4326.json",
     "title": "States and Territories",

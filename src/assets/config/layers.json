@@ -80,7 +80,7 @@
     {
       "source": "tds",
       "path": "ub8/au/FMC/c6/mosaics/deciles/flam_c6_{{year}}_dc.nc",
-      "name": "Flammability (Deciles)",
+      "name": "Flammability (Deciles - Grouped)",
       "units": "unitless",
       "icon": "fa-fire",
       "wms_layer": "flam_groups",
@@ -122,7 +122,59 @@
           "fixed": true
         }
       }
-    },    {
+    },
+    {
+      "source": "tds",
+      "path": "ub8/au/FMC/c6/mosaics/deciles/flam_c6_{{year}}_dc.nc",
+      "name": "Flammability (Deciles)",
+      "units": "unitless",
+      "icon": "fa-fire",
+      "wms_layer": "flam_deciles",
+      "description": "Relative Flammability Index",
+      "palette": {
+        "image": false,
+        "name": "RdYlBu",
+        "count": 9,
+        "reverse": true
+      },
+      "labels":[
+        "Very much above",
+        "Above average",
+        "Above average",
+        "Average",
+        "Average",
+        "Average",
+        "Below average",
+        "Below average",
+        "Very much below"
+      ],
+      "precision":1,
+      "range": [
+        0.5,
+        9.5
+      ],
+      "timeperiod": {
+        "start": 2019,
+        "end": 8
+      },
+      "timestepMultiplier": 4,
+      "timestepReference": "{{year}}-01-01",
+      "timeshift":-2,
+      "wms_params": {
+        "styles": "boxfill/anu_fmc_rdylbu_11_rev",
+        "colorscalerange": "1,5",
+        "abovemaxcolor": "transparent",
+        "numcolorbands": 11
+      },
+      "chart_config": {
+        "yaxis": {
+          "title": " ",
+          "fixed": true
+        }
+      },
+      "zonal":true
+    },
+    {
       "source": "tds",
       "path": "ub8/au/FMC/c6/mosaics/fmc_c6_{{year}}.nc",
       "name": "Quality Mask",

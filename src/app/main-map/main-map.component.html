@@ -32,7 +32,7 @@
         [position]="1">
       </wms-layer>
 -->
-    <wms-layer #wms *ngIf="mainLayer?.layer" [url]="mainLayer.url" [params]="mainLayer.wmsParameters" [opacity]="mainLayer.opacity"
+    <wms-layer #wms *ngIf="mainLayer?.layer&&!zonal" [url]="mainLayer.url" [params]="mainLayer.wmsParameters" [opacity]="mainLayer.opacity"
       [position]="0">
     </wms-layer>
 
@@ -51,7 +51,7 @@
     <agm-data-layer *ngIf="currentConditions&&showIncidents&&incidentsData" [geoJson]="incidentsData" (layerClick)="incidentClicked($event)"
       [style]="incidentStyle"></agm-data-layer>
 
-    <agm-data-layer *ngIf="geoJsonObject" [geoJson]="geoJsonObject" (layerClick)="clicked($event)" [style]="staticStyles">
+    <agm-data-layer *ngIf="geoJsonObject" [geoJson]="geoJsonObject" (layerClick)="clicked($event)" [style]="vectorStyles">
     </agm-data-layer>
 
     <map-control position="TOP_LEFT" class="test">
@@ -105,6 +105,15 @@
               placement="right">
               <i class="fa fa-exclamation-triangle"></i>
             </button>
+          </div>
+          <div *ngIf="showWindows">
+            <button class="btn btn-secondary btn-sm"
+                    (click)="toggleZonal()"
+                    [ngbTooltip]="zonal?'Show detailed grids':'Show region average'"
+                    placement="right"
+                    [disabled]="!zonalAvailable">
+            <i class="fa fa-square-o"></i>
+          </button>
           </div>
           <div *ngIf="showWindows && mainLayer?.layer">
             <a class="btn btn-secondary btn-sm" [href]="mainLayer.downloadURL" target="blank">
