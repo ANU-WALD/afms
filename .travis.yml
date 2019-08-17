@@ -29,17 +29,12 @@ deploy:
   on:
     branch: production
 
-  - skip_cleanup: true
-    provider: script
-    script: bash -c "cd dist && find . -type f -exec curl -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org{} \;"
-    on:
-      branch: production
-  # deploy to "wenfo.org/afms/defence" on branch defence
-  - skip_cleanup: true
-    provider: script
-    script: bash -c "cd dist && find . -type f -exec curl -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org/defence/{} \;"
-    on:
-      branch: defence
+# deploy to "wenfo.org/afms/defence" on branch defence
+- skip_cleanup: true
+  provider: script
+  script: bash -c "cd dist && find . -type f -exec curl -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp.wenfo.org/defence/{} \;"
+  on:
+    branch: defence
 notifications:
   email: false
   slack:
