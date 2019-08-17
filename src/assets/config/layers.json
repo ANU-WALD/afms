@@ -126,7 +126,7 @@
     },
     {
       "source": "tds",
-      "path": "ub8/au/FMC/c6/mosaics/deciles/flam_c6_{{year}}_dc.nc",
+      "path": "ub8/au/FMC/c6/mosaics/flam_c6_{{year}}.nc",
       "name": "Flammability (Deciles)",
       "units": "unitless",
       "icon": "fa-fire",
@@ -140,13 +140,13 @@
       },
       "labels":[
         "Very much above",
+        "",
         "Above average",
-        "Above average",
+        "",
         "Average",
-        "Average",
-        "Average",
+        "",
         "Below average",
-        "Below average",
+        "",
         "Very much below"
       ],
       "precision":1,
@@ -155,7 +155,7 @@
         9.5
       ],
       "timeperiod": {
-        "start": 2019,
+        "start": 2018,
         "end": 8
       },
       "timestepMultiplier": 4,
