@@ -29,7 +29,7 @@ export class ZonalService {
       }),
       map(table=>{
         return table.filter((row,i)=>{
-          let rowDate:UTCDate = row.datetime;
+          let rowDate:UTCDate = row.time;
           return (rowDate.getUTCFullYear()===date.getUTCFullYear()) &&
           (rowDate.getUTCMonth()===date.getUTCMonth()) &&
           (rowDate.getUTCDate()===date.getUTCDate());
