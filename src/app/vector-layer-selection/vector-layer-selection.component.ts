@@ -26,12 +26,12 @@ export class VectorLayerSelectionComponent implements OnInit {
 
   constructor(private _http:Http,
               private mapView:MapViewParameterService) {
-    _http.get("assets/config/vectors.json").toPromise().then(resp=>{
-      var json = resp.json();
-      var layers:Array<any> = json.vector_layers;
+    _http.get('assets/config/vectors.json?='+((new Date()).getTime())).toPromise().then(resp=>{
+      const json = resp.json();
+      const layers:Array<any> = json.vector_layers;
       this.vectorLayers = layers.map(l=>new VectorLayer(l.filename,l.title,l.name_field,l.id_field,l.zonal));
 
-      var params = this.mapView.current();
+      const params = this.mapView.current();
       if(params.layer&&params.layer!=='_'){
         this.selectedLayer=this.vectorLayers.find(l=>decodeURIComponent(l.baseFilename())===decodeURIComponent(params.vector));
       }
