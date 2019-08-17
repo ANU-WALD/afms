@@ -45,7 +45,8 @@
     "rxjs": "^6.0.0",
     "store": "^2.0.12",
     "typescript": "^2.7.0",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.8.4",
+    "less": "3.6.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.6.6",
