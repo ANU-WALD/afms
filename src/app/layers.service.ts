@@ -52,10 +52,10 @@ export class LayersService {
   incidentFeeds:Observable<IncidentFeeds>;
 
   constructor(private _http:HttpClient) {
-    var layerConfig$:Observable<Config> = <Observable<Config>>_http.get("assets/config/layers.json").pipe(
+    const layerConfig$:Observable<Config> = <Observable<Config>>_http.get('assets/config/layers.json?_='+(new Date()).getTime()).pipe(
       publishReplay(),refCount());
 
-    var newLayer = function(l:any) : FMCLayer{
+    const newLayer = function(l:any) : FMCLayer{
       return new FMCLayer(l.name,l.units,l.icon,l.wms_layer,l.palette,
                           l.range,l.description,DateRange.fromJSON(l.timeperiod),
                           l.legend,l.wms_params,l.source,l.path,l.pathTimeSeries,l.chart_config,
