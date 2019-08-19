@@ -35,8 +35,8 @@ class ValueMarker {
   styleUrls: ['./main-map.component.scss']
 })
 export class MainMapComponent implements OnInit {
-  @ViewChild('mapDiv') mapDiv: Component;
-  @ViewChild('wms') wmsLayer: WMSLayerComponent;
+  @ViewChild('mapDiv', { static: false }) mapDiv: Component;
+  @ViewChild('wms', { static: false }) wmsLayer: WMSLayerComponent;
   mainLayer: VisibleLayer;
 
   currentConditions = true
