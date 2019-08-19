@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import {MapViewParameterService} from 'map-wald';
+import { HttpClient } from '@angular/common/http';
 
 export class VectorLayer {
   constructor(public jsonFilename: string, public name: string, public nameField: string,
@@ -24,10 +24,10 @@ export class VectorLayerSelectionComponent implements OnInit {
 
   @Output() selectedLayerChanged: EventEmitter<VectorLayer> = new EventEmitter<VectorLayer>();
 
-  constructor(private _http:Http,
+  constructor(_http:HttpClient,
               private mapView:MapViewParameterService) {
     _http.get('assets/config/vectors.json?='+((new Date()).getTime())).toPromise().then(resp=>{
-      const json = resp.json();
+      const json:any = resp;
       const layers:Array<any> = json.vector_layers;
       this.vectorLayers = layers.map(l=>new VectorLayer(l.filename,l.title,l.name_field,l.id_field,l.zonal));
 
