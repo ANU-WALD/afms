@@ -4,7 +4,6 @@ import {Observable, forkJoin} from 'rxjs';
 import {CatalogHost, InterpolationService, TimeSeries, UTCDate} from 'map-wald';
 import {SelectionService} from '../selection.service';
 import {TimeseriesService} from 'map-wald';
-import {Http} from '@angular/http';
 import {LatLng} from '../latlng';
 import {CsvService} from '../csv.service';
 import * as Plotly from 'plotly.js/dist/plotly-basic';
@@ -32,7 +31,6 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   hasBeenLoaded = false;
 
   constructor(private timeseries: TimeseriesService,
-              private http: Http,
               private csv_service: CsvService,
               private _element: ElementRef) {
 

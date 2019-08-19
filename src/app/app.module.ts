@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
@@ -47,8 +46,7 @@ import { ContextualDataService } from './contextual-data.service';
       apiKey: environment.google_maps_api_key
     }),
     FormsModule,
-    HttpModule, // old
-    HttpClientModule, // new
+    HttpClientModule,
     NgbModule.forRoot(),
     RouterModule.forRoot(routes,{ useHash: true }),
     MapWaldModule.forRoot({paths:routeParameters})

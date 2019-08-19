@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Http } from '@angular/http';
 import {
   MapViewParameterService, TimeseriesService, WMSLayerComponent,
   WMSService, OpendapService, MetadataService,
@@ -20,6 +19,7 @@ import { ContextualDataService } from 'app/contextual-data.service';
 import { ZonalService } from 'app/zonal.service';
 import { StaticSymbol } from '@angular/compiler';
 import { forkJoin } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 class ValueMarker {
   label: string;
@@ -110,7 +110,7 @@ export class MainMapComponent implements OnInit {
     _activatedRoute: ActivatedRoute,
     private selection: SelectionService,
     private mapView: MapViewParameterService,
-    private http: Http,
+    private http: HttpClient,
     private timeseries: TimeseriesService,
     private layers: LayersService,
     private metadata: MetadataService,
@@ -392,9 +392,8 @@ export class MainMapComponent implements OnInit {
   vectorLayerChanged(layer: VectorLayer) {
     this.geoJsonObject = null;
     this.vectorLayer = layer;
-    this.http.get(`assets/selection_layers/${layer.jsonFilename}`).pipe(
-      map((r) => r.json()))
-      .subscribe((data) => {
+    this.http.get(`assets/selection_layers/${layer.jsonFilename}`
+    ).subscribe((data) => {
         this.geoJsonObject = data;
         this.assessZonal();
     });
