@@ -17,7 +17,7 @@ export class DateControlComponent implements OnInit, OnChanges {
   @Input() start:Date;
   @Input() end:Date;
   @Input() layer:VisibleLayer;
-  @ViewChild('d') datePicker: NgbInputDatepicker;
+  @ViewChild('d', { static: true }) datePicker: NgbInputDatepicker;
   minDate:NgbDateStruct;
   maxDate:NgbDateStruct;
 
