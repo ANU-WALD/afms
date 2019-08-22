@@ -427,14 +427,6 @@
           "#noAlertLevelStyle":"NA"
         }
       }
-    },
-    "QLD":{
-      "format":"GeoRSS",
-      "url":"https://www.qfes.qld.gov.au/data/alerts/bushfireAlert.xml",
-      "displayProperty":"description",
-      "icon":{
-        "property":"category"
-      }
     }
   }
 }
