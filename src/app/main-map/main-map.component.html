@@ -1,28 +1,23 @@
 <div class="main-map">
-  <agm-map  [(latitude)]="lat"
-            [(longitude)]="lng"
-            [(zoom)]="zoom"
-            [disableDefaultUI]="false"
-            [mapTypeId]="baseLayer?baseLayer.map_type_id : null"
-            [zoomControl]="false"
-            (mapClick)="mapClick($event)"
-            (centerChange)="moved($event)"
-            (zoomChange)="zoomed($event)"
-            scaleControl="true">
+  <agm-map [(latitude)]="lat" [(longitude)]="lng" [(zoom)]="zoom" [disableDefaultUI]="false" [mapTypeId]="baseLayer?baseLayer.map_type_id : null"
+    [zoomControl]="false" (mapClick)="mapClick($event)" (centerChange)="moved($event)" (zoomChange)="zoomed($event)"
+    [fitBounds]="bounds" scaleControl="true">
 
-  <agm-marker *ngIf="marker"
-              [longitude]="marker.loc.lng"
-              [latitude]="marker.loc.lat">
+    <agm-marker *ngIf="marker" [longitude]="marker.loc.lng" [latitude]="marker.loc.lat">
 
-    <agm-info-window [disableAutoPan]="true" [isOpen]="marker.open">
-      <span *ngIf="!marker.value;then markerValueLoading;else markerValueLoaded"></span>
-      <ng-template #markerValueLoading><i class="fa fa-spinner fa-pulse"
-          aria-hidden="true"></i></ng-template>
-      <ng-template #markerValueLoaded>{{marker.label}}: {{marker.value}}{{mainLayer.layer.suffix}}</ng-template>
-    </agm-info-window>
-  </agm-marker>
+      <agm-info-window [disableAutoPan]="true" [isOpen]="marker.open">
+        <span *ngIf="!marker.value;then markerValueLoading;else markerValueLoaded"></span>
+        <ng-template #markerValueLoading><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></ng-template>
+        <ng-template #markerValueLoaded>{{marker.label}}: {{marker.value}}{{mainLayer.layer.suffix}}
+            <span *ngFor="let c of marker.context">
+              <br/>
+              {{c}}
+            </span>
+        </ng-template>
+      </agm-info-window>
+    </agm-marker>
 
-<!--
+    <!--
       <wms-layer *ngIf="wmsParametersSat" #wmsSat
         [url]="wmsURL"
         [params]="wmsParametersSat"
@@ -37,15 +32,11 @@
         [position]="1">
       </wms-layer>
 -->
-      <wms-layer #wms
-                     *ngIf="mainLayer?.layer"
-                     [url]="mainLayer.url"
-                     [params]="mainLayer.wmsParameters"
-                     [opacity]="mainLayer.opacity"
-                     [position]="0">
-      </wms-layer>
+    <wms-layer #wms *ngIf="mainLayer?.layer&&!zonal" [url]="mainLayer.url" [params]="mainLayer.wmsParameters" [opacity]="mainLayer.opacity"
+      [position]="0">
+    </wms-layer>
 
-<!--
+    <!--
         <wms-layer #wmsMask *ngIf="showMask"
         [url]="maskLayer.url"
         [params]="maskLayer.wmsParameters"
@@ -53,77 +44,148 @@
         [position]="1">
       </wms-layer>
     -->
+    <agm-info-window [(isOpen)]="currentConditions&&showIncidents&&showIncidentDetails" [latitude]="incidentLat" [longitude]="incidentLng">
+      <div [innerHTML]="incidentContent"></div>
+    </agm-info-window>
 
-    <agm-data-layer *ngIf="geoJsonObject"
-                      [geoJson]="geoJsonObject"
-                      (layerClick)="clicked($event)"
-                      [style]="staticStyles">
-      </agm-data-layer>
+    <agm-data-layer *ngIf="currentConditions&&showIncidents&&incidentsData" [geoJson]="incidentsData" (layerClick)="incidentClicked($event)"
+      [style]="incidentStyle"></agm-data-layer>
 
-      <map-control position="TOP_LEFT" class="test">
-        <div class="card dateSearchCard map-control">
-          <div class="card-block control-card-content">
-            <app-date-control [start]="dateRange.start"
-                              [end]="dateRange.end"
-                              [layer]="mainLayer"></app-date-control>
-            <fmc-search (coordinatesSelected)="moveAndZoom($event)"></fmc-search>
+    <agm-data-layer *ngIf="geoJsonObject" [geoJson]="geoJsonObject" (layerClick)="clicked($event)" [style]="vectorStyles">
+    </agm-data-layer>
+
+    <map-control position="TOP_LEFT" class="test">
+      <div>
+        <button-bar>
+          <div>
+            <button class="btn btn-secondary btn-sm" (click)="showWindows = !showWindows" [ngbTooltip]="showWindows?'Hide windows':'Show windows'"
+              placement="right">
+              <i class="fa" [ngClass]="showWindows?'fa-eye-slash':'fa-eye'"></i>
+            </button>
           </div>
-        </div>
-
-        <div class="card layerSelectorCard map-control">
-          <div class="card-block control-card-content">
-            <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
-            <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
-            <fmc-base-layer-selection (baseLayerChanged)="setBaseLayer($event)"></fmc-base-layer-selection>
-            <fmc-layer-opacity-selector (opacityChanged)="setOpacity($event)">
-            </fmc-layer-opacity-selector>
+          <div *ngIf="showWindows">
+            <button class="btn btn-secondary btn-sm" (click)="zoomIn()" [disabled]="zoom===maxZoom" ngbTooltip="Zoom in"
+              placement="right">
+              <i class="fa fa-plus"></i>
+            </button>
           </div>
-        </div>
-      </map-control>
-
-      <map-control position="LEFT_BOTTOM">
-        <div *ngIf="mainLayer?.layer" class="card map-control">
-          <div class="card-block control-card-content">
-            <map-legend [imageURL]="mainLayer.legendImageURL"
-                        [title]="mainLayer.layer.name"
-                        [mapUnits]="mainLayer.layer.units"
-                        [cbPalette]="mainLayer.layer.palette?.name"
-                        [cbCount]="mainLayer.layer.palette?.count"
-                        [cbReverse]="mainLayer.layer.palette?.reverse"
-                        [cbRange]="mainLayer.layer.range"
-                        [colours]="mainLayer.layer.colours"
-                        [labels]="mainLayer.layer.labels"
-                        [helpText]="mainLayer.layer.description"></map-legend>
+          <div *ngIf="showWindows">
+            <button class="btn btn-secondary btn-sm" (click)="zoomOut()" [disabled]="zoom===minZoom" ngbTooltip="Zoom out"
+              placement="right">
+              <i class="fa fa-minus"></i>
+            </button>
           </div>
-        </div>
-      </map-control>
+          <div *ngIf="showWindows">
+            <button class="btn btn-secondary btn-sm" (click)="zoomToFit()" ngbTooltip="Zoom to full extent"
+              placement="right">
+              <i class="fa fa-arrows-alt"></i>
+            </button>
+          </div>
+          <div *ngIf="showWindows">
+            <button class="btn btn-secondary btn-sm" [ngbPopover]="searchPopover" [autoClose]="'outside'" placement="right">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+          <div *ngIf="showWindows">
+            <button class="btn btn-secondary btn-sm" (click)="toggleTransparency()" ngbTooltip="Adjust transparency of grid layer"
+              placement="right">
+              <i class="fa" [ngClass]="(mainLayer?.opacity<0.5)?'fa-circle-o':((mainLayer?.opacity<0.9)?'fa-adjust':'fa-circle')"></i>
+            </button>
+          </div>
+          <div *ngIf="showWindows">
+            <button class="btn btn-secondary btn-sm" (click)="toggleBaseLayer()" ngbTooltip="Toggle base layer"
+              placement="right">
+              <i class="fa" [ngClass]="baseLayer?.label==='Road Map'?'fa-road':'fa-globe'"></i>
+            </button>
+          </div>
+          <div *ngIf="showWindows">
+            <button class="btn btn-secondary btn-sm"
+                    (click)="showIncidents=!showIncidents"
+                    [ngbTooltip]="currentConditions?'Toggle current incidents':'No incident feed available for historical maps'"
+              placement="right">
+              <i class="fa fa-exclamation-triangle"></i>
+            </button>
+          </div>
+          <div *ngIf="showWindows">
+            <button class="btn btn-secondary btn-sm"
+                    (click)="toggleZonal()"
+                    [ngbTooltip]="zonal?'Show detailed grids':'Show region average'"
+                    placement="right"
+                    [disabled]="!zonalAvailable">
+            <i class="fa fa-square-o"></i>
+          </button>
+          </div>
+          <div *ngIf="showWindows && mainLayer?.layer">
+            <a class="btn btn-secondary btn-sm" [href]="mainLayer.downloadURL" target="blank">
+              <i class="fa fa-download"></i>
+            </a>
+          </div>
+        </button-bar>
+      </div>
+    </map-control>
 
-      <map-control position="BOTTOM_CENTER">
-        <div class="card map-control chart">
-          <a (click)="chartIsCollapsed = !chartIsCollapsed">
-            <div class="card-header">
-              <h6 class="mb-0">
-                Chart
-                <span *ngIf="chartIsCollapsed" class="fa fa-angle-up
-                  collapse-arrow" aria-hidden="true"></span>
-                <span *ngIf="!chartIsCollapsed" class="fa fa-angle-down
-                  collapse-arrow" aria-hidden="true"></span>
-              </h6>
+    <map-control position="TOP_CENTER" class="test">
+      <div *ngIf="showWindows" class="card dateSearchCard map-control">
+        <div class="card-block control-card-content">
+          <div class="row">
+            <div class="col">
+              <fmc-layer-control (layerChanged)="layerChanged($event)"></fmc-layer-control>
             </div>
-          </a>
-
-          <div class="ngbCollapse" [ngbCollapse]="chartIsCollapsed">
-            <div class="card-block control-card-content">
-              <app-charts [coordinates]="selectedCoordinates"
-                          [year] = "selection.year"
-                          [layer] = "mainLayer"></app-charts>
+            <div class="col">
+              <app-date-control [start]="dateRange.start" [end]="dateRange.end" [layer]="mainLayer"></app-date-control>
+            </div>
+            <div class="col">
+              <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
             </div>
           </div>
         </div>
-      </map-control>
+      </div>
+      <!--      <div *ngIf="showWindows" class="card layerSelectorCard map-control">
+        <div class="card-block control-card-content">
+          <fmc-base-layer-selection (baseLayerChanged)="setBaseLayer($event)"></fmc-base-layer-selection>
+          <fmc-layer-opacity-selector (opacityChanged)="setOpacity($event)">
+          </fmc-layer-opacity-selector>
 
-</agm-map>
-    <!--
+        </div>
+      </div>
+      -->
+    </map-control>
+
+    <map-control position="LEFT_BOTTOM">
+      <div *ngIf="showWindows && mainLayer?.layer" class="card map-control">
+        <div class="card-block control-card-content">
+          <map-legend [imageURL]="mainLayer.legendImageURL" [title]="mainLayer.layer.name" [mapUnits]="mainLayer.layer.units"
+            [cbPalette]="mainLayer.layer.palette?.name" [cbCount]="mainLayer.layer.palette?.count" [cbReverse]="mainLayer.layer.palette?.reverse"
+            [cbRange]="mainLayer.layer.range" [colours]="mainLayer.layer.colours" [labels]="mainLayer.layer.labels"
+            [helpText]="mainLayer.layer.description"></map-legend>
+        </div>
+      </div>
+    </map-control>
+
+    <map-control position="BOTTOM_CENTER">
+      <div *ngIf="showWindows" class="card map-control chart">
+        <a (click)="chartIsCollapsed = !chartIsCollapsed">
+          <div class="card-header">
+            <h6 class="mb-0">
+              Chart
+              <span *ngIf="chartIsCollapsed" class="fa fa-angle-up
+                  collapse-arrow" aria-hidden="true"></span>
+              <span *ngIf="!chartIsCollapsed" class="fa fa-angle-down
+                  collapse-arrow" aria-hidden="true"></span>
+            </h6>
+          </div>
+        </a>
+
+        <div class="ngbCollapse" [ngbCollapse]="chartIsCollapsed">
+          <div class="card-block control-card-content">
+            <app-charts [coordinates]="selectedCoordinates" [year]="selection.year" [layer]="mainLayer"></app-charts>
+          </div>
+        </div>
+      </div>
+    </map-control>
+
+  </agm-map>
+  <!--
 
       (mapClick)="mapClicked($event)">
 
@@ -149,4 +211,10 @@
           [editable]="true">
       </sebm-google-map-circle>
     -->
+
+  <ng-template #searchPopover>
+    <div class="search-popover">
+      <fmc-search (coordinatesSelected)="moveAndZoom($event)"></fmc-search>
+    </div>
+  </ng-template>
 </div>

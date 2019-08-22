@@ -54,7 +54,13 @@ export class VisibleLayer {
     });
 
     if (this.layer.source === 'tds') {
-      this.url = `${this.layer.host || TDS_URL}/wms/${this.path}`;
+      let base = this.layer.host||TDS_URL;
+      this.url = `${base}/wms/${this.path}`;
+
+      var url = 
+      `${this.path}?service=WCS&version=1.0.0&request=GetCoverage&coverage=${this.layer.variable_name}&format=GeoTIFF_Float&time=${this.dateText(currentDate)}`;
+//T00:00:00Z
+      this.downloadURL = `${base}/wcs/${url}`;
     }
 
     this.wmsParameters = {

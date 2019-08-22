@@ -1,4 +1,4 @@
-import { environment } from '../environments/environment'
+import { environment } from '../environments/environment';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -24,6 +24,8 @@ import { BaseLayerSelectionComponent } from './base-layer-selection/base-layer-s
 import { LayerOpacitySelectorComponent } from './layer-opacity-selector/layer-opacity-selector.component';
 import { AboutComponent } from './about/about.component';
 import { SplashModalComponent } from './splash-modal/splash-modal.component';
+import { BaseLayerService } from './base-layer.service';
+import { ContextualDataService } from './contextual-data.service';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,7 @@ import { SplashModalComponent } from './splash-modal/splash-modal.component';
     MapWaldModule.forRoot({paths:routeParameters})
 ],
   entryComponents: [AboutComponent, SplashModalComponent],
-  providers: [SelectionService,LayersService],
+  providers: [SelectionService,LayersService,BaseLayerService,ContextualDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

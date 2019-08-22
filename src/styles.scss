@@ -12,6 +12,7 @@ $font-family-base:       $font-family-sans-serif;
 
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
 @import '../node_modules/bootstrap/scss/bootstrap';
+@import '../node_modules/map-wald/map-wald.scss';
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
 .gm-style{
@@ -123,4 +124,8 @@ $font-family-base:       $font-family-sans-serif;
 
 .bnhcrc-logo{
   margin-bottom: 6px;
+}
+
+.search-popover{
+  width:250px;
 }

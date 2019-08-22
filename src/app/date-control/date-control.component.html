@@ -1,7 +1,9 @@
 <div class="date-control container-fluid">
   <div class="row pb-1">
-      <button class="btn btn-sm col-2" [disabled]="atMin"
-              (click)="stepBackward()"><i class="fa fa-chevron-left"></i></button>
+      <button class="btn btn-sm col-1" [disabled]="atMin"
+              (click)="stepYear(-1)"><i class="fa fa-lg fa-angle-double-left"></i></button>
+      <button class="btn btn-sm col-1" [disabled]="atMin"
+              (click)="stepBackward()"><i class="fa fa-lg fa-angle-left"></i></button>
       <div class="input-group input-group-sm col px-1">
         <input class="form-control form-control-sm" id="dateInputGroup" placeholder="yyyy-mm-dd"
                name="dp" [(ngModel)]="selection.date" (ngOnChange)="dateChanged()"
@@ -16,7 +18,9 @@
           </span>
         </div>
       </div>
-      <button class="btn btn-sm col-2" [disabled]="atMax"
-              (click)="stepForward()"><i class="fa fa-chevron-right"></i></button>
+      <button class="btn btn-sm col-1" [disabled]="atMax"
+              (click)="stepForward()"><i class="fa fa-lg fa-angle-right"></i></button>
+      <button class="btn btn-sm col-1" [disabled]="atMax"
+              (click)="stepYear(1)"><i class="fa fa-lg fa-angle-double-right"></i></button>
   </div>
 </div>

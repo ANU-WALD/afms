@@ -1,5 +1,5 @@
-<div>
-<!--
+<div class="input-group input-group-sm">
+  <!--
   <div *ngFor="let l of vectorLayers" class="form-group">
     <label>
       <input name="vectorLayerRadios"
@@ -11,12 +11,7 @@
     </label>
   </div>
 -->
-  <div>
-    <select
-            name="vectorLayerSelect"
-            [(ngModel)]="selectedLayer"
-            (ngModelChange)="layerChange($event)">
-      <option *ngFor="let l of vectorLayers"[ngValue]="l">{{l.name}}</option>
-    </select>
-  </div>
+  <select class="form-control form-control-sm" name="vectorLayerSelect" [(ngModel)]="selectedLayer" (ngModelChange)="layerChange($event)">
+    <option *ngFor="let l of vectorLayers" [ngValue]="l">{{l.name}}</option>
+  </select>
 </div>

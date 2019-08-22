@@ -1,12 +1,12 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { BaseLayerService, BaseLayer } from '../base-layer.service'
-import { MapViewParameterService } from 'map-wald';
+import { BaseLayerService } from '../base-layer.service'
+import { MapViewParameterService, BaseLayer } from 'map-wald';
 
 @Component({
   selector: 'fmc-base-layer-selection',
   templateUrl: './base-layer-selection.component.html',
   styleUrls: ['./base-layer-selection.component.scss'],
-  providers: [ BaseLayerService ],
+  providers: [  ],
 })
 export class BaseLayerSelectionComponent implements OnInit {
 
@@ -15,7 +15,7 @@ export class BaseLayerSelectionComponent implements OnInit {
   selectedLayer: BaseLayer;
   layers: BaseLayer[];
 
-  constructor(private baseLayerService: BaseLayerService, 
+  constructor(private baseLayerService: BaseLayerService,
     private mapView: MapViewParameterService) { }
 
   ngOnInit() {
