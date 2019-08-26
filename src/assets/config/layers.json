@@ -114,7 +114,7 @@
       },
       "timestepMultiplier": 4,
       "timestepReference": "{{year}}-01-01",
-      "timeshift":-2,
+      "timeshift":0,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_11_rev",
         "colorscalerange": "1,5",
