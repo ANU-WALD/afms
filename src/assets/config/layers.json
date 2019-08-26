@@ -80,7 +80,7 @@
     },
     {
       "source": "tds",
-      "path": "ub8/au/FMC/c6/mosaics/flam_c6_{{year}}.nc",
+      "path": "ub8/au/FMC/c6/deciles/flam_c6_{{year}}_dc.nc",
       "name": "Flammability (Deciles)",
       "units": "unitless",
       "icon": "fa-fire",
@@ -119,7 +119,8 @@
         "styles": "boxfill/anu_fmc_rdylbu_11_rev",
         "colorscalerange": "1,5",
         "abovemaxcolor": "transparent",
-        "numcolorbands": 11
+        "numcolorbands": 11,
+        "layers":"decile_values"
       },
       "chart_config": {
         "yaxis": {
