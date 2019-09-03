@@ -11,13 +11,11 @@ import { LatLng } from '../latlng';
 import { BaseLayerService } from '../base-layer.service';
 import { LayersService, thredds } from '../layers.service';
 import { DateRange, FMCLayer } from '../layer';
-import { map } from 'rxjs/operators';
 
 import { VisibleLayer } from './visible-layer';
 import { IncidentsService } from 'app/incidents.service';
 import { ContextualDataService } from 'app/contextual-data.service';
 import { ZonalService } from 'app/zonal.service';
-import { StaticSymbol } from '@angular/compiler';
 import { forkJoin } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -39,7 +37,7 @@ export class MainMapComponent implements OnInit {
   @ViewChild('wms', { static: false }) wmsLayer: WMSLayerComponent;
   mainLayer: VisibleLayer;
 
-  currentConditions = true
+  currentConditions = true;
   showWindows = true;
   showIncidents = true;
 
@@ -60,13 +58,13 @@ export class MainMapComponent implements OnInit {
   // initial center position for the map
   lat: number = -22.673858;
   lng = 129.815982;
-  bounds: Bounds = null;
   fullExtent: Bounds = {
     east: 160,
     north: -10,
     south: -45,
     west: 110
   };
+  bounds: Bounds = null;
 
   incidentsData: any = null;
   incidentLng: number;
@@ -121,11 +119,12 @@ export class MainMapComponent implements OnInit {
     private zonalService:ZonalService,
     private palettes:PaletteService) {
 
+    this.zoomToFit();
 
     this.mainLayer = new VisibleLayer(null, null);
 
-    this.layers.availableLayers.subscribe(layers => {
-      this.layerChanged(layers[0]);
+    this.layers.availableLayers.subscribe(overlayLayers => {
+      this.layerChanged(overlayLayers[0]);
       this.selection.loadFromURL(_activatedRoute);
       this.selection.dateChange.subscribe((newDate: Date) => {
         this.setDate(newDate);
@@ -157,19 +156,19 @@ export class MainMapComponent implements OnInit {
     }
 
     this.incidents.all().subscribe(data => {
-      this.incidentsData = data
+      this.incidentsData = data;
     });
 
     this.baseLayerService.getLayers()
-      .then(layers => {
-        var params = this.mapView.current();
+      .then(baseLayers => {
+        const params = this.mapView.current();
         if (params.base_layer && params.base_layer !== '_') {
-          this.baseLayer = layers.find(l => decodeURIComponent(
+          this.baseLayer = baseLayers.find(l => decodeURIComponent(
             l.map_type_id) === decodeURIComponent(params.base_layer));
         }
 
         if (!this.baseLayer) {
-          this.baseLayer = layers[0];
+          this.baseLayer = baseLayers[0];
         }
       });
   }
