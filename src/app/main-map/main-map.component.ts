@@ -405,7 +405,9 @@ export class MainMapComponent implements OnInit {
     this.zonalAvailable = (this.mainLayer&&this.mainLayer.layer.zonal) &&
                           (this.vectorLayer&&this.vectorLayer.zonal);
     this.zonal = this.zonalAvailable;
-    if(!this.zonal){
+    if(this.zonal){
+      this.updateZonal();
+    } else {
       this.vectorStyles = this.staticStyles;
     }
   }
@@ -448,6 +450,14 @@ export class MainMapComponent implements OnInit {
     return {
       icon: icon
     };
+  }
+
+  zonalChanged(){
+    this.vectorStyles = this.staticStyles;
+
+    if(this.zonal){
+      this.updateZonal();
+    }
   }
 
   toggleZonal(){

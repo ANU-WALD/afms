@@ -137,6 +137,15 @@
             <div class="col">
               <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
             </div>
+            <div class="col">
+              <select class="form-control form-control-sm"
+                      [disabled]="!zonalAvailable"
+                      [(ngModel)]="zonal"
+                      (ngModelChange)="zonalChanged()">
+                  <option [ngValue]="false">Grid</option>
+                  <option [ngValue]="true">Zonal</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
