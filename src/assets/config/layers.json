@@ -480,6 +480,16 @@
           "#noAlertLevelStyle":"NA"
         }
       }
+    },
+    "QLD":{
+      "format":"GeoRSS",
+      "cors":true,
+      "url":"https://proxies.hydrograph.io/qld-qfes/data/alerts/bushfireAlert.xml",
+      "urlOrig":"https://www.qfes.qld.gov.au/data/alerts/bushfireAlert.xml",
+      "displayProperty":"description",
+      "icon":{
+        "property":"category"
+      }
     }
   }
 }
