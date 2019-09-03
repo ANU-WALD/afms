@@ -15,6 +15,8 @@ export class ZonalService {
   constructor(private _http:HttpClient) { }
 
   getForDate(layer:FMCLayer,polygons:VectorLayer,date:UTCDate):Observable<TableRow>{
+    date = layer.effectiveDate(date);
+
     let params = {
       variable_name:layer.variable_name,
       vector_name:polygons.baseFilename()
