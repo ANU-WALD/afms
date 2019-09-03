@@ -116,10 +116,10 @@
       "timestepReference": "{{year}}-01-01",
       "timeshift":-2,
       "wms_params": {
-        "styles": "boxfill/anu_fmc_rdylbu_11_rev",
-        "colorscalerange": "1,5",
+        "styles": "boxfill/anu_fmc_rdylbu_9_rev",
+        "colorscalerange": "0.5,9.5",
         "abovemaxcolor": "transparent",
-        "numcolorbands": 11,
+        "numcolorbands": 9,
         "layers":"decile_values"
       },
       "chart_config": {
@@ -142,10 +142,10 @@
         "image": false,
         "name": "RdYlBu",
         "count": 9,
-        "reverse": true
+        "reverse": false
       },
       "labels":[
-        "Very much above",
+        "Very much above average",
         "",
         "Above average",
         "",
@@ -153,7 +153,7 @@
         "",
         "Below average",
         "",
-        "Very much below"
+        "Very much below average"
       ],
       "precision":1,
       "range": [
@@ -168,10 +168,10 @@
       "timestepReference": "{{year}}-01-01",
       "timeshift":-2,
       "wms_params": {
-        "styles": "boxfill/anu_fmc_rdylbu_11_rev",
-        "colorscalerange": "1,5",
+        "styles": "boxfill/anu_fmc_rdylbu_9",
+        "colorscalerange": "0.5,9.5",
         "abovemaxcolor": "transparent",
-        "numcolorbands": 11,
+        "numcolorbands": 9,
         "layers":"decile_values"
       },
       "chart_config": {
