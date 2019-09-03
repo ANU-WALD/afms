@@ -368,8 +368,11 @@ export class MainMapComponent implements OnInit {
     const opacity = this.mainLayer.opacity;
     let date: UTCDate;
     if (this.selection.year === 0) {
-      date = layer.previousTimeStep(layer.previousTimeStep(layer.previousTimeStep(layer.timePeriod.end)));
-      // TODO Find latest available!
+      const TIMESTEP_GRACE = 0;
+      date = layer.timePeriod.end;
+      for(let i=0;i<=TIMESTEP_GRACE;i++){
+        date = layer.previousTimeStep(date);
+      }
     }
     this.mainLayer = new VisibleLayer(layer);
     this.mainLayer.opacity = opacity;
