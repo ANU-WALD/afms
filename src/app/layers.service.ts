@@ -18,6 +18,7 @@ interface Config {
 export interface IncidentFeed{
   hide:boolean;
   url:string;
+  cors:boolean;
   format:'GeoJSON'|'GeoRSS'|'KML'|'Custom';
   displayProperty:string;
   icon:{

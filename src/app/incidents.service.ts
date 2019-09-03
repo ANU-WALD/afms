@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { of, Observable, forkJoin } from 'rxjs';
 import { LayersService, IncidentFeed } from './layers.service';
-import { map, switchAll, tap } from 'rxjs/operators';
+import { map, switchAll, tap, catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
 const CORS_PROXY='https://cors-anywhere.herokuapp.com/';
@@ -26,9 +26,9 @@ export class IncidentsService {
       const features = json.map(evt=>{
         let geom:any;
         if(evt.polygon.coordinates.length>1){
-          let coords:number[] = evt.polygon.coordinates.map(c=>+c);
-          let coordinates:number[][] = [];
-          for(var i = 0; i < coords.length; i+=2){
+          const coords:number[] = evt.polygon.coordinates.map(c=>+c);
+          const coordinates:number[][] = [];
+          for(let i = 0; i < coords.length; i+=2){
             coordinates.push([coords[i+1],coords[i]]);
           }
           geom = {
@@ -71,7 +71,7 @@ export class IncidentsService {
               private http:HttpClient) { }
 
   private get(feed:IncidentFeed,name:string):Observable<any> {
-    const url = `${CORS_PROXY}${feed.url}`;
+    const url = `${feed.cors?'':CORS_PROXY}${feed.url}`;
     if(feed.hide){
       return of({
         features:[]
@@ -192,6 +192,11 @@ export class IncidentsService {
       map(feeds=>{
         const keys = Object.keys(feeds);
         const obs$ = keys.map(k=>this.get(feeds[k],k).pipe(
+          catchError(err=>{
+            return of({
+              features:[]
+            });
+          }),
           tap(feed=>{
             const icon = feeds[k].icon;
             feed.features.forEach(f=>{
