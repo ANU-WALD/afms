@@ -127,7 +127,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
     forkJoin(observables)
       .subscribe((data) => {
           this.setFullTimeSeries(data);
-          const chartTimestamps: UTCDate[] = data[data.length-1].dates;
+          const chartTimestamps: UTCDate[] = data[1].dates;
 
           let values = chartTimestamps.map((_,i)=>data.map(ts=>ts.values[i]).filter(v=>!isNaN(v)));
           let minimums = values.map(vals=>Math.min(...vals));
