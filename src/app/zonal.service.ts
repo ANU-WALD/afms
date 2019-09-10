@@ -40,7 +40,7 @@ export class ZonalService {
       map(rows=>{
         let result:any = {};
         rows.forEach(row => {
-          result[row.plg_id] = row.avg;
+          result[row.plg_id] = (row.avg==='')?NaN:+row.avg;
         });
         return result;
       })
