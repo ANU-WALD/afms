@@ -89,7 +89,7 @@ export class ContextualDataService {
   private rangeQuery(c:number,window:number,values:number[]):string{
     const indexMin = this.ts.indexInDimension(c-window, values);
     const indexMax = this.ts.indexInDimension(c+window, values);
-    const range = [indexMin,indexMax].sort()
+    const range = [indexMin,indexMax].sort((a,b)=>a-b);
     return this.ts.dapRangeQuery(range[0],range[1]);
   }
 
