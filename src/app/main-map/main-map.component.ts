@@ -16,7 +16,7 @@ import { VisibleLayer } from './visible-layer';
 import { IncidentsService } from 'app/incidents.service';
 import { ContextualDataService } from 'app/contextual-data.service';
 import { ZonalService } from 'app/zonal.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 class ValueMarker {
@@ -96,6 +96,10 @@ export class MainMapComponent implements OnInit {
   };
 
   vectorStyles = this.staticStyles;
+
+  tsSubscription:Subscription;
+  landcoverSubscription:Subscription;
+  contextualSubscription:Subscription;
 
   static constrainCoords(ll: LatLng) {
     return {
@@ -278,12 +282,25 @@ export class MainMapComponent implements OnInit {
   updateContextualData(){
     this.marker.context = [];
 
-    this.contextualData.landcover(this.selection.year,this.marker.loc).subscribe(lc => {
+    if(this.landcoverSubscription){
+      this.landcoverSubscription.unsubscribe();
+    }
+    if(this.contextualSubscription){
+      this.contextualSubscription.unsubscribe();
+    }
+
+    this.landcoverSubscription = this.contextualData.landcover(this.selection.year,this.marker.loc).subscribe(lc => {
       this.marker.context.unshift(`Land cover: ${lc}`);
+      this.landcoverSubscription = null;
     });
 
-    this.contextualData.contextualData(this.mainLayer.layer,this.selection.effectiveDate(),this.marker.loc).subscribe(data=>{
+    this.contextualSubscription = this.contextualData.contextualData(
+      this.mainLayer.layer,
+      this.selection.effectiveDate(),
+      this.marker.loc).subscribe(data=>{
+
       this.marker.context = this.marker.context.concat(Object.keys(data).map(k=>`${k}: ${data[k]}`));
+      this.contextualSubscription = null;
     });
   }
 
@@ -313,7 +330,11 @@ export class MainMapComponent implements OnInit {
       return;
     }
 
-    this.timeseries.getTimeseries(this.mainLayer.host, fn,
+    if(this.tsSubscription){
+      this.tsSubscription.unsubscribe();
+    }
+
+    this.tsSubscription = this.timeseries.getTimeseries(this.mainLayer.host, fn,
       this.mainLayer.layer.variable_name,
       coords,
       this.mainLayer.layer.indexing)// ,year)
@@ -327,10 +348,12 @@ export class MainMapComponent implements OnInit {
         this.currentYearDataForLocation.year = year;
         this.currentYearDataForLocation.coords = coords;
         this.updateMarker();
+        this.tsSubscription = null;
       },
-        error => {
-          console.log(error);
-        });
+      error => {
+        console.log(error);
+        this.tsSubscription = null;
+      });
   }
 
   updateMarker() {
