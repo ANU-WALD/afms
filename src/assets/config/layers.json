@@ -320,7 +320,7 @@
         "level": 1
       },
       "wms_params": {
-        "elevation": 0.25,
+        "elevation": -0.25,
         "styles": "boxfill/rdylbu_11",
         "colorscalerange": "0,0.5",
         "abovemaxcolor": "extend",
