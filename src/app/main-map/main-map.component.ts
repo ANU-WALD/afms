@@ -201,6 +201,10 @@ export class MainMapComponent implements OnInit {
     if (this.mainLayer.opacity < 0) {
       this.mainLayer.opacity = 1.0;
     }
+
+    if(this.zonal){
+      this.updateZonal();
+    }
   }
 
   toggleBaseLayer() {
@@ -528,6 +532,7 @@ export class MainMapComponent implements OnInit {
     const zonalValue = this.zonalValues[id]
 
     const result = Object.assign({},this.dynamicStyles);
+    result.fillOpacity = this.mainLayer.opacity;
 
     if(isNaN(zonalValue)){
       result.fillOpacity = 0.0;
