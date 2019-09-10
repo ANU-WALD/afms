@@ -502,15 +502,19 @@ export class MainMapComponent implements OnInit {
     if(!isNaN(+id)){
       id = +id;
     }
-    let zonalValue = this.zonalValues[id]
+    const zonalValue = this.zonalValues[id]
 
-    let result = Object.assign({},this.dynamicStyles);
+    const result = Object.assign({},this.dynamicStyles);
 
-    let colourIndex = this.palettes.colourIndex(zonalValue,
-                                                this.mainLayer.layer.range[0],
-                                                this.mainLayer.layer.range[1],
-                                                this.zonalPalette.length)
-    result.fillColor = this.zonalPalette[colourIndex];
+    if(isNaN(zonalValue)){
+      result.fillOpacity = 0.0;
+    } else {
+      const colourIndex = this.palettes.colourIndex(zonalValue,
+        this.mainLayer.layer.range[0],
+        this.mainLayer.layer.range[1],
+        this.zonalPalette.length)
+      result.fillColor = this.zonalPalette[colourIndex];
+    }
     return result;
   }
 }
