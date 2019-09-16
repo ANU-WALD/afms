@@ -9,6 +9,7 @@ import { environment } from 'environments/environment';
 
 const ZONAL_URL='{{tds}}/dodsC/ub8/au/FMC/c6/deciles/zonal_stats/{{vector_name}}_{{variable_name}}_zonal_stat.nc';
 const ZONAL_URL_CSV='assets/deciles/{{vector_name}}_{{variable_name}}.csv';
+const DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD=85;
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,11 @@ export class ZonalService {
               private _meta: MetadataService,
               private _dap:OpendapService) { }
 
-  getForDate(layer:FMCLayer,polygons:VectorLayer,date:UTCDate):Observable<TableRow>{
+  getForDate(layer:FMCLayer,polygons:VectorLayer,date:UTCDate,coverageThreshold?:number):Observable<TableRow>{
+    if(coverageThreshold===undefined){
+      coverageThreshold = DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD;
+    }
+
     date = layer.effectiveDate(date);
 
     const params = {
@@ -49,7 +54,7 @@ export class ZonalService {
           closest = deltas.indexOf(Math.min(...deltas));
         }
         const dateQuery = this._dap.dapRangeQuery(closest);
-        const queryUrl = `${url}.ascii?avg${dateQuery}`;
+        const queryUrl = `${url}.ascii?avg${dateQuery},coverage${dateQuery}`;
         return this._dap.getData(queryUrl,meta.das);
       }),
       switchAll(),
@@ -57,7 +62,14 @@ export class ZonalService {
         const result:any = {};
         const ids = <number[]>data.plg_id;
         const vals = <number[]>data.avg;
-        ids.forEach((plg_id,i)=>result[plg_id]=vals[i]);
+        const cov = <number[]>data.coverage;
+        ids.forEach((plg_id,i)=>{
+          if(cov[i]<coverageThreshold){
+            result[plg_id]=NaN;
+          } else {
+            result[plg_id]=vals[i];
+          }
+        });
         return result;
       })
     );
