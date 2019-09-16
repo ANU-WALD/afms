@@ -5,12 +5,14 @@
       "title": "Local Government Areas",
       "name_field": "LGA_NAME11",
       "id_field": "LGA_CODE11",
-      "zonal": true
+      "zonal": "LGA"
     },
     {
       "filename": "gfe_fire_weather.json",
       "title": "Fire Weather Areas",
-      "name_field": "DIST_NAME"
+      "name_field": "DIST_NAME",
+      "id_field":"plg_id",
+      "zonal":"FWA"
     },
     {
       "filename": "states4326.json",
