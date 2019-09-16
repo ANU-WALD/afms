@@ -106,15 +106,6 @@
               <i class="fa fa-exclamation-triangle"></i>
             </button>
           </div>
-          <div *ngIf="showWindows">
-            <button class="btn btn-secondary btn-sm"
-                    (click)="toggleZonal()"
-                    [ngbTooltip]="zonal?'Show detailed grids':'Show region average'"
-                    placement="right"
-                    [disabled]="!zonalAvailable">
-            <i class="fa fa-square-o"></i>
-          </button>
-          </div>
           <div *ngIf="showWindows && mainLayer?.layer">
             <a class="btn btn-secondary btn-sm" [href]="mainLayer.downloadURL" target="blank">
               <i class="fa fa-download"></i>

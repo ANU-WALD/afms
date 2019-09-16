@@ -487,15 +487,6 @@ export class MainMapComponent implements OnInit {
     }
   }
 
-  toggleZonal(){
-    this.vectorStyles = this.staticStyles;
-    this.zonal=!this.zonal;
-
-    if(this.zonal){
-      this.updateZonal();
-    }
-  }
-
   updateZonal(){
     let values$ = this.zonalService.getForDate(this.mainLayer.layer,
       this.vectorLayer,
