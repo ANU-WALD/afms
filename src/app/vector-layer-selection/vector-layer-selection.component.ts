@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 export class VectorLayer {
   constructor(public jsonFilename: string, public name: string, public nameField: string,
-              public idField:string, public zonal: boolean) {
+              public idField:string, public zonal: string) {
   }
 
   baseFilename():string{

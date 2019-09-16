@@ -128,7 +128,7 @@
           "fixed": true
         }
       },
-      "zonal":true
+      "zonal":"flam"
     },
     {
       "source": "tds",
@@ -180,7 +180,7 @@
           "fixed": true
         }
       },
-      "zonal":true
+      "zonal":"fmc"
     },
     {
       "source": "tds",

@@ -430,7 +430,7 @@ export class MainMapComponent implements OnInit {
 
   assessZonal() {
     this.zonalAvailable = (this.mainLayer&&this.mainLayer.layer.zonal) &&
-                          (this.vectorLayer&&this.vectorLayer.zonal);
+                          (this.vectorLayer&&!!this.vectorLayer.zonal);
     this.zonal = this.zonalAvailable;
     if(this.zonal){
       this.updateZonal();
