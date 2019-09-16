@@ -64,14 +64,14 @@ export class SelectionService {
   // Constrain the selected date to be within the
   // configured range (if any).
   // Returns true if the date was changed, false otherwise
-  private constrain(): boolean{
+  constrain(): boolean{
     if(!this.currentLayer){
       return false;
     }
 
     var now = this.effectiveDate();
     if(now<this.range.start){
-      this.goto(this.currentLayer.layer.nextTimeStep(now));
+      this.goto(this.currentLayer.layer.nextTimeStep(this.range.start));
       return true;
     }
 
@@ -113,8 +113,8 @@ export class SelectionService {
   dateChange: EventEmitter<UTCDate> = new EventEmitter<UTCDate>();
 
   effectiveDate():UTCDate{
-    return this.currentLayer.layer.mostRecentTimestep(
-      new Date(Date.UTC(this._struct.year,this._struct.month-1,this._struct.day)));
+    const current = new Date(Date.UTC(this._struct.year,this._struct.month-1,this._struct.day));
+    return this.currentLayer.layer.mostRecentTimestep(current) || current;
   }
 }
 

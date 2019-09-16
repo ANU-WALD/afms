@@ -406,6 +406,8 @@ export class MainMapComponent implements OnInit {
     this.mainLayer.opacity = opacity;
     this.mainLayer.host = thredds(layer.host);
     this.selection.currentLayer = this.mainLayer;
+    this.selection.constrain();
+
     this.dateRange = layer.timePeriod;
     if (date) {
       this.selection.date = {
