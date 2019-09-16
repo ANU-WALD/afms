@@ -518,6 +518,13 @@ export class MainMapComponent implements OnInit {
       } else {
         this.vectorStyles = this.staticStyles;
       }
+
+      if(this.showIncidents){
+        this.showIncidents=false;
+        setTimeout(()=>{
+          this.showIncidents=true;
+        });
+      }
     });
   }
 
