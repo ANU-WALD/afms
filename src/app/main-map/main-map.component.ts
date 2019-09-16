@@ -15,7 +15,7 @@ import { DateRange, FMCLayer } from '../layer';
 import { VisibleLayer } from './visible-layer';
 import { IncidentsService } from 'app/incidents.service';
 import { ContextualDataService } from 'app/contextual-data.service';
-import { ZonalService } from 'app/zonal.service';
+import { ZonalService, DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD } from 'app/zonal.service';
 import { forkJoin, Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -51,6 +51,8 @@ export class MainMapComponent implements OnInit {
   zoom = 4;
 
   zonal=false;
+  zonalFilter=-1;
+  zonalThreshold=undefined;
   zonalAvailable=false;
   zonalValues:any;
   zonalPalette:ColourPalette;
@@ -490,7 +492,9 @@ export class MainMapComponent implements OnInit {
   updateZonal(){
     let values$ = this.zonalService.getForDate(this.mainLayer.layer,
       this.vectorLayer,
-      this.selection.effectiveDate());
+      this.selection.effectiveDate(),
+      this.zonalThreshold,
+      (this.zonalFilter>=0)?this.zonalFilter:undefined);
 
     let colours$ = this.palettes.getPalette(this.mainLayer.layer.palette.name,
       this.mainLayer.layer.palette.reverse,

@@ -9,7 +9,8 @@ import { environment } from 'environments/environment';
 
 const ZONAL_URL='{{tds}}/dodsC/ub8/au/FMC/c6/deciles/zonal_stats/{{vector_name}}_{{variable_name}}_zonal_stat.nc';
 const ZONAL_URL_CSV='assets/deciles/{{vector_name}}_{{variable_name}}.csv';
-const DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD=85;
+export const DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD=85;
+export const DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD_SINGLE_COVER=33;
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +20,20 @@ export class ZonalService {
               private _meta: MetadataService,
               private _dap:OpendapService) { }
 
-  getForDate(layer:FMCLayer,polygons:VectorLayer,date:UTCDate,coverageThreshold?:number):Observable<TableRow>{
-    if(coverageThreshold===undefined){
-      coverageThreshold = DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD;
+  getForDate(layer:FMCLayer,polygons:VectorLayer,date:UTCDate,coverageThreshold?:number,landcover?:number):Observable<TableRow>{
+    let landcoverStr = '';
+    if(landcover!==undefined){
+      landcoverStr = `_${landcover}`;
     }
+
+    if(coverageThreshold===undefined){
+      coverageThreshold = landcover===undefined ?
+        DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD :
+        DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD_SINGLE_COVER;
+    }
+
+    const avgVar = `avg${landcoverStr}`;
+    const covVar = `coverage${landcoverStr}`;
 
     date = layer.effectiveDate(date);
 
@@ -54,15 +65,15 @@ export class ZonalService {
           closest = deltas.indexOf(Math.min(...deltas));
         }
         const dateQuery = this._dap.dapRangeQuery(closest);
-        const queryUrl = `${url}.ascii?avg${dateQuery},coverage${dateQuery}`;
+        const queryUrl = `${url}.ascii?${avgVar}${dateQuery},${covVar}${dateQuery}`;
         return this._dap.getData(queryUrl,meta.das);
       }),
       switchAll(),
       map(data=>{
         const result:any = {};
         const ids = <number[]>data.plg_id;
-        const vals = <number[]>data.avg;
-        const cov = <number[]>data.coverage;
+        const vals = <number[]>data[avgVar];
+        const cov = <number[]>data[covVar];
         ids.forEach((plg_id,i)=>{
           if(cov[i]<coverageThreshold){
             result[plg_id]=NaN;
