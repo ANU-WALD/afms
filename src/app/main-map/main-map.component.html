@@ -3,7 +3,7 @@
     [zoomControl]="false" (mapClick)="mapClick($event)" (centerChange)="moved($event)" (zoomChange)="zoomed($event)"
     [fitBounds]="bounds" scaleControl="true">
 
-    <agm-marker *ngIf="marker" [longitude]="marker.loc.lng" [latitude]="marker.loc.lat">
+    <agm-marker *ngIf="marker&&!zonal" [longitude]="marker.loc.lng" [latitude]="marker.loc.lat">
 
       <agm-info-window [disableAutoPan]="true" [isOpen]="marker.open">
         <span *ngIf="!marker.value;then markerValueLoading;else markerValueLoaded"></span>
@@ -175,7 +175,7 @@
     </map-control>
 
     <map-control position="BOTTOM_CENTER">
-      <div *ngIf="showWindows" class="card map-control chart">
+      <div *ngIf="showWindows&&!zonal" class="card map-control chart">
         <a (click)="chartIsCollapsed = !chartIsCollapsed">
           <div class="card-header">
             <h6 class="mb-0">
