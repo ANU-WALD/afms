@@ -48,6 +48,9 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
   ngOnInit() {
     this.node = this._element.nativeElement.querySelector('.our-chart');
+    if(this.hasBeenLoaded){
+      this.updateChart();
+    }
   }
 
   ngOnChanges(event) {
@@ -93,6 +96,10 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
     this.havePlot = false;
     this.hasBeenLoaded = true;
+
+    if(!this.node){
+      return;
+    }
 
     Plotly.purge(this.node);
 
