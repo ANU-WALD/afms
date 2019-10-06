@@ -18,6 +18,7 @@ import { ContextualDataService } from 'app/contextual-data.service';
 import { ZonalService, DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD } from 'app/zonal.service';
 import { forkJoin, Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { AgmMap } from '@agm/core';
 
 class ValueMarker {
   label: string;
@@ -33,6 +34,7 @@ class ValueMarker {
   styleUrls: ['./main-map.component.scss']
 })
 export class MainMapComponent implements OnInit {
+  @ViewChild('theMap', {static: false}) theMap: AgmMap;
   @ViewChild('mapDiv', { static: false }) mapDiv: Component;
   @ViewChild('wms', { static: false }) wmsLayer: WMSLayerComponent;
   mainLayer: VisibleLayer;
@@ -433,6 +435,7 @@ export class MainMapComponent implements OnInit {
   }
 
   assessZonal() {
+    const prev = this.zonalAvailable;
     this.zonalAvailable = (this.mainLayer&&this.mainLayer.layer.zonal) &&
                           (this.vectorLayer&&!!this.vectorLayer.zonal);
     this.zonal = this.zonal && this.zonalAvailable;
@@ -440,6 +443,10 @@ export class MainMapComponent implements OnInit {
       this.updateZonal();
     } else {
       this.vectorStyles = this.staticStyles;
+    }
+
+    if(prev!==this.zonalAvailable){
+      this.theMap.triggerResize();
     }
   }
 
@@ -489,6 +496,8 @@ export class MainMapComponent implements OnInit {
     if(this.zonal){
       this.updateZonal();
     }
+
+    this.theMap.triggerResize();
   }
 
   updateZonal(){

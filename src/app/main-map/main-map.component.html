@@ -1,7 +1,16 @@
 <div class="main-map">
-  <agm-map [(latitude)]="lat" [(longitude)]="lng" [(zoom)]="zoom" [disableDefaultUI]="false" [mapTypeId]="baseLayer?baseLayer.map_type_id : null"
-    [zoomControl]="false" (mapClick)="mapClick($event)" (centerChange)="moved($event)" (zoomChange)="zoomed($event)"
-    [fitBounds]="bounds" scaleControl="true">
+  <agm-map #theMap
+           [(latitude)]="lat"
+           [(longitude)]="lng"
+           [(zoom)]="zoom"
+           [disableDefaultUI]="false"
+           [mapTypeId]="baseLayer?baseLayer.map_type_id : null"
+           [zoomControl]="false"
+           (mapClick)="mapClick($event)"
+           (centerChange)="moved($event)"
+           (zoomChange)="zoomed($event)"
+           [fitBounds]="bounds"
+           scaleControl="true">
 
     <agm-marker *ngIf="marker&&!zonal" [longitude]="marker.loc.lng" [latitude]="marker.loc.lat">
 
@@ -128,7 +137,7 @@
             <div class="col">
               <fmc-vector-layer-selection (selectedLayerChanged)="vectorLayerChanged($event)"></fmc-vector-layer-selection>
             </div>
-            <div class="col">
+            <div class="col" *ngIf="zonalAvailable">
               <select class="form-control form-control-sm"
                       [disabled]="!zonalAvailable"
                       [(ngModel)]="zonal"
@@ -137,7 +146,7 @@
                   <option [ngValue]="true">Zonal</option>
               </select>
             </div>
-            <div class="col">
+            <div class="col" *ngIf="zonalAvailable&&zonal">
               <select class="form-control form-control-sm"
                       [disabled]="!zonalAvailable||!zonal"
                       [(ngModel)]="zonalFilter"
