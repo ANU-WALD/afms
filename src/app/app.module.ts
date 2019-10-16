@@ -8,7 +8,8 @@ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { AgmCoreModule } from '@agm/core';
-import { MapWaldModule } from 'map-wald';
+import { MapWaldCoreModule} from 'map-wald';
+import { MapWaldBootstrapModule } from 'map-wald-visual';
 
 import { SelectionService } from './selection.service';
 import { LayersService } from './layers.service';
@@ -49,7 +50,8 @@ import { ContextualDataService } from './contextual-data.service';
     HttpClientModule,
     NgbModule.forRoot(),
     RouterModule.forRoot(routes,{ useHash: true }),
-    MapWaldModule.forRoot({paths:routeParameters})
+    MapWaldCoreModule.forRoot({paths:routeParameters}),
+    MapWaldBootstrapModule
 ],
   entryComponents: [AboutComponent, SplashModalComponent],
   providers: [SelectionService,LayersService,BaseLayerService,ContextualDataService],

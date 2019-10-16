@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
-  MapViewParameterService, TimeseriesService, WMSLayerComponent,
+  MapViewParameterService, TimeseriesService,
   WMSService, OpendapService, MetadataService,
-  UTCDate, Bounds, BaseLayer, PaletteService, ColourPalette
+  UTCDate, Bounds, PaletteService, ColourPalette
 } from 'map-wald';
+import { BaseLayer, WMSLayerComponent } from 'map-wald-visual';
 import { SelectionService } from '../selection.service';
 import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.component';
 import { LatLng } from '../latlng';
