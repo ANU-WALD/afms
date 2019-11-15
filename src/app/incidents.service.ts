@@ -71,7 +71,14 @@ export class IncidentsService {
               private http:HttpClient) { }
 
   private get(feed:IncidentFeed,name:string):Observable<any> {
-    const url = `${feed.cors?'':CORS_PROXY}${feed.url}`;
+    let url = `${feed.cors?'':CORS_PROXY}${feed.url}`;
+    if(url.indexOf('?')<0){
+      url += '?';
+    } else {
+      url += '&'
+    }
+    url += `_time=${(new Date()).getTime()}`;
+
     if(feed.hide){
       return of({
         features:[]
