@@ -463,7 +463,9 @@ export class MainMapComponent implements OnInit {
     let tmp = incident.feature.getGeometry();
     let geo;
     if (tmp.getLength) {
-      geo = tmp.getAt(0).get();
+//      geo = tmp.getAt(0).get();
+      this.clicked(incident);
+      return;
     } else {
       geo = tmp.get();
     }
