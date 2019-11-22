@@ -17,9 +17,11 @@ import { VisibleLayer } from './visible-layer';
 import { IncidentsService } from 'app/incidents.service';
 import { ContextualDataService } from 'app/contextual-data.service';
 import { ZonalService, DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD } from 'app/zonal.service';
-import { forkJoin, Subscription } from 'rxjs';
+import { forkJoin, Subscription, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AgmMap } from '@agm/core';
+import { DatesService } from 'app/dates.service';
+import { tap } from 'rxjs/operators';
 
 class ValueMarker {
   label: string;
@@ -126,7 +128,8 @@ export class MainMapComponent implements OnInit {
     private baseLayerService: BaseLayerService,
     private contextualData:ContextualDataService,
     private zonalService:ZonalService,
-    private palettes:PaletteService) {
+    private palettes:PaletteService,
+    private datesService:DatesService) {
 
     this.zoomToFit();
 
@@ -397,32 +400,47 @@ export class MainMapComponent implements OnInit {
 
   layerChanged(layer: FMCLayer) {
     const opacity = this.mainLayer.opacity;
-    let date: UTCDate;
-    if (this.selection.year === 0) {
-      const TIMESTEP_GRACE = 0;
-      date = layer.timePeriod.end;
-      for(let i=0;i<=TIMESTEP_GRACE;i++){
-        date = layer.previousTimeStep(date);
-      }
-    }
     this.mainLayer = new VisibleLayer(layer);
     this.mainLayer.opacity = opacity;
     this.mainLayer.host = thredds(layer.host);
-    this.selection.currentLayer = this.mainLayer;
-    this.selection.constrain();
 
-    this.dateRange = layer.timePeriod;
-    if (date) {
-      this.selection.date = {
-        year: date.getUTCFullYear(),
-        month: date.getUTCMonth() + 1,
-        day: date.getUTCDate()
-      };
+    let date: UTCDate;
+    let dateInit$:Observable<any>;
+    if (this.selection.year === 0) {
+      const endYear = layer.timePeriod.end.getUTCFullYear();
+
+      // const TIMESTEP_GRACE = 0;
+      // date = layer.mostRecentTimestep(layer.timePeriod.end);
+      // for(let i=0;i<TIMESTEP_GRACE;i++){
+      //   date = layer.previousTimeStep(date);
+      // }
+      dateInit$ = this.datesService.availableDates(this.mainLayer,endYear).pipe(
+        tap(dates=>{
+          // Select last...
+          date = dates[dates.length-1]
+        })
+      );
+    } else {
+      dateInit$ = of(null);
     }
-    this.mainLayer.setDate(this.selection.effectiveDate());
 
-    this.reloadMarkerData();
-    this.assessZonal();
+    dateInit$.subscribe(_=>{
+      this.selection.currentLayer = this.mainLayer;
+      this.selection.constrain();
+
+      this.dateRange = layer.timePeriod;
+      if (date) {
+        this.selection.date = {
+          year: date.getUTCFullYear(),
+          month: date.getUTCMonth() + 1,
+          day: date.getUTCDate()
+        };
+      }
+      this.mainLayer.setDate(this.selection.effectiveDate());
+
+      this.reloadMarkerData();
+      this.assessZonal();
+    });
   }
 
   vectorLayerChanged(layer: VectorLayer) {
