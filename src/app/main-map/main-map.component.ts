@@ -498,7 +498,7 @@ export class MainMapComponent implements OnInit {
       this.updateZonal();
     }
 
-    this.theMap.triggerResize();
+    this.theMap.triggerResize(false);
   }
 
   updateZonal(){
