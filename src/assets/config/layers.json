@@ -368,7 +368,7 @@
       "url":"https://emergency.vic.gov.au/public/osom-geojson.json",
       "displayProperty":"category2",
       "icon":{
-        "property":"category",
+        "property":"category1",
         "translation":{
           "ar-road":"NA",
           "ar-rescue":"NA",
@@ -438,6 +438,7 @@
       "displayProperty":"description",
       "icon":{
         "property":"styleUrl",
+        "default":"#adviceStyle",
         "translation":{
           "other":"NA",
           "#adviceStyle":"Advice",

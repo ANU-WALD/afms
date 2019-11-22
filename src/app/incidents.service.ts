@@ -209,7 +209,7 @@ export class IncidentsService {
             feed.features.forEach(f=>{
               f.properties._display = f.properties[feeds[k].displayProperty];
               if(icon&&icon.property){
-                const val = f.properties[icon.property];
+                const val = f.properties[icon.property] || icon.default;
                 if(icon.translation){
                   f.properties._style = icon.translation[val] || 'NA';
                 } else {

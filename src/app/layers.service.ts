@@ -23,6 +23,7 @@ export interface IncidentFeed{
   displayProperty:string;
   icon:{
     property:string;
+    default?:string;
     translation:{
       [key:string]:'NA'|'Advice'|'WatchAct'|'Warning'
     },
