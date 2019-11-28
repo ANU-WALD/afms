@@ -568,7 +568,7 @@ export class MainMapComponent implements OnInit {
       this.selection.effectiveDate(),
       (this.zonal===this.MODE_AREAL_AVERAGE)?ZONAL_AVERAGE:ZONAL_RELATIVE,
       this.zonalThreshold,
-      (this.zonalFilter>=0)?this.zonalFilter:undefined);
+      (this.zonalFilter>0)?this.zonalFilter:undefined);
 
     let colours$ = this.palettes.getPalette(this.mainLayer.layer.palette.name,
       this.mainLayer.layer.palette.reverse,
