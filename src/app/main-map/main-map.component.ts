@@ -22,6 +22,7 @@ import { HttpClient } from '@angular/common/http';
 import { AgmMap } from '@agm/core';
 import { DatesService } from 'app/dates.service';
 import { tap } from 'rxjs/operators';
+import { ZONAL_RELATIVE, ZONAL_AVERAGE } from 'app/zonal.service';
 
 class ValueMarker {
   label: string;
@@ -30,6 +31,27 @@ class ValueMarker {
   open: boolean;
   context: string[];
 }
+
+const DECILE_LABELS = [
+  'Very much above',
+  '',
+  'Above average',
+  '',
+  'Average',
+  '',
+  'Below average',
+  '',
+  'Very much below'
+];
+
+const DECILE_RANGE = [
+  0.5,
+  9.5
+];
+
+const DECILE_COUNT = [
+  9
+];
 
 @Component({
   selector: 'app-main-map',
@@ -41,6 +63,10 @@ export class MainMapComponent implements OnInit {
   @ViewChild('mapDiv', { static: false }) mapDiv: Component;
   @ViewChild('wms', { static: false }) wmsLayer: WMSLayerComponent;
   mainLayer: VisibleLayer;
+
+  MODE_GRID=0;
+  MODE_AREAL_AVERAGE=1;
+  MODE_AREAL_RELATIVE=2;
 
   currentConditions = true;
   showWindows = true;
@@ -55,7 +81,7 @@ export class MainMapComponent implements OnInit {
   maxZoom = 16;
   zoom = 4;
 
-  zonal=false;
+  zonal=0;
   zonalFilter=-1;
   zonalThreshold=undefined;
   zonalAvailable=false;
@@ -107,6 +133,9 @@ export class MainMapComponent implements OnInit {
   tsSubscription:Subscription;
   landcoverSubscription:Subscription;
   contextualSubscription:Subscription;
+
+  legendLabels: string[];
+  legendRange: number[];
 
   static constrainCoords(ll: LatLng) {
     return {
@@ -440,6 +469,7 @@ export class MainMapComponent implements OnInit {
 
       this.reloadMarkerData();
       this.assessZonal();
+      this.updateLegend();
     });
   }
 
@@ -457,7 +487,7 @@ export class MainMapComponent implements OnInit {
     const prev = this.zonalAvailable;
     this.zonalAvailable = (this.mainLayer&&this.mainLayer.layer.zonal) &&
                           (this.vectorLayer&&!!this.vectorLayer.zonal);
-    this.zonal = this.zonal && this.zonalAvailable;
+    this.zonal = this.zonalAvailable? this.zonal : this.MODE_GRID;
     if(this.zonal){
       this.updateZonal();
     } else {
@@ -514,6 +544,7 @@ export class MainMapComponent implements OnInit {
   zonalChanged(){
     this.vectorStyles = this.staticStyles;
 
+    this.updateLegend();
     if(this.zonal){
       this.updateZonal();
     }
@@ -521,10 +552,21 @@ export class MainMapComponent implements OnInit {
     this.theMap.triggerResize(false);
   }
 
+  private updateLegend() {
+    if(this.zonal === this.MODE_AREAL_RELATIVE){
+      this.legendRange =  DECILE_RANGE
+      this.legendLabels = DECILE_LABELS
+    } else {
+      this.legendRange = this.mainLayer.layer.range;
+      this.legendLabels = this.mainLayer.layer.labels;
+    }
+  }
+
   updateZonal(){
     let values$ = this.zonalService.getForDate(this.mainLayer.layer,
       this.vectorLayer,
       this.selection.effectiveDate(),
+      (this.zonal===this.MODE_AREAL_AVERAGE)?ZONAL_AVERAGE:ZONAL_RELATIVE,
       this.zonalThreshold,
       (this.zonalFilter>=0)?this.zonalFilter:undefined);
 
@@ -540,7 +582,7 @@ export class MainMapComponent implements OnInit {
       this.zonalPalette = colours;
 
       if(!Object.keys(data).length){
-        this.zonal = false;
+        this.zonal = this.MODE_GRID;
       }
 
       if(this.zonal){
@@ -571,10 +613,10 @@ export class MainMapComponent implements OnInit {
     if(isNaN(zonalValue)){
       result.fillOpacity = 0.0;
     } else {
+      let range = this.legendRange;
+
       const colourIndex = this.palettes.colourIndex(zonalValue,
-        this.mainLayer.layer.range[0],
-        this.mainLayer.layer.range[1],
-        this.zonalPalette.length)
+        range[0],range[1],this.zonalPalette.length)
       result.fillColor = this.zonalPalette[colourIndex];
     }
     return result;

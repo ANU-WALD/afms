@@ -36,7 +36,8 @@
       },
       "contextual":[
         "LFMC Uncertainty"
-      ]
+      ],
+      "zonal":"fmc"
     },
     {
       "source": "tds",
@@ -76,7 +77,8 @@
           "title": " ",
           "fixed": true
         }
-      }
+      },
+      "zonal":"flam"
     },
     {
       "source": "tds",

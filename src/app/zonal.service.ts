@@ -7,10 +7,12 @@ import { HttpClient } from '@angular/common/http';
 import { map, switchAll } from 'rxjs/operators';
 import { environment } from 'environments/environment';
 
-const ZONAL_URL='{{tds}}/dodsC/ub8/au/FMC/c6/mosaics/deciles/zonal_stats/{{vector_name}}_{{variable_name}}_zonal_stat.nc';
+const ZONAL_URL='{{tds}}/dodsC/ub8/au/FMC/c6/mosaics/deciles/zonal_stats/{{vector_name}}_{{variable_name}}_{{mode}}zonal_stat.nc';
 const ZONAL_URL_CSV='assets/deciles/{{vector_name}}_{{variable_name}}.csv';
 export const DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD=85;
 export const DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD_SINGLE_COVER=33;
+export const ZONAL_AVERAGE='nc_';
+export const ZONAL_RELATIVE='';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,12 @@ export class ZonalService {
               private _meta: MetadataService,
               private _dap:OpendapService) { }
 
-  getForDate(layer:FMCLayer,polygons:VectorLayer,date:UTCDate,coverageThreshold?:number,landcover?:number):Observable<TableRow>{
+  getForDate(layer:FMCLayer,
+             polygons:VectorLayer,
+             date:UTCDate,
+             mode:string,
+             coverageThreshold?:number,
+             landcover?:number):Observable<TableRow>{
     let landcoverStr = '';
     if(landcover!==undefined){
       landcoverStr = `_${landcover}`;
@@ -40,7 +47,8 @@ export class ZonalService {
     const params = {
       tds:environment.tds_server,
       variable_name:layer.zonal,
-      vector_name:polygons.zonal
+      vector_name:polygons.zonal,
+      mode:mode
     };
 
     const url = InterpolationService.interpolate(ZONAL_URL,params);

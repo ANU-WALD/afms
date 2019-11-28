@@ -41,11 +41,12 @@
         [position]="1">
       </wms-layer>
 -->
+
     <wms-layer #wms *ngIf="mainLayer?.layer&&!zonal" [url]="mainLayer.url" [params]="mainLayer.wmsParameters" [opacity]="mainLayer.opacity"
       [position]="0">
     </wms-layer>
 
-    <!--
+  <!--
         <wms-layer #wmsMask *ngIf="showMask"
         [url]="maskLayer.url"
         [params]="maskLayer.wmsParameters"
@@ -63,7 +64,7 @@
     <agm-data-layer *ngIf="geoJsonObject" [geoJson]="geoJsonObject" (layerClick)="clicked($event)" [style]="vectorStyles">
     </agm-data-layer>
 
-    <map-control position="TOP_LEFT" class="test">
+  <map-control position="TOP_LEFT" class="test">
       <div>
         <button-bar>
           <div>
@@ -142,8 +143,9 @@
                       [disabled]="!zonalAvailable"
                       [(ngModel)]="zonal"
                       (ngModelChange)="zonalChanged()">
-                  <option [ngValue]="false">Grid</option>
-                  <option [ngValue]="true">Zonal</option>
+                  <option [ngValue]="MODE_GRID">Grid</option>
+                  <option [ngValue]="MODE_AREAL_AVERAGE">Areal Average</option>
+                  <option [ngValue]="MODE_AREAL_RELATIVE">Areal Relative</option>
               </select>
             </div>
             <div class="col" *ngIf="zonalAvailable&&zonal">
@@ -177,7 +179,7 @@
         <div class="card-block control-card-content">
           <map-legend [imageURL]="mainLayer.legendImageURL" [title]="mainLayer.layer.name" [mapUnits]="mainLayer.layer.units"
             [cbPalette]="mainLayer.layer.palette?.name" [cbCount]="mainLayer.layer.palette?.count" [cbReverse]="mainLayer.layer.palette?.reverse"
-            [cbRange]="mainLayer.layer.range" [colours]="mainLayer.layer.colours" [labels]="mainLayer.layer.labels"
+            [cbRange]="legendRange" [colours]="mainLayer.layer.colours" [labels]="legendLabels"
             [helpText]="mainLayer.layer.description"></map-legend>
         </div>
       </div>
