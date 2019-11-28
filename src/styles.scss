@@ -129,3 +129,7 @@ $font-family-base:       $font-family-sans-serif;
 .search-popover{
   width:250px;
 }
+
+.text-muted {
+  color: lighten($text-muted,35%) !important;
+}
