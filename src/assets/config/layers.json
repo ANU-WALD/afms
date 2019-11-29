@@ -18,7 +18,7 @@
       "precision":0,
       "range": [
         0,
-        140
+        153
       ],
       "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2018)",
       "timeperiod": {
@@ -30,7 +30,7 @@
       "timeshift":-2,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_9",
-        "colorscalerange": "0,140",
+        "colorscalerange": "0,153",
         "abovemaxcolor": "extend",
         "numcolorbands": 9
       },
@@ -57,7 +57,7 @@
       "precision":1,
       "range": [
         0,
-        1
+        0.99
       ],
       "timeperiod": {
         "start": 2001,
@@ -68,7 +68,7 @@
       "timeshift":-2,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_11_rev",
-        "colorscalerange": "0,1",
+        "colorscalerange": "0,0.99",
         "abovemaxcolor": "extend",
         "numcolorbands": 11
       },
