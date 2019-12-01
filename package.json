@@ -37,7 +37,7 @@
     "dap-query-js": "github:flowmatters/dap-query-js",
     "file-saver": "^1.3.3",
     "font-awesome": "^4.7.0",
-    "map-wald": "github:ANU-WALD/map-wald",
+    "map-wald": "github:ANU-WALD/map-wald#db009a609bb438104269c06d063279f3613750ad",
     "ngx-pipes": "1.6.5",
     "plotly.js": "git+https://github.com/arlowhite/plotly.js.git#no-polyfill",
     "proj4": "^2.3.17",
