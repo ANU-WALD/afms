@@ -71,7 +71,14 @@ export class IncidentsService {
               private http:HttpClient) { }
 
   private get(feed:IncidentFeed,name:string):Observable<any> {
-    const url = `${feed.cors?'':CORS_PROXY}${feed.url}`;
+    let url = `${feed.cors?'':CORS_PROXY}${feed.url}`;
+    if(url.indexOf('?')<0){
+      url += '?';
+    } else {
+      url += '&'
+    }
+    url += `_time=${(new Date()).getTime()}`;
+
     if(feed.hide){
       return of({
         features:[]
@@ -202,7 +209,7 @@ export class IncidentsService {
             feed.features.forEach(f=>{
               f.properties._display = f.properties[feeds[k].displayProperty];
               if(icon&&icon.property){
-                const val = f.properties[icon.property];
+                const val = f.properties[icon.property] || icon.default;
                 if(icon.translation){
                   f.properties._style = icon.translation[val] || 'NA';
                 } else {
