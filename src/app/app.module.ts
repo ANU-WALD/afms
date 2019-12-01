@@ -1,10 +1,9 @@
-import { environment } from '../environments/environment'
+import { environment } from '../environments/environment';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
@@ -24,6 +23,8 @@ import { BaseLayerSelectionComponent } from './base-layer-selection/base-layer-s
 import { LayerOpacitySelectorComponent } from './layer-opacity-selector/layer-opacity-selector.component';
 import { AboutComponent } from './about/about.component';
 import { SplashModalComponent } from './splash-modal/splash-modal.component';
+import { BaseLayerService } from './base-layer.service';
+import { ContextualDataService } from './contextual-data.service';
 
 @NgModule({
   declarations: [
@@ -45,14 +46,13 @@ import { SplashModalComponent } from './splash-modal/splash-modal.component';
       apiKey: environment.google_maps_api_key
     }),
     FormsModule,
-    HttpModule, // old
-    HttpClientModule, // new
+    HttpClientModule,
     NgbModule.forRoot(),
     RouterModule.forRoot(routes,{ useHash: true }),
     MapWaldModule.forRoot({paths:routeParameters})
 ],
   entryComponents: [AboutComponent, SplashModalComponent],
-  providers: [SelectionService,LayersService],
+  providers: [SelectionService,LayersService,BaseLayerService,ContextualDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

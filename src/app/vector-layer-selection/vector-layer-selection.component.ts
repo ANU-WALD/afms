@@ -1,16 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import {MapViewParameterService} from 'map-wald';
+import { HttpClient } from '@angular/common/http';
 
 export class VectorLayer {
-  jsonFilename: string;
-  name: string;
-  nameField: string;
-
-  constructor(fn: string, n: string, nf: string) {
-    this.jsonFilename = fn;
-    this.name = n;
-    this.nameField = nf;
+  constructor(public jsonFilename: string, public name: string, public nameField: string,
+              public idField:string, public zonal: string) {
   }
 
   baseFilename():string{
@@ -30,14 +24,14 @@ export class VectorLayerSelectionComponent implements OnInit {
 
   @Output() selectedLayerChanged: EventEmitter<VectorLayer> = new EventEmitter<VectorLayer>();
 
-  constructor(private _http:Http,
+  constructor(_http:HttpClient,
               private mapView:MapViewParameterService) {
-    _http.get("assets/config/vectors.json").toPromise().then(resp=>{
-      var json = resp.json();
-      var layers:Array<any> = json.vector_layers;
-      this.vectorLayers = layers.map(l=>new VectorLayer(l.filename,l.title,l.name_field));
+    _http.get('assets/config/vectors.json?='+((new Date()).getTime())).toPromise().then(resp=>{
+      const json:any = resp;
+      const layers:Array<any> = json.vector_layers;
+      this.vectorLayers = layers.map(l=>new VectorLayer(l.filename,l.title,l.name_field,l.id_field,l.zonal));
 
-      var params = this.mapView.current();
+      const params = this.mapView.current();
       if(params.layer&&params.layer!=='_'){
         this.selectedLayer=this.vectorLayers.find(l=>decodeURIComponent(l.baseFilename())===decodeURIComponent(params.vector));
       }

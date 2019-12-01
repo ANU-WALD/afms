@@ -2,12 +2,13 @@
   "layers": [
     {
       "source": "tds",
-      "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
+      "path": "ub8/au/FMC/c6/mosaics/fmc_c6_{{year}}.nc",
+      "pathTimeSeries": "ub8/au/FMC/c6/mosaics/perf_prof2/fmc_c6_{{year}}.nc",
       "name": "Live Fuel Moisture Content",
       "units": "%",
       "suffix": "%",
       "icon": "fa-tint",
-      "wms_layer": "lvmc_mean",
+      "wms_layer": "fmc_mean",
       "palette": {
         "image": false,
         "name": "RdYlBu",
@@ -24,53 +25,27 @@
         "start": 2001,
         "end": 0
       },
+      "timestepMultiplier": 4,
+      "timestepReference": "{{year}}-01-01",
       "timeshift":-2,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_9",
         "colorscalerange": "0,140",
         "abovemaxcolor": "extend",
         "numcolorbands": 9
-      }
+      },
+      "contextual":[
+        "LFMC Uncertainty"
+      ]
     },
     {
       "source": "tds",
-      "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
-      "name": "LFMC Uncertainty",
-      "units": "%",
-      "suffix": "%",
-      "icon": "fa-percent",
-      "wms_layer": "lvmc_stdv",
-      "palette": {
-        "image": false,
-        "name": "RdYlBu",
-        "count": 11,
-        "reverse": true
-      },
-      "precision":0,
-      "range": [
-        0,
-        50
-      ],
-      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2018)",
-      "timeperiod": {
-        "start": 2001,
-        "end": 0
-      },
-      "timeshift":-2,
-      "wms_params": {
-        "styles": "boxfill/anu_fmc_rdylbu_11_rev",
-        "colorscalerange": "0,50",
-        "abovemaxcolor": "extend",
-        "numcolorbands": 11
-      }
-    },
-    {
-      "source": "tds",
-      "path": "ub8/au/FMC/australia_LVMC_{{year}}.nc",
+      "path": "ub8/au/FMC/c6/mosaics/flam_c6_{{year}}.nc",
+      "pathTimeSeries": "ub8/au/FMC/c6/mosaics/perf_prof2/flam_c6_{{year}}.nc",
       "name": "Flammability",
       "units": "unitless",
       "icon": "fa-fire",
-      "wms_layer": "flammability_index",
+      "wms_layer": "flammability",
       "description": "Flammability Index (0-1) derived from logistic regression models trained on fire events mapped in the MODIS burned area product and four predictor variables calculated from the FMC estimates following the methodology of Yebra et al. (2018)",
       "palette": {
         "image": false,
@@ -85,8 +60,10 @@
       ],
       "timeperiod": {
         "start": 2001,
-        "end": 0
+        "end": 8
       },
+      "timestepMultiplier": 4,
+      "timestepReference": "{{year}}-01-01",
       "timeshift":-2,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_11_rev",
@@ -103,10 +80,149 @@
     },
     {
       "source": "tds",
-      "host": "http://www.flowmatters.com.au/proxies/bom-dap/thredds",
-      "realhost": "http://opendap.bom.gov.au:8080/thredds",
+      "path": "ub8/au/FMC/c6/mosaics/deciles/flam_c6_{{year}}_dc.nc",
+      "name": "Flammability (Deciles)",
+      "units": "unitless",
+      "icon": "fa-fire",
+      "wms_layer": "decile_values",
+      "description": "Relative Flammability Index",
+      "palette": {
+        "image": false,
+        "name": "RdYlBu",
+        "count": 9,
+        "reverse": true
+      },
+      "labels":[
+        "Very much above",
+        "",
+        "Above average",
+        "",
+        "Average",
+        "",
+        "Below average",
+        "",
+        "Very much below"
+      ],
+      "precision":1,
+      "range": [
+        0.5,
+        9.5
+      ],
+      "timeperiod": {
+        "start": 2018,
+        "end": 8
+      },
+      "timestepMultiplier": 4,
+      "timestepReference": "{{year}}-01-01",
+      "timeshift":-2,
+      "wms_params": {
+        "styles": "boxfill/anu_fmc_rdylbu_9_rev",
+        "colorscalerange": "0.5,9.5",
+        "abovemaxcolor": "transparent",
+        "numcolorbands": 9,
+        "layers":"decile_values"
+      },
+      "chart_config": {
+        "yaxis": {
+          "title": " ",
+          "fixed": true
+        }
+      },
+      "zonal":"flam"
+    },
+    {
+      "source": "tds",
+      "path": "ub8/au/FMC/c6/mosaics/deciles/fmc_c6_{{year}}_dc.nc",
+      "name": "FMC (Deciles)",
+      "units": "unitless",
+      "icon": "fa-fire",
+      "wms_layer": "decile_values",
+      "description": "Live Fuel Moisture Content",
+      "palette": {
+        "image": false,
+        "name": "RdYlBu",
+        "count": 9,
+        "reverse": false
+      },
+      "labels":[
+        "Very much above average",
+        "",
+        "Above average",
+        "",
+        "Average",
+        "",
+        "Below average",
+        "",
+        "Very much below average"
+      ],
+      "precision":1,
+      "range": [
+        0.5,
+        9.5
+      ],
+      "timeperiod": {
+        "start": 2018,
+        "end": 8
+      },
+      "timestepMultiplier": 4,
+      "timestepReference": "{{year}}-01-01",
+      "timeshift":-2,
+      "wms_params": {
+        "styles": "boxfill/anu_fmc_rdylbu_9",
+        "colorscalerange": "0.5,9.5",
+        "abovemaxcolor": "transparent",
+        "numcolorbands": 9,
+        "layers":"decile_values"
+      },
+      "chart_config": {
+        "yaxis": {
+          "title": " ",
+          "fixed": true
+        }
+      },
+      "zonal":"fmc"
+    },
+    {
+      "source": "tds",
+      "path": "ub8/au/FMC/c6/mosaics/fmc_c6_{{year}}.nc",
+      "name": "LFMC Uncertainty",
+      "units": "%",
+      "suffix": "%",
+      "icon": "fa-percent",
+      "wms_layer": "fmc_stdv",
+      "palette": {
+        "image": false,
+        "name": "RdYlBu",
+        "count": 11,
+        "reverse": true
+      },
+      "precision":0,
+      "range": [
+        0,
+        50
+      ],
+      "description": "Uncertainty (%) in the retrieval of Fuel Moisture Content characterised as the standard deviation of the distribution of plausible FMC values retrieved from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2018)",
+      "timeperiod": {
+        "start": 2001,
+        "end": 0
+      },
+      "timestepMultiplier": 4,
+      "timestepReference": "{{year}}-01-01",
+      "timeshift":-2,
+      "wms_params": {
+        "styles": "boxfill/anu_fmc_rdylbu_11_rev",
+        "colorscalerange": "0,50",
+        "abovemaxcolor": "extend",
+        "numcolorbands": 11
+      }
+    },
+    {
+      "source": "tds",
+      "host": "https://proxies.hydrograph.io/bom-dap/thredds",
+      "realhost": "http://opendap.bom.gov.au/thredds",
       "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.vol.smc.{{year}}.nc",
-      "name": "Soil Moisture 0-10cm (JASMIN)",
+      "patH": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/",
+      "name": "Soil Moisture 0-10cm",
       "units": "m<sup>3</sup>;.m<sup>-3</sup>",
       "icon": "fa-tint",
       "wms_layer": "sm",
@@ -124,7 +240,7 @@
       "precision":2,
       "timeperiod": {
         "start": 2010,
-        "end": "2018/07/31"
+        "end": -1
       },
       "wms_params": {
         "styles": "boxfill/rdylbu_11",
@@ -141,10 +257,11 @@
     },
     {
       "source": "tds",
-      "host": "http://www.flowmatters.com.au/proxies/bom-dap/thredds",
+      "host": "https://proxies.hydrograph.io/bom-dap/thredds",
       "realhost": "http://opendap.bom.gov.au:8080/thredds",
       "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.vol.smc.{{year}}.nc",
-      "name": "Soil Moisture 10-35cm (JASMIN)",
+      "":"     c35ee8d2a475e10ea06d0ad53b46ce2a",
+      "name": "Soil Moisture 10-35cm",
       "units": "m^3.m^-3",
       "icon": "fa-tint",
       "wms_layer": "sm",
@@ -163,13 +280,13 @@
       ],
       "timeperiod": {
         "start": 2010,
-        "end": "2018/07/31"
+        "end": -1
       },
       "indexing": {
         "level": 1
       },
       "wms_params": {
-        "elevation": 0.25,
+        "elevation": -0.25,
         "styles": "boxfill/rdylbu_11",
         "colorscalerange": "0,0.5",
         "abovemaxcolor": "extend",
@@ -183,12 +300,28 @@
       }
     }
   ],
+  "contextual":[
+    {
+      "source":"tds",
+      "path":"ub8/au/treecover/250m/ANUWALD.TreeCover.{{year}}.250m.nc",
+      "wms_layer":"TreeCover",
+      "name":"Tree cover",
+      "op":"mean",
+      "window":0.025,
+      "units":"%",
+      "timeperiod": {
+        "start": 2004,
+        "end": 2017,
+        "format": "{{year}}-01-01T00%3A00%3A00.000Z"
+      }
+    }
+  ],
   "mask": {
     "source": "tds",
-    "path": "ub8/au/FMC/{{year}}_latlon_masks.nc",
+    "path": "ub8/au/FMC/c6/mosaics/mask_{{year}}.nc",
     "name": "Computation Mask",
     "icon": "fa-fire",
-    "wms_layer": "forest",
+    "wms_layer": "quality_mask",
     "range": [
       0,
       100
@@ -197,6 +330,132 @@
       "start": 2001,
       "end": 2013,
       "format": "{{year}}-01-01T00%3A00%3A00.000Z"
+    }
+  },
+  "incidents": {
+    "NSW":{
+      "format":"GeoJSON",
+      "url":"http://feeds.rfs.nsw.gov.au/majorincidents.json",
+      "displayProperty":"description",
+      "icon":{
+        "property":"category",
+        "translation":{
+          "Not Applicable":"NA",
+          "Advice":"Advice",
+          "Watch and Act":"WatchAct",
+          "EmergencyWarning":"Warning"
+        }
+      }
+    },
+    "WA":{
+      "format":"GeoJSON",
+      "url":"https://www.emergency.wa.gov.au/data/incident_FCAD.json",
+      "displayProperty":"description",
+      "icon":{
+        "property":"type",
+        "translation":{
+          "other":"NA",
+          "Not Applicable":"NA",
+          "Bushfire":"Advice",
+          "Burn off":"Advice",
+          "Controlled Burn":"Advice",
+          "Fire":"Advice"
+        }
+      }
+    },
+    "VIC":{
+      "format":"GeoJSON",
+      "url":"https://emergency.vic.gov.au/public/osom-geojson.json",
+      "displayProperty":"category2",
+      "icon":{
+        "property":"category",
+        "translation":{
+          "ar-road":"NA",
+          "ar-rescue":"NA",
+          "other":"NA",
+          "Not Applicable":"NA",
+          "planned burn":"Advice",
+          "fire-active":"Advice",
+          "Fire":"Advice",
+          "Watch and Act":"WatchAct",
+          "Emergency Warning":"Warning"
+        }
+      }
+    },
+    "ACT":{
+      "format":"Custom",
+      "url":"https://esa.act.gov.au/feeds/allincidents.json",
+      "displayProperty":"description",
+      "icon":{
+        "property":"icon",
+        "translation":{
+          "iconFireNotApplicable":"NA",
+          "iconFireClosed":"NA",
+          "iconFire":"Advice",
+          "Watch and act":"WatchAct",
+          "Emergency Warning":"Warning",
+          "other":"NA"
+        },
+        "exclude":[
+          {
+            "property":"title",
+            "pattern":"^AMBULANCE RESPONSE"
+          }
+        ]
+      }
+    },
+    "SA":{
+      "format":"Custom",
+      "url":"https://data.eso.sa.gov.au/prod/cfs/criimson/cfs_current_incidents.json",
+      "displayProperty":"Type",
+      "icon":{
+        "property":"Type",
+        "translation":{
+          "other":"NA",
+          "Not Applicable":"NA",
+          "Grass Fire":"Advice",
+          "Forest Fire":"Advice"
+        }
+      }
+    },
+    "NT":{
+      "format":"Custom",
+      "url":"http://www.pfes.nt.gov.au/incidentmap/json/ntfrsincidents.json",
+      "displayProperty":"eventtype",
+      "icon":{
+        "property":"category",
+        "translation":{
+          "other":"NA",
+          "fire":"Advice",
+          "bushfire-emergency":"Warning",
+          "advice":"Advice"
+        }
+      }
+    },
+    "TAS":{
+      "format":"KML",
+      "url":"http://www.fire.tas.gov.au/Show?pageId=bfKml2",
+      "displayProperty":"description",
+      "icon":{
+        "property":"styleUrl",
+        "translation":{
+          "other":"NA",
+          "#adviceStyle":"Advice",
+          "#watchAndActStyle":"WatchAct",
+          "#emergencyWarningStyle":"Warning",
+          "#noAlertLevelStyle":"NA"
+        }
+      }
+    },
+    "QLD":{
+      "format":"GeoRSS",
+      "cors":true,
+      "url":"https://proxies.hydrograph.io/qld-qfes/data/alerts/bushfireAlert.xml",
+      "urlOrig":"https://www.qfes.qld.gov.au/data/alerts/bushfireAlert.xml",
+      "displayProperty":"description",
+      "icon":{
+        "property":"category"
+      }
     }
   }
 }

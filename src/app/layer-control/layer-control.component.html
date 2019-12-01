@@ -1,4 +1,4 @@
-<div>
+<div class="input-group input-group-sm">
   <!--
   <div *ngFor="let l of layers" class="form-group">
     <label>
@@ -11,7 +11,8 @@
     </label>
   </div>
   -->
-  <select name="layerSelect"
+  <select class="form-control form-control-sm"
+          name="layerSelect"
           [(ngModel)]="selectedLayer"
           (ngModelChange)="layerChange($event)">
     <option *ngFor="let l of layers" [ngValue]="l">

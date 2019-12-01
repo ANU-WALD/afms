@@ -1,10 +1,9 @@
 // TODO: All plot generating code should be pulled out into a service (e.g., plotly.service)
 import {Component, ElementRef, AfterViewInit, Input, OnChanges, OnInit} from '@angular/core';
 import {Observable, forkJoin} from 'rxjs';
-import {CatalogHost, InterpolationService} from 'map-wald';
+import {CatalogHost, InterpolationService, TimeSeries, UTCDate} from 'map-wald';
 import {SelectionService} from '../selection.service';
 import {TimeseriesService} from 'map-wald';
-import {Http} from '@angular/http';
 import {LatLng} from '../latlng';
 import {CsvService} from '../csv.service';
 import * as Plotly from 'plotly.js/dist/plotly-basic';
@@ -25,7 +24,6 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   @Input() coordinates: LatLng;
   @Input() year: number;
   @Input() layer: VisibleLayer;
-  @Input() thredds: CatalogHost;
 
   fullTimeSeries = null;
   havePlot = false;
@@ -33,7 +31,6 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   hasBeenLoaded = false;
 
   constructor(private timeseries: TimeseriesService,
-              private http: Http,
               private csv_service: CsvService,
               private _element: ElementRef) {
 
@@ -51,6 +48,9 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
   ngOnInit() {
     this.node = this._element.nativeElement.querySelector('.our-chart');
+    if(this.hasBeenLoaded){
+      this.updateChart();
+    }
   }
 
   ngOnChanges(event) {
@@ -58,19 +58,17 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       return;
     }
 
-    this.updateChart(this.getChartRange());
+    this.updateChart();
   }
 
-  private getChartRange(): number {
-    return Math.min(CHART_YEARS, this.year - this.layer.layer.timePeriod.start.getFullYear())
-  }
-
-  setFullTimeSeries(data: any[]) {
+  // TODO used for downloads, but won't currently keep things in correct order!
+  setFullTimeSeries(data: TimeSeries[]) {
     // TODO: make this more generic - currently only works with the FMC data
 
     const data_copy = Array.from(data);
 
-    data_copy.reverse();
+    data_copy.sort((a,b)=>a.dates[0].getUTCFullYear()-b.dates[0].getUTCFullYear());
+    // data_copy.reverse();
 
     const fullTimeSeries = {labels: [], columns: []};
 
@@ -92,76 +90,93 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
   }
 
-  updateChart(yearCount: number) {
+  updateChart() {
     const selectedYear = this.year;
-    const dataSeries = [];
+    const dataSeries: {year:number,observable:Observable<TimeSeries>}[] = [];
 
     this.havePlot = false;
     this.hasBeenLoaded = true;
 
+    if(!this.node){
+      return;
+    }
+
     Plotly.purge(this.node);
 
-
-    const host = this.thredds;
-    const baseFn = this.layer.layer.path;
+    const host = this.layer.host;
+    const baseFn = this.layer.layer.pathTimeSeries;
     const variable = this.layer.layer.variable_name;
 
-    for (let i = 0; i <= yearCount; i++) {
-      const year = selectedYear - i;
+    let timePeriod = this.layer.layer.timePeriod;
+    let startYear = timePeriod.start.getUTCFullYear();
+    let endYear = timePeriod.end.getUTCFullYear();
+
+    for (let yr = startYear; yr <= endYear; yr++) {
       const fn = InterpolationService.interpolate(baseFn, {
-        year: year
+        year: yr
       });
       const observable = this.timeseries.getTimeseries(host, fn, variable, this.coordinates, this.layer.layer.indexing);
 
       const newDataSeries = {
-        year: year,
+        year: yr,
         observable: observable
       };
 
-      dataSeries.push(newDataSeries);
+      if(yr===selectedYear){
+        dataSeries.unshift(newDataSeries);
+      } else {
+        dataSeries.push(newDataSeries);
+      }
     }
 
     const observables = dataSeries.map(s => s.observable);
 
     forkJoin(observables)
-      .subscribe((data: any) => {
-
+      .subscribe((data) => {
           this.setFullTimeSeries(data);
+          const chartTimestamps: UTCDate[] = data[1].dates;
 
-          const traces = [];
-          for (const index in data) {
-            const dataset = data[index];
-
-            // Set all datasets to the same year so that they are overlayed with
-            // each other rather than shown sequentially
-
-            const chartTimestamps: Date[] = dataset.dates.map(d => {
-              const yearOffset = selectedYear-d.getFullYear();
-              const modifiedDate = this.layer.layer.reverseDate(d);
-              modifiedDate.setFullYear(modifiedDate.getFullYear()+yearOffset);
-              return modifiedDate;
-            });
-
-            const color = +index ? 'rgb(198,219,239)' : 'rgb(33,113,181)';
-            const trace = {
+          let values = chartTimestamps.map((_,i)=>data.map(ts=>ts.values[i]).filter(v=>!isNaN(v)));
+          let minimums = values.map(vals=>Math.min(...vals));
+          let maximums = values.map(vals=>Math.max(...vals));
+          const mainColour = 'rgb(33,113,181)';
+          const traces = [
+            {
               x: chartTimestamps,
-              y: dataset.values,
-              name: dataSeries[index].year.toString(),
+              y: data[0].values,
+              name: ''+selectedYear,
               mode: 'lines+markers',
               connectgaps: true,
-
+              fillcolor:'rgb(198,219,239)',
               marker: {
-                size: +index ? 4 : 6,
-                color: color
+                size: 6,
+                color: mainColour
               },
               line: {
-                color: color
+                color: mainColour
               }
-            };
-
-            traces.push(trace);
-
-          }
+            },
+            {
+              x: chartTimestamps,
+              y: minimums,
+              name: 'min',
+              mode:'none',
+              type:'scatter',
+              fill:'tozeroy',
+              fillcolor:'white'
+              // hoverinfo:'skip'
+            },
+            {
+              x: chartTimestamps,
+              y: maximums,
+              name: 'max',
+              mode:'none',
+              type:'scatter',
+              fill:'tozeroy',
+              fillcolor:'rgb(198,219,239)'
+              // hoverinfo:'skip'
+            }
+          ]
 
           traces.reverse();
           this.buildChart(traces);
@@ -204,6 +219,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
         yaxis: {
           hoverformat: '.2f',
           title: y_axis_title ? y_axis_title : '%',
+          fixedrange: true,
           range: yRange
         },
         height: height,

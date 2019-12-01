@@ -1,12 +1,13 @@
-import {InterpolationService} from 'map-wald';
+import {InterpolationService, CatalogHost, UTCDate} from 'map-wald';
 import {FMCLayer} from '../layer';
 import {environment} from '../../environments/environment';
-import { previousTimeStep } from '../selection.service';
 
 const TDS_URL = environment.tds_server;
 
 export class VisibleLayer {
+  host:CatalogHost;
   url: string = TDS_URL;
+  downloadURL: string;
   path: string;
   legendImageURL: string = null;
   opacity = 1.0;
@@ -25,35 +26,41 @@ export class VisibleLayer {
     }
   }
 
-  dateText(date: Date): string {
+  dateText(date: UTCDate): string {
     const fmt = this.layer.timePeriod.format || '{{year}}-{{month}}-{{day}}T00%3A00%3A00.000Z';
     return InterpolationService.interpolate(fmt, {
-      year: date.getFullYear(),
-      month: VisibleLayer.leading0(date.getMonth() + 1),
-      day: VisibleLayer.leading0(date.getDate())
+      year: date.getUTCFullYear(),
+      month: VisibleLayer.leading0(date.getUTCMonth() + 1),
+      day: VisibleLayer.leading0(date.getUTCDate())
     });
   }
 
-  setDate(newDate: Date) {
+  setDate(newDate: UTCDate) {
     this.updateParameters(newDate);
   }
 
-  constructor(public layer: FMCLayer, currentDate: Date) {
-    if (layer) {
+  constructor(public layer: FMCLayer, currentDate?: UTCDate) {
+    if (layer&&currentDate) {
       this.updateParameters(currentDate);
     }
   };
 
-  updateParameters(currentDate: Date) {
+  updateParameters(currentDate: UTCDate) {
     currentDate = this.layer.effectiveDate(currentDate);
     this.path = InterpolationService.interpolate(this.layer.path, {
-      year: currentDate.getFullYear(),
-      month: VisibleLayer.leading0(currentDate.getMonth() + 1),
-      day: VisibleLayer.leading0(currentDate.getDate())
+      year: currentDate.getUTCFullYear(),
+      month: VisibleLayer.leading0(currentDate.getUTCMonth() + 1),
+      day: VisibleLayer.leading0(currentDate.getUTCDate())
     });
 
     if (this.layer.source === 'tds') {
-      this.url = `${this.layer.host || TDS_URL}/wms/${this.path}`;
+      let base = this.layer.host||TDS_URL;
+      this.url = `${base}/wms/${this.path}`;
+
+      var url = 
+      `${this.path}?service=WCS&version=1.0.0&request=GetCoverage&coverage=${this.layer.variable_name}&format=GeoTIFF_Float&time=${this.dateText(currentDate)}`;
+//T00:00:00Z
+      this.downloadURL = `${base}/wcs/${url}`;
     }
 
     this.wmsParameters = {
