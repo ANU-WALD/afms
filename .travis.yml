@@ -37,8 +37,7 @@ deploy:
 
 - skip_cleanup: true
   provider: script
-  script: bash -c "cd dist && find . -type f -exec curl -v -u $FTP_USER:$FTP_PASSWORD
-    --ftp-create-dirs -T {} ftp.wenfo.org/defence/{} \;"
+  script: cd dist && scp -o StrictHostKeyChecking=no -i ../id_rsa_deploy -r . $FTP_USER@wenfo.org:/home/$FTP_USER/public_html/afms/defence
   on:
     branch: defence
 notifications:
