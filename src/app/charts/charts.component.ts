@@ -139,6 +139,15 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
           const values = chartTimestamps.map((_,i)=>data.map(ts=>ts.values[i]).filter(v=>!isNaN(v)));
           const minimums = values.map(vals=>Math.min(...vals));
           const maximums = values.map(vals=>Math.max(...vals));
+          const medians = values.map(vals=>{
+            const sorted = vals.slice().sort();
+            if(sorted.length%2){
+              return sorted[(sorted.length-1)/2];
+            }
+            const idx = sorted.length/2;
+            return (sorted[idx] + sorted[idx-1])/2;
+          });
+
           const findYears = function(valuesToMatch:number[]) {
             return valuesToMatch.map((v,i)=>{
               return data[data.findIndex(ts=>ts.values[i]===v)].dates[i].getFullYear();
@@ -162,6 +171,22 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
               },
               line: {
                 color: mainColour
+              }
+            },
+            {
+              x: chartTimestamps,
+              y: medians,
+              name: 'median',
+              mode: 'lines',
+              connectgaps: true,
+              fillcolor:'rgb(229,229,254)',
+              marker: {
+                size: 6,
+                color: mainColour
+              },
+              line: {
+                color: mainColour,
+                dash:'dash'
               }
             },
             {
