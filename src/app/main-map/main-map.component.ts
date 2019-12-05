@@ -53,6 +53,9 @@ const DECILE_COUNT = [
   9
 ];
 
+const DECILE_FOOTER = `condition in comparison to the observations for a given month in the
+ previous years (2001-year before current)`;
+
 @Component({
   selector: 'app-main-map',
   templateUrl: './main-map.component.html',
@@ -136,6 +139,7 @@ export class MainMapComponent implements OnInit {
 
   legendLabels: string[];
   legendRange: number[];
+  legendFooter = '';
 
   static constrainCoords(ll: LatLng) {
     return {
@@ -453,8 +457,8 @@ export class MainMapComponent implements OnInit {
       dateInit$ = of(null);
     }
 
+    this.selection.currentLayer = this.mainLayer;
     dateInit$.subscribe(_=>{
-      this.selection.currentLayer = this.mainLayer;
       this.selection.constrain();
 
       this.dateRange = layer.timePeriod;
@@ -560,6 +564,8 @@ export class MainMapComponent implements OnInit {
       this.legendRange = this.mainLayer.layer.range;
       this.legendLabels = this.mainLayer.layer.labels;
     }
+
+    this.updateLegendText();
   }
 
   updateZonal(){
@@ -591,6 +597,8 @@ export class MainMapComponent implements OnInit {
         this.vectorStyles = this.staticStyles;
       }
 
+      this.updateLegendText();
+
       if(this.showIncidents){
         this.showIncidents=false;
         setTimeout(()=>{
@@ -598,6 +606,12 @@ export class MainMapComponent implements OnInit {
         });
       }
     });
+  }
+
+  private updateLegendText() {
+    this.legendFooter = (this.zonal === this.MODE_AREAL_RELATIVE) ?
+      `<br><strong> ${this.mainLayer.layer.shortName} ${DECILE_FOOTER}</strong>` :
+      '';
   }
 
   zonalStyles(f:any){
@@ -622,3 +636,4 @@ export class MainMapComponent implements OnInit {
     return result;
   }
 }
+
