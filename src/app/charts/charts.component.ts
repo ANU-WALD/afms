@@ -136,9 +136,17 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
           this.setFullTimeSeries(data);
           const chartTimestamps: UTCDate[] = data[1].dates;
 
-          let values = chartTimestamps.map((_,i)=>data.map(ts=>ts.values[i]).filter(v=>!isNaN(v)));
-          let minimums = values.map(vals=>Math.min(...vals));
-          let maximums = values.map(vals=>Math.max(...vals));
+          const values = chartTimestamps.map((_,i)=>data.map(ts=>ts.values[i]).filter(v=>!isNaN(v)));
+          const minimums = values.map(vals=>Math.min(...vals));
+          const maximums = values.map(vals=>Math.max(...vals));
+          const findYears = function(valuesToMatch:number[]) {
+            return valuesToMatch.map((v,i)=>{
+              return data[data.findIndex(ts=>ts.values[i]===v)].dates[i].getFullYear();
+            });
+          };
+          const minYears = findYears(minimums);
+          const maxYears = findYears(maximums);
+
           const mainColour = 'rgb(33,113,181)';
           const traces = [
             {
@@ -159,24 +167,35 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
             {
               x: chartTimestamps,
               y: minimums,
-              name: 'min',
-              mode:'none',
+              text:minYears,
+              name: 'Lowest in record',
+              mode:'lines',
               type:'scatter',
               fill:'tozeroy',
-              fillcolor:'white'
+              fillcolor:'white',
+              hoverinfo: 'y+text',
+              // showlegend:true,
+              line: {
+                color: 'rgb(131,163,131)'
+              }
               // hoverinfo:'skip'
             },
             {
               x: chartTimestamps,
               y: maximums,
-              name: 'max',
-              mode:'none',
+              text:maxYears,
+              name: 'Highest in record',
+              mode:'lines',
               type:'scatter',
               fill:'tozeroy',
-              fillcolor:'rgb(198,219,239)'
+              fillcolor:'rgb(198,219,239)',
+              hoverinfo: 'y+text',
+              line: {
+                color: 'rgb(131,163,131)'
+              }
               // hoverinfo:'skip'
             }
-          ]
+          ];
 
           traces.reverse();
           this.buildChart(traces);
@@ -225,7 +244,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
         height: height,
         width: width,
         title: `${this.layer.layer.name} (${this.layer.layer.units}) at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
-        showlegend: false
+        showlegend: true
       },
       {
         displaylogo: false,
