@@ -83,6 +83,7 @@
       "zonal":"flam"
     },
     {
+      "hide":true,
       "source": "tds",
       "path": "ub8/au/FMC/c6/mosaics/fmc_c6_{{year}}.nc",
       "name": "LFMC Uncertainty",

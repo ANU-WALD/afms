@@ -19,7 +19,7 @@ export class LayerControlComponent implements OnInit {
               private layerService:LayersService) {
 
     layerService.availableLayers.subscribe(available=>{
-      this.layers = available;
+      this.layers = available.filter(l=>!l.hide);
 
       var params = this.mapView.current();
       if(params.layer&&params.layer!=='_'){
