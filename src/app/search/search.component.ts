@@ -35,7 +35,7 @@ export class SearchComponent implements OnInit {
       distinctUntilChanged(),
       filter(t => t.length > 2),
       concatMap((r) => {
-        const possibleLatLon = r.split(/[,\/]/);
+        const possibleLatLon = r.split(/[,\/ ]+/);
         if (possibleLatLon.length === 2) {
           const [lat, lng] = possibleLatLon.map(s => +s.trim());
           if ((lat < -7) && (lat > -45) && (lng > 110) && (lng < 170)) {
