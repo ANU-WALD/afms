@@ -282,7 +282,8 @@
           "fire-active":"Advice",
           "Fire":"Advice",
           "Watch and Act":"WatchAct",
-          "Emergency Warning":"Warning"
+          "Emergency Warning":"Warning",
+          "Burn Area":"Advice"
         },
         "exclude":[
           {
