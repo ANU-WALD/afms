@@ -379,7 +379,13 @@
           "Fire":"Advice",
           "Watch and Act":"WatchAct",
           "Emergency Warning":"Warning"
-        }
+        },
+        "exclude":[
+          {
+            "property":"category2",
+            "pattern":"Total Fire Ban"
+          }
+        ]
       }
     },
     "ACT":{
