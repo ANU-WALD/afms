@@ -1,6 +1,6 @@
 // TODO: All plot generating code should be pulled out into a service (e.g., plotly.service)
 import {Component, ElementRef, AfterViewInit, Input, OnChanges, OnInit} from '@angular/core';
-import {Observable, forkJoin} from 'rxjs';
+import {Observable, forkJoin, Subscription} from 'rxjs';
 import {CatalogHost, InterpolationService, TimeSeries, UTCDate} from 'map-wald';
 import {SelectionService} from '../selection.service';
 import {TimeseriesService} from 'map-wald';
@@ -29,6 +29,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   havePlot = false;
   node: HTMLElement;
   hasBeenLoaded = false;
+  private dataSubscription: Subscription;
 
   constructor(private timeseries: TimeseriesService,
               private csv_service: CsvService,
@@ -103,6 +104,11 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
     Plotly.purge(this.node);
 
+    if(this.dataSubscription){
+      this.dataSubscription.unsubscribe();
+      this.dataSubscription = null;
+    }
+
     const host = this.layer.host;
     const baseFn = this.layer.layer.pathTimeSeries;
     const variable = this.layer.layer.variable_name;
@@ -131,8 +137,9 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
     const observables = dataSeries.map(s => s.observable);
 
-    forkJoin(observables)
+    this.dataSubscription = forkJoin(observables)
       .subscribe((data) => {
+          this.dataSubscription = null;
           this.setFullTimeSeries(data);
           const chartTimestamps: UTCDate[] = data[1].dates;
 
