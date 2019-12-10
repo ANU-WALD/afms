@@ -13,9 +13,9 @@ import {VisibleLayer} from 'app/main-map/visible-layer';
 const CHART_YEARS = 4;
 const ALICE = [-23.6980, 133.8807];
 
-const COLOUR_MAIN='rgb(0,0,0)';
+const COLOUR_MAIN='rgb(26,90,145)';
 const COLOUR_MEDIAN='rgb(128,128,128)';
-const COLOUR_MINMAX='rgb(33,113,181)';
+const COLOUR_MINMAX='rgb(39,135,217)';
 const COLOUR_RANGE='rgb(198,219,239)';
 
 @Component({
