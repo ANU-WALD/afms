@@ -56,7 +56,7 @@ const DECILE_COUNT = [
 const DECILE_FOOTER = `condition in comparison to the observations for a given month in the
  previous years (2001-year before current)`;
 
- const NO_DATA_LEVEL = 100;
+ const NO_DATA_LEVEL = 150;
  const NO_DATA_FILL = `rgb(${NO_DATA_LEVEL},${NO_DATA_LEVEL},${NO_DATA_LEVEL})`;
 
  @Component({
@@ -633,8 +633,11 @@ export class MainMapComponent implements OnInit {
     } else {
       let range = this.legendRange;
 
-      const colourIndex = this.palettes.colourIndex(zonalValue,
-        range[0],range[1],this.zonalPalette.length)
+      let colourIndex = this.palettes.colourIndex(zonalValue,
+        range[0],range[1],this.zonalPalette.length);
+      if(this.mainLayer.layer.wmsParams.abovemaxcolor === 'extend') {
+        colourIndex = Math.min(colourIndex,this.zonalPalette.length-1);
+      }
       result.fillColor = this.zonalPalette[colourIndex];
     }
     return result;
