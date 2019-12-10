@@ -502,7 +502,7 @@ export class MainMapComponent implements OnInit {
     }
 
     if(prev!==this.zonalAvailable){
-      this.theMap.triggerResize();
+      this.theMap.triggerResize(false);
     }
   }
 
