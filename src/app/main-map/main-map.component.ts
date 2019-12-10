@@ -19,7 +19,7 @@ import { ContextualDataService } from 'app/contextual-data.service';
 import { ZonalService, DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD } from 'app/zonal.service';
 import { forkJoin, Subscription, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { AgmMap } from '@agm/core';
+import { AgmMap, AgmInfoWindow } from '@agm/core';
 import { DatesService } from 'app/dates.service';
 import { tap } from 'rxjs/operators';
 import { ZONAL_RELATIVE, ZONAL_AVERAGE } from 'app/zonal.service';
@@ -68,6 +68,7 @@ export class MainMapComponent implements OnInit {
   @ViewChild('theMap', {static: false}) theMap: AgmMap;
   @ViewChild('mapDiv', { static: false }) mapDiv: Component;
   @ViewChild('wms', { static: false }) wmsLayer: WMSLayerComponent;
+  @ViewChild('markerInfoWindow', { static: false}) markerInfoWindow: AgmInfoWindow;
   mainLayer: VisibleLayer;
 
   MODE_GRID=0;
@@ -327,6 +328,9 @@ export class MainMapComponent implements OnInit {
 
     this.selectedCoordinates = coords;
     this.mapView.update({ coords: `${coords.lat.toFixed(3)},${coords.lng.toFixed(3)}` });
+    setTimeout(()=>{
+      this.markerInfoWindow.open();
+    });
   }
 
   updateContextualData(){

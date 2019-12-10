@@ -14,7 +14,7 @@
 
     <agm-marker *ngIf="marker&&!zonal" [longitude]="marker.loc.lng" [latitude]="marker.loc.lat">
 
-      <agm-info-window [disableAutoPan]="true" [isOpen]="marker.open">
+      <agm-info-window #markerInfoWindow [disableAutoPan]="true" [isOpen]="marker.open">
         <span *ngIf="!marker.value;then markerValueLoading;else markerValueLoaded"></span>
         <ng-template #markerValueLoading><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></ng-template>
         <ng-template #markerValueLoaded>{{marker.label}}: {{marker.value}}{{mainLayer.layer.suffix}}
