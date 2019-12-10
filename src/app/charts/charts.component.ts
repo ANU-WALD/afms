@@ -13,6 +13,11 @@ import {VisibleLayer} from 'app/main-map/visible-layer';
 const CHART_YEARS = 4;
 const ALICE = [-23.6980, 133.8807];
 
+const COLOUR_MAIN='rgb(0,0,0)';
+const COLOUR_MEDIAN='rgb(128,128,128)';
+const COLOUR_MINMAX='rgb(33,113,181)';
+const COLOUR_RANGE='rgb(198,219,239)';
+
 @Component({
   selector: 'app-charts',
   templateUrl: './charts.component.html',
@@ -163,7 +168,6 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
           const minYears = findYears(minimums);
           const maxYears = findYears(maximums);
 
-          const mainColour = 'rgb(33,113,181)';
           const traces = [
             {
               x: chartTimestamps,
@@ -171,13 +175,12 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
               name: ''+selectedYear,
               mode: 'lines+markers',
               connectgaps: true,
-              fillcolor:'rgb(198,219,239)',
               marker: {
                 size: 6,
-                color: mainColour
+                color: COLOUR_MAIN
               },
               line: {
-                color: mainColour
+                color: COLOUR_MAIN
               }
             },
             {
@@ -186,13 +189,8 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
               name: 'median',
               mode: 'lines',
               connectgaps: true,
-              fillcolor:'rgb(229,229,254)',
-              marker: {
-                size: 6,
-                color: mainColour
-              },
               line: {
-                color: mainColour,
+                color: COLOUR_MEDIAN,
                 dash:'dash'
               }
             },
@@ -208,7 +206,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
               hoverinfo: 'y+text',
               // showlegend:true,
               line: {
-                color: 'rgb(131,163,131)'
+                color: COLOUR_MINMAX
               }
               // hoverinfo:'skip'
             },
@@ -220,10 +218,10 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
               mode:'lines',
               type:'scatter',
               fill:'tozeroy',
-              fillcolor:'rgb(198,219,239)',
+              fillcolor:COLOUR_RANGE,
               hoverinfo: 'y+text',
               line: {
-                color: 'rgb(131,163,131)'
+                color: COLOUR_MINMAX
               }
               // hoverinfo:'skip'
             }
