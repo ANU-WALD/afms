@@ -179,7 +179,7 @@
           <map-legend [imageURL]="mainLayer.legendImageURL" [title]="mainLayer.layer.name" [mapUnits]="mainLayer.layer.units"
             [cbPalette]="mainLayer.layer.palette?.name" [cbCount]="mainLayer.layer.palette?.count" [cbReverse]="mainLayer.layer.palette?.reverse"
             [cbRange]="legendRange" [colours]="mainLayer.layer.colours" [labels]="legendLabels"
-            [helpText]="mainLayer.layer.description + ' ' + legendFooter"></map-legend>
+            [helpText]="legendFooter + ' ' + mainLayer.layer.description"></map-legend>
         </div>
       </div>
     </map-control>

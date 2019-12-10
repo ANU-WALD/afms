@@ -621,7 +621,7 @@ export class MainMapComponent implements OnInit {
 
   private updateLegendText() {
     this.legendFooter = (this.zonal === this.MODE_AREAL_RELATIVE) ?
-      `<br><strong> ${this.mainLayer.layer.shortName} ${DECILE_FOOTER}</strong>` :
+      `<strong> ${this.mainLayer.layer.shortName} ${DECILE_FOOTER}</strong><br>` :
       '';
   }
 
