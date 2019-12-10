@@ -100,19 +100,26 @@ export class ZonalService {
         let timestep = 0
         if(data.time){
           const dates = data.time as Date[];
-          const deltas = dates.map(t => Math.abs(t.getTime() - date.getTime()));
-          timestep = deltas.indexOf(Math.min(...deltas));
+          const time = date.getTime();
+          const timestamps = dates.map(t=>t.getTime());
+          const deltas = timestamps.map(t => Math.abs(t - time));
+          if(time<timestamps[0]){
+            timestep = -1;
+          } else {
+            timestep = deltas.indexOf(Math.min(...deltas));
+          }
         }
 
 
         const result:any = {};
         const ids = <number[]>data.plg_id;
-        const vals = <number[]>data[avgVar][timestep];
+        const vals = <number[]>data[avgVar][timestep]||[];
         const maxCov = ids.map((_,i)=>{
           const allCov = <number[][]>data[covVar];
           return Math.max(...allCov.map(covForT=>covForT[i]));
         });
-        const cov = <number[]>data[covVar][timestep].map((c,i)=>maxCov[i]?(100.0*c/maxCov[i]):0.0);
+        const covValues = <number[]>data[covVar][timestep]||[];
+        const cov = covValues.map((c,i)=>maxCov[i]?(100.0*c/maxCov[i]):0.0);
         ids.forEach((plg_id,i)=>{
           if(cov[i]<coverageThreshold){
             result[plg_id]=NaN;
