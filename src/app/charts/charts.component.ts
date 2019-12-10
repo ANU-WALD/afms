@@ -162,7 +162,11 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
           const findYears = function(valuesToMatch:number[]) {
             return valuesToMatch.map((v,i)=>{
-              return data[data.findIndex(ts=>ts.values[i]===v)].dates[i].getFullYear();
+              const idx = data.findIndex(ts=>ts.values[i]===v);
+              if(idx<0){
+                return '-';
+              }
+              return data[idx].dates[i].getFullYear();
             });
           };
           const minYears = findYears(minimums);
