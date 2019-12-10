@@ -56,7 +56,10 @@ const DECILE_COUNT = [
 const DECILE_FOOTER = `condition in comparison to the observations for a given month in the
  previous years (2001-year before current)`;
 
-@Component({
+ const NO_DATA_LEVEL = 100;
+ const NO_DATA_FILL = `rgb(${NO_DATA_LEVEL},${NO_DATA_LEVEL},${NO_DATA_LEVEL})`;
+
+ @Component({
   selector: 'app-main-map',
   templateUrl: './main-map.component.html',
   styleUrls: ['./main-map.component.scss']
@@ -625,7 +628,8 @@ export class MainMapComponent implements OnInit {
     result.fillOpacity = this.mainLayer.opacity;
 
     if(isNaN(zonalValue)){
-      result.fillOpacity = 0.0;
+      result.fillOpacity = this.mainLayer.opacity * 0.5;
+      result.fillColor = NO_DATA_FILL;
     } else {
       let range = this.legendRange;
 
