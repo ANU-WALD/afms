@@ -201,6 +201,7 @@ export class MainMapComponent implements OnInit {
         this.lng = ll.lng;
         this.zoom = +view.zm;
         this.constrainZoom();
+        this.bounds = null;
       }
     }
 
