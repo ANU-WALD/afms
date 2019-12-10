@@ -116,6 +116,7 @@ export class MainMapComponent implements OnInit {
   selectedCoordinates: LatLng;
   marker: ValueMarker = null;
   currentYearDataForLocation: any;
+  loading = false;
 
   dateRange = new DateRange();
 
@@ -572,6 +573,7 @@ export class MainMapComponent implements OnInit {
   }
 
   updateZonal(){
+    this.loading = true;
     let values$ = this.zonalService.getForDate(this.mainLayer.layer,
       this.vectorLayer,
       this.selection.effectiveDate(),
@@ -584,6 +586,7 @@ export class MainMapComponent implements OnInit {
       this.mainLayer.layer.palette.count);
 
     forkJoin(values$,colours$).subscribe(resp=>{
+      this.loading = false;
       let data = resp[0];
       let colours = resp[1];
 
