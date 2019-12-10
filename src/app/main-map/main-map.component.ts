@@ -182,16 +182,16 @@ export class MainMapComponent implements OnInit {
 
     const view = mapView.current();
 
-    const coords = decodeURIComponent(view.coords);
-    if (coords && (coords !== '_')) {
-      const coordArray = coords.split(',').map(s => +s).filter(isNaN);
-      if (coordArray.length === 2) {
-        this.selectLocation(MainMapComponent.constrainCoords({
-          lat: coordArray[0],
-          lng: coordArray[1]
-        }));
-      }
-    }
+    // const coords = decodeURIComponent(view.coords);
+    // if (coords && (coords !== '_')) {
+    //   const coordArray = coords.split(',').map(s => +s).filter(n=>!isNaN(n));
+    //   if (coordArray.length === 2) {
+    //     this.selectLocation(MainMapComponent.constrainCoords({
+    //       lat: coordArray[0],
+    //       lng: coordArray[1]
+    //     }));
+    //   }
+    // }
 
     if (!((view.lat === '_') || (view.lng === '_') || (view.zm === '_'))) {
       if (!isNaN(view.lat) || !isNaN(view.lng)) {
