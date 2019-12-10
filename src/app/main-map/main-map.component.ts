@@ -104,7 +104,7 @@ export class MainMapComponent implements OnInit {
     south: -45,
     west: 110
   };
-  bounds: Bounds = null;
+  bounds: Bounds|boolean = false;
 
   incidentsData: any = null;
   incidentLng: number;
@@ -202,7 +202,7 @@ export class MainMapComponent implements OnInit {
         this.lng = ll.lng;
         this.zoom = +view.zm;
         this.constrainZoom();
-        this.bounds = null;
+        this.bounds = false;
       }
     }
 
