@@ -244,6 +244,30 @@ export class IncidentsService {
           type:'FeatureCollection',
           features:[].concat(...data.map(d=>d.features))
         };
+      }),
+      map(allFeeds=>{
+        const result = {
+          type:'FeatureCollection',
+          features:[]
+        };
+
+        const takeGeo = function(i:number,f:any):any{
+          return {
+            type:'Feature',
+            geometry:f.geometry.geometries[i],
+            properties:f.properties
+          };
+        };
+
+        const compound = allFeeds.features.filter(f=>f.geometry.type=='GeometryCollection');
+        const points = allFeeds.features.filter(f=>f.geometry.type!=='GeometryCollection');
+        result.features = [].concat(
+          points,
+          compound.map(f=>takeGeo(0,f)),
+          compound.map(f=>takeGeo(1,f))
+        );
+
+        return result;
       })
     );
   }

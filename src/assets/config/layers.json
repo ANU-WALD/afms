@@ -5,6 +5,7 @@
       "path": "ub8/au/FMC/c6/mosaics/fmc_c6_{{year}}.nc",
       "pathTimeSeries": "ub8/au/FMC/c6/mosaics/perf_prof2/fmc_c6_{{year}}.nc",
       "name": "Live Fuel Moisture Content",
+      "shortName":"FMC",
       "units": "%",
       "suffix": "%",
       "icon": "fa-tint",
@@ -18,7 +19,7 @@
       "precision":0,
       "range": [
         0,
-        140
+        153
       ],
       "description": "Live Fuel Moisture Content (%) amount of water in the live fuel per dry mass derived from MODIS satellite imagery and radiative transfer models inversion techniques following the methodology of Yebra et al. (2018)",
       "timeperiod": {
@@ -30,19 +31,21 @@
       "timeshift":-2,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_9",
-        "colorscalerange": "0,140",
+        "colorscalerange": "0,153",
         "abovemaxcolor": "extend",
         "numcolorbands": 9
       },
       "contextual":[
         "LFMC Uncertainty"
-      ]
+      ],
+      "zonal":"fmc"
     },
     {
       "source": "tds",
       "path": "ub8/au/FMC/c6/mosaics/flam_c6_{{year}}.nc",
       "pathTimeSeries": "ub8/au/FMC/c6/mosaics/perf_prof2/flam_c6_{{year}}.nc",
       "name": "Flammability",
+      "shortName":"FI",
       "units": "unitless",
       "icon": "fa-fire",
       "wms_layer": "flammability",
@@ -56,7 +59,7 @@
       "precision":1,
       "range": [
         0,
-        1
+        0.99
       ],
       "timeperiod": {
         "start": 2001,
@@ -67,60 +70,9 @@
       "timeshift":-2,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_11_rev",
-        "colorscalerange": "0,1",
+        "colorscalerange": "0,0.99",
         "abovemaxcolor": "extend",
         "numcolorbands": 11
-      },
-      "chart_config": {
-        "yaxis": {
-          "title": " ",
-          "fixed": true
-        }
-      }
-    },
-    {
-      "source": "tds",
-      "path": "ub8/au/FMC/c6/mosaics/deciles/flam_c6_{{year}}_dc.nc",
-      "name": "Flammability (Deciles)",
-      "units": "unitless",
-      "icon": "fa-fire",
-      "wms_layer": "decile_values",
-      "description": "Relative Flammability Index",
-      "palette": {
-        "image": false,
-        "name": "RdYlBu",
-        "count": 9,
-        "reverse": true
-      },
-      "labels":[
-        "Very much above",
-        "",
-        "Above average",
-        "",
-        "Average",
-        "",
-        "Below average",
-        "",
-        "Very much below"
-      ],
-      "precision":1,
-      "range": [
-        0.5,
-        9.5
-      ],
-      "timeperiod": {
-        "start": 2018,
-        "end": 8
-      },
-      "timestepMultiplier": 4,
-      "timestepReference": "{{year}}-01-01",
-      "timeshift":-2,
-      "wms_params": {
-        "styles": "boxfill/anu_fmc_rdylbu_9_rev",
-        "colorscalerange": "0.5,9.5",
-        "abovemaxcolor": "transparent",
-        "numcolorbands": 9,
-        "layers":"decile_values"
       },
       "chart_config": {
         "yaxis": {
@@ -131,61 +83,11 @@
       "zonal":"flam"
     },
     {
-      "source": "tds",
-      "path": "ub8/au/FMC/c6/mosaics/deciles/fmc_c6_{{year}}_dc.nc",
-      "name": "FMC (Deciles)",
-      "units": "unitless",
-      "icon": "fa-fire",
-      "wms_layer": "decile_values",
-      "description": "Live Fuel Moisture Content",
-      "palette": {
-        "image": false,
-        "name": "RdYlBu",
-        "count": 9,
-        "reverse": false
-      },
-      "labels":[
-        "Very much above average",
-        "",
-        "Above average",
-        "",
-        "Average",
-        "",
-        "Below average",
-        "",
-        "Very much below average"
-      ],
-      "precision":1,
-      "range": [
-        0.5,
-        9.5
-      ],
-      "timeperiod": {
-        "start": 2018,
-        "end": 8
-      },
-      "timestepMultiplier": 4,
-      "timestepReference": "{{year}}-01-01",
-      "timeshift":-2,
-      "wms_params": {
-        "styles": "boxfill/anu_fmc_rdylbu_9",
-        "colorscalerange": "0.5,9.5",
-        "abovemaxcolor": "transparent",
-        "numcolorbands": 9,
-        "layers":"decile_values"
-      },
-      "chart_config": {
-        "yaxis": {
-          "title": " ",
-          "fixed": true
-        }
-      },
-      "zonal":"fmc"
-    },
-    {
+      "hide":true,
       "source": "tds",
       "path": "ub8/au/FMC/c6/mosaics/fmc_c6_{{year}}.nc",
       "name": "LFMC Uncertainty",
+      "shortName":"FMC-U",
       "units": "%",
       "suffix": "%",
       "icon": "fa-percent",
@@ -223,6 +125,7 @@
       "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.vol.smc.{{year}}.nc",
       "patH": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/",
       "name": "Soil Moisture 0-10cm",
+      "shortName":"SM10",
       "units": "m<sup>3</sup>;.m<sup>-3</sup>",
       "icon": "fa-tint",
       "wms_layer": "sm",
@@ -262,6 +165,7 @@
       "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.vol.smc.{{year}}.nc",
       "":"     c35ee8d2a475e10ea06d0ad53b46ce2a",
       "name": "Soil Moisture 10-35cm",
+      "shortName":"SM35",
       "units": "m^3.m^-3",
       "icon": "fa-tint",
       "wms_layer": "sm",
@@ -378,7 +282,8 @@
           "fire-active":"Advice",
           "Fire":"Advice",
           "Watch and Act":"WatchAct",
-          "Emergency Warning":"Warning"
+          "Emergency Warning":"Warning",
+          "Burn Area":"Advice"
         },
         "exclude":[
           {

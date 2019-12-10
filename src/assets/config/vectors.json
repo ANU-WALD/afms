@@ -17,7 +17,9 @@
     {
       "filename": "states4326.json",
       "title": "States and Territories",
-      "name_field": "STATE_NAME"
+      "name_field": "STATE_NAME",
+      "id_field":"STATE_CODE",
+      "zonal":"States"
     },
     {
       "filename": "NatParks.json",

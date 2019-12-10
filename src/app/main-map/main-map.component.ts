@@ -17,9 +17,12 @@ import { VisibleLayer } from './visible-layer';
 import { IncidentsService } from 'app/incidents.service';
 import { ContextualDataService } from 'app/contextual-data.service';
 import { ZonalService, DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD } from 'app/zonal.service';
-import { forkJoin, Subscription } from 'rxjs';
+import { forkJoin, Subscription, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { AgmMap } from '@agm/core';
+import { AgmMap, AgmInfoWindow } from '@agm/core';
+import { DatesService } from 'app/dates.service';
+import { tap } from 'rxjs/operators';
+import { ZONAL_RELATIVE, ZONAL_AVERAGE } from 'app/zonal.service';
 
 class ValueMarker {
   label: string;
@@ -29,7 +32,34 @@ class ValueMarker {
   context: string[];
 }
 
-@Component({
+const DECILE_LABELS = [
+  'Very much above',
+  '',
+  'Above average',
+  '',
+  'Average',
+  '',
+  'Below average',
+  '',
+  'Very much below'
+];
+
+const DECILE_RANGE = [
+  0.5,
+  9.5
+];
+
+const DECILE_COUNT = [
+  9
+];
+
+const DECILE_FOOTER = `condition in comparison to the observations for a given month in the
+ previous years (2001-year before current)`;
+
+ const NO_DATA_LEVEL = 150;
+ const NO_DATA_FILL = `rgb(${NO_DATA_LEVEL},${NO_DATA_LEVEL},${NO_DATA_LEVEL})`;
+
+ @Component({
   selector: 'app-main-map',
   templateUrl: './main-map.component.html',
   styleUrls: ['./main-map.component.scss']
@@ -38,7 +68,12 @@ export class MainMapComponent implements OnInit {
   @ViewChild('theMap', {static: false}) theMap: AgmMap;
   @ViewChild('mapDiv', { static: false }) mapDiv: Component;
   @ViewChild('wms', { static: false }) wmsLayer: WMSLayerComponent;
+  @ViewChild('markerInfoWindow', { static: false}) markerInfoWindow: AgmInfoWindow;
   mainLayer: VisibleLayer;
+
+  MODE_GRID=0;
+  MODE_AREAL_AVERAGE=1;
+  MODE_AREAL_RELATIVE=2;
 
   currentConditions = true;
   showWindows = true;
@@ -53,7 +88,7 @@ export class MainMapComponent implements OnInit {
   maxZoom = 16;
   zoom = 4;
 
-  zonal=false;
+  zonal=0;
   zonalFilter=-1;
   zonalThreshold=undefined;
   zonalAvailable=false;
@@ -69,7 +104,7 @@ export class MainMapComponent implements OnInit {
     south: -45,
     west: 110
   };
-  bounds: Bounds = null;
+  bounds: Bounds|boolean = false;
 
   incidentsData: any = null;
   incidentLng: number;
@@ -82,6 +117,7 @@ export class MainMapComponent implements OnInit {
   selectedCoordinates: LatLng;
   marker: ValueMarker = null;
   currentYearDataForLocation: any;
+  loading = false;
 
   dateRange = new DateRange();
 
@@ -106,6 +142,10 @@ export class MainMapComponent implements OnInit {
   landcoverSubscription:Subscription;
   contextualSubscription:Subscription;
 
+  legendLabels: string[];
+  legendRange: number[];
+  legendFooter = '';
+
   static constrainCoords(ll: LatLng) {
     return {
       lat: Math.min(-7, Math.max(-45, +ll.lat)),
@@ -126,7 +166,8 @@ export class MainMapComponent implements OnInit {
     private baseLayerService: BaseLayerService,
     private contextualData:ContextualDataService,
     private zonalService:ZonalService,
-    private palettes:PaletteService) {
+    private palettes:PaletteService,
+    private datesService:DatesService) {
 
     this.zoomToFit();
 
@@ -142,16 +183,16 @@ export class MainMapComponent implements OnInit {
 
     const view = mapView.current();
 
-    const coords = decodeURIComponent(view.coords);
-    if (coords && (coords !== '_')) {
-      const coordArray = coords.split(',').map(s => +s).filter(isNaN);
-      if (coordArray.length === 2) {
-        this.selectLocation(MainMapComponent.constrainCoords({
-          lat: coordArray[0],
-          lng: coordArray[1]
-        }));
-      }
-    }
+    // const coords = decodeURIComponent(view.coords);
+    // if (coords && (coords !== '_')) {
+    //   const coordArray = coords.split(',').map(s => +s).filter(n=>!isNaN(n));
+    //   if (coordArray.length === 2) {
+    //     this.selectLocation(MainMapComponent.constrainCoords({
+    //       lat: coordArray[0],
+    //       lng: coordArray[1]
+    //     }));
+    //   }
+    // }
 
     if (!((view.lat === '_') || (view.lng === '_') || (view.zm === '_'))) {
       if (!isNaN(view.lat) || !isNaN(view.lng)) {
@@ -161,6 +202,7 @@ export class MainMapComponent implements OnInit {
         this.lng = ll.lng;
         this.zoom = +view.zm;
         this.constrainZoom();
+        this.bounds = false;
       }
     }
 
@@ -286,6 +328,9 @@ export class MainMapComponent implements OnInit {
 
     this.selectedCoordinates = coords;
     this.mapView.update({ coords: `${coords.lat.toFixed(3)},${coords.lng.toFixed(3)}` });
+    setTimeout(()=>{
+      this.markerInfoWindow.open();
+    });
   }
 
   updateContextualData(){
@@ -397,32 +442,48 @@ export class MainMapComponent implements OnInit {
 
   layerChanged(layer: FMCLayer) {
     const opacity = this.mainLayer.opacity;
-    let date: UTCDate;
-    if (this.selection.year === 0) {
-      const TIMESTEP_GRACE = 0;
-      date = layer.timePeriod.end;
-      for(let i=0;i<=TIMESTEP_GRACE;i++){
-        date = layer.previousTimeStep(date);
-      }
-    }
     this.mainLayer = new VisibleLayer(layer);
     this.mainLayer.opacity = opacity;
     this.mainLayer.host = thredds(layer.host);
-    this.selection.currentLayer = this.mainLayer;
-    this.selection.constrain();
 
-    this.dateRange = layer.timePeriod;
-    if (date) {
-      this.selection.date = {
-        year: date.getUTCFullYear(),
-        month: date.getUTCMonth() + 1,
-        day: date.getUTCDate()
-      };
+    let date: UTCDate;
+    let dateInit$:Observable<any>;
+    if (this.selection.year === 0) {
+      const endYear = layer.timePeriod.end.getUTCFullYear();
+
+      // const TIMESTEP_GRACE = 0;
+      // date = layer.mostRecentTimestep(layer.timePeriod.end);
+      // for(let i=0;i<TIMESTEP_GRACE;i++){
+      //   date = layer.previousTimeStep(date);
+      // }
+      dateInit$ = this.datesService.availableDates(this.mainLayer,endYear).pipe(
+        tap(dates=>{
+          // Select last...
+          date = dates[dates.length-1]
+        })
+      );
+    } else {
+      dateInit$ = of(null);
     }
-    this.mainLayer.setDate(this.selection.effectiveDate());
 
-    this.reloadMarkerData();
-    this.assessZonal();
+    this.selection.currentLayer = this.mainLayer;
+    dateInit$.subscribe(_=>{
+      this.selection.constrain();
+
+      this.dateRange = layer.timePeriod;
+      if (date) {
+        this.selection.date = {
+          year: date.getUTCFullYear(),
+          month: date.getUTCMonth() + 1,
+          day: date.getUTCDate()
+        };
+      }
+      this.mainLayer.setDate(this.selection.effectiveDate());
+
+      this.reloadMarkerData();
+      this.assessZonal();
+      this.updateLegend();
+    });
   }
 
   vectorLayerChanged(layer: VectorLayer) {
@@ -439,7 +500,7 @@ export class MainMapComponent implements OnInit {
     const prev = this.zonalAvailable;
     this.zonalAvailable = (this.mainLayer&&this.mainLayer.layer.zonal) &&
                           (this.vectorLayer&&!!this.vectorLayer.zonal);
-    this.zonal = this.zonal && this.zonalAvailable;
+    this.zonal = this.zonalAvailable? this.zonal : this.MODE_GRID;
     if(this.zonal){
       this.updateZonal();
     } else {
@@ -447,7 +508,7 @@ export class MainMapComponent implements OnInit {
     }
 
     if(prev!==this.zonalAvailable){
-      this.theMap.triggerResize();
+      this.theMap.triggerResize(false);
     }
   }
 
@@ -463,7 +524,9 @@ export class MainMapComponent implements OnInit {
     let tmp = incident.feature.getGeometry();
     let geo;
     if (tmp.getLength) {
-      geo = tmp.getAt(0).get();
+//      geo = tmp.getAt(0).get();
+      this.clicked(incident);
+      return;
     } else {
       geo = tmp.get();
     }
@@ -494,25 +557,41 @@ export class MainMapComponent implements OnInit {
   zonalChanged(){
     this.vectorStyles = this.staticStyles;
 
+    this.updateLegend();
     if(this.zonal){
       this.updateZonal();
     }
 
-    this.theMap.triggerResize();
+    this.theMap.triggerResize(false);
+  }
+
+  private updateLegend() {
+    if(this.zonal === this.MODE_AREAL_RELATIVE){
+      this.legendRange =  DECILE_RANGE
+      this.legendLabels = DECILE_LABELS
+    } else {
+      this.legendRange = this.mainLayer.layer.range;
+      this.legendLabels = this.mainLayer.layer.labels;
+    }
+
+    this.updateLegendText();
   }
 
   updateZonal(){
+    this.loading = true;
     let values$ = this.zonalService.getForDate(this.mainLayer.layer,
       this.vectorLayer,
       this.selection.effectiveDate(),
+      (this.zonal===this.MODE_AREAL_AVERAGE)?ZONAL_AVERAGE:ZONAL_RELATIVE,
       this.zonalThreshold,
-      (this.zonalFilter>=0)?this.zonalFilter:undefined);
+      (this.zonalFilter>0)?this.zonalFilter:undefined);
 
     let colours$ = this.palettes.getPalette(this.mainLayer.layer.palette.name,
       this.mainLayer.layer.palette.reverse,
       this.mainLayer.layer.palette.count);
 
     forkJoin(values$,colours$).subscribe(resp=>{
+      this.loading = false;
       let data = resp[0];
       let colours = resp[1];
 
@@ -520,7 +599,7 @@ export class MainMapComponent implements OnInit {
       this.zonalPalette = colours;
 
       if(!Object.keys(data).length){
-        this.zonal = false;
+        this.zonal = this.MODE_GRID;
       }
 
       if(this.zonal){
@@ -529,6 +608,8 @@ export class MainMapComponent implements OnInit {
         this.vectorStyles = this.staticStyles;
       }
 
+      this.updateLegendText();
+
       if(this.showIncidents){
         this.showIncidents=false;
         setTimeout(()=>{
@@ -536,6 +617,12 @@ export class MainMapComponent implements OnInit {
         });
       }
     });
+  }
+
+  private updateLegendText() {
+    this.legendFooter = (this.zonal === this.MODE_AREAL_RELATIVE) ?
+      `<strong> ${this.mainLayer.layer.shortName} ${DECILE_FOOTER}</strong><br>` :
+      '';
   }
 
   zonalStyles(f:any){
@@ -549,14 +636,19 @@ export class MainMapComponent implements OnInit {
     result.fillOpacity = this.mainLayer.opacity;
 
     if(isNaN(zonalValue)){
-      result.fillOpacity = 0.0;
+      result.fillOpacity = this.mainLayer.opacity * 0.5;
+      result.fillColor = NO_DATA_FILL;
     } else {
-      const colourIndex = this.palettes.colourIndex(zonalValue,
-        this.mainLayer.layer.range[0],
-        this.mainLayer.layer.range[1],
-        this.zonalPalette.length)
+      let range = this.legendRange;
+
+      let colourIndex = this.palettes.colourIndex(zonalValue,
+        range[0],range[1],this.zonalPalette.length);
+      if(this.mainLayer.layer.wmsParams.abovemaxcolor === 'extend') {
+        colourIndex = Math.min(colourIndex,this.zonalPalette.length-1);
+      }
       result.fillColor = this.zonalPalette[colourIndex];
     }
     return result;
   }
 }
+

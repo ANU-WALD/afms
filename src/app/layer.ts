@@ -5,14 +5,15 @@ const MAXIMUM_DATE_SHIFT=60;
 export class FMCLayer {
   colours: Array<string>;
 
-  constructor(public name: string, public units: string, public icon: string, public variable_name: string, public palette: any,
+  constructor(public name: string, public shortName: string, public units: string,
+    public icon: string, public variable_name: string, public palette: any,
     public range: Array<number>, public description: string, public timePeriod: DateRange,
     public legend: Array<any>, public wmsParams: any, public source: string, public path: string,
     public pathTimeSeries:string,
     public chartConfig: any, public host: string, public urlFragment: string, public indexing: any,
     public suffix: string, public timeshift: number, public timestep: number, public precision: number,
     public refDate: string,public op:string, public window:number, public labels:string[],public contextual:string[],
-    public zonal:string) {
+    public zonal:string,public hide:boolean) {
 
     this.indexing = this.indexing || {};
     this.pathTimeSeries = this.pathTimeSeries || this.path;

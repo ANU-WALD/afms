@@ -1,6 +1,6 @@
 // TODO: All plot generating code should be pulled out into a service (e.g., plotly.service)
 import {Component, ElementRef, AfterViewInit, Input, OnChanges, OnInit} from '@angular/core';
-import {Observable, forkJoin} from 'rxjs';
+import {Observable, forkJoin, Subscription} from 'rxjs';
 import {CatalogHost, InterpolationService, TimeSeries, UTCDate} from 'map-wald';
 import {SelectionService} from '../selection.service';
 import {TimeseriesService} from 'map-wald';
@@ -12,6 +12,11 @@ import {VisibleLayer} from 'app/main-map/visible-layer';
 
 const CHART_YEARS = 4;
 const ALICE = [-23.6980, 133.8807];
+
+const COLOUR_MAIN='rgb(26,90,145)';
+const COLOUR_MEDIAN='rgb(128,128,128)';
+const COLOUR_MINMAX='rgb(39,135,217)';
+const COLOUR_RANGE='rgb(198,219,239)';
 
 @Component({
   selector: 'app-charts',
@@ -29,6 +34,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
   havePlot = false;
   node: HTMLElement;
   hasBeenLoaded = false;
+  private dataSubscription: Subscription;
 
   constructor(private timeseries: TimeseriesService,
               private csv_service: CsvService,
@@ -103,6 +109,11 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
     Plotly.purge(this.node);
 
+    if(this.dataSubscription){
+      this.dataSubscription.unsubscribe();
+      this.dataSubscription = null;
+    }
+
     const host = this.layer.host;
     const baseFn = this.layer.layer.pathTimeSeries;
     const variable = this.layer.layer.variable_name;
@@ -131,15 +142,36 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
     const observables = dataSeries.map(s => s.observable);
 
-    forkJoin(observables)
+    this.dataSubscription = forkJoin(observables)
       .subscribe((data) => {
+          this.dataSubscription = null;
           this.setFullTimeSeries(data);
           const chartTimestamps: UTCDate[] = data[1].dates;
 
-          let values = chartTimestamps.map((_,i)=>data.map(ts=>ts.values[i]).filter(v=>!isNaN(v)));
-          let minimums = values.map(vals=>Math.min(...vals));
-          let maximums = values.map(vals=>Math.max(...vals));
-          const mainColour = 'rgb(33,113,181)';
+          const values = chartTimestamps.map((_,i)=>data.map(ts=>ts.values[i]).filter(v=>!isNaN(v)));
+          const minimums = values.map(vals=>Math.min(...vals));
+          const maximums = values.map(vals=>Math.max(...vals));
+          const medians = values.map(vals=>{
+            const sorted = vals.slice().sort();
+            if(sorted.length%2){
+              return sorted[(sorted.length-1)/2];
+            }
+            const idx = sorted.length/2;
+            return (sorted[idx] + sorted[idx-1])/2;
+          });
+
+          const findYears = function(valuesToMatch:number[]) {
+            return valuesToMatch.map((v,i)=>{
+              const idx = data.findIndex(ts=>ts.values[i]===v);
+              if(idx<0){
+                return '-';
+              }
+              return data[idx].dates[i].getFullYear();
+            });
+          };
+          const minYears = findYears(minimums);
+          const maxYears = findYears(maximums);
+
           const traces = [
             {
               x: chartTimestamps,
@@ -147,36 +179,57 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
               name: ''+selectedYear,
               mode: 'lines+markers',
               connectgaps: true,
-              fillcolor:'rgb(198,219,239)',
               marker: {
                 size: 6,
-                color: mainColour
+                color: COLOUR_MAIN
               },
               line: {
-                color: mainColour
+                color: COLOUR_MAIN
+              }
+            },
+            {
+              x: chartTimestamps,
+              y: medians,
+              name: 'median',
+              mode: 'lines',
+              connectgaps: true,
+              line: {
+                color: COLOUR_MEDIAN,
+                dash:'dash'
               }
             },
             {
               x: chartTimestamps,
               y: minimums,
-              name: 'min',
-              mode:'none',
+              text:minYears,
+              name: 'Lowest since 2001',
+              mode:'lines',
               type:'scatter',
               fill:'tozeroy',
-              fillcolor:'white'
+              fillcolor:'white',
+              hoverinfo: 'y+text',
+              // showlegend:true,
+              line: {
+                color: COLOUR_MINMAX
+              }
               // hoverinfo:'skip'
             },
             {
               x: chartTimestamps,
               y: maximums,
-              name: 'max',
-              mode:'none',
+              text:maxYears,
+              name: 'Highest since 2001',
+              mode:'lines',
               type:'scatter',
               fill:'tozeroy',
-              fillcolor:'rgb(198,219,239)'
+              fillcolor:COLOUR_RANGE,
+              hoverinfo: 'y+text',
+              line: {
+                color: COLOUR_MINMAX
+              }
               // hoverinfo:'skip'
             }
-          ]
+          ];
 
           traces.reverse();
           this.buildChart(traces);
@@ -225,7 +278,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
         height: height,
         width: width,
         title: `${this.layer.layer.name} (${this.layer.layer.units}) at ${this.coordinates.lat.toFixed(3)},${this.coordinates.lng.toFixed(3)}`,
-        showlegend: false
+        showlegend: true
       },
       {
         displaylogo: false,

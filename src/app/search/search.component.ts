@@ -1,8 +1,9 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {GeocodingService} from 'map-wald-visual';
+import {GeocodingResult,GeocodingService} from 'map-wald-visual';
 import {LatLng} from '../latlng';
-import { debounceTime, distinctUntilChanged, filter, concatMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, concatMap, tap } from 'rxjs/operators';
+
 
 @Component({
   selector: 'fmc-search',
@@ -25,13 +26,16 @@ export class SearchComponent implements OnInit {
 
   // TODO: Change this to a method. Keep getting errors when I try to do it so leaving it as an arrow function for now.
   search = (term: Observable<string>) => {
+    return this.searchInner(term);
+  }
 
+  searchInner(term: Observable<string>): Observable<GeocodingResult[]> {
     return term.pipe(
       debounceTime(200),
       distinctUntilChanged(),
       filter(t => t.length > 2),
       concatMap((r) => {
-        const possibleLatLon = r.split(/[,\/]/);
+        const possibleLatLon = r.split(/[,\/ ]+/);
         if (possibleLatLon.length === 2) {
           const [lat, lng] = possibleLatLon.map(s => +s.trim());
           if ((lat < -7) && (lat > -45) && (lng > 110) && (lng < 170)) {
@@ -41,6 +45,7 @@ export class SearchComponent implements OnInit {
             }]);
           }
         }
+
         return this._geocoder.geocode(r);
       }));
   }
