@@ -21,7 +21,7 @@ import { forkJoin, Subscription, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AgmMap, AgmInfoWindow } from '@agm/core';
 import { DatesService } from 'app/dates.service';
-import { tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { ZONAL_RELATIVE, ZONAL_AVERAGE } from 'app/zonal.service';
 
 class ValueMarker {
@@ -457,6 +457,7 @@ export class MainMapComponent implements OnInit {
       //   date = layer.previousTimeStep(date);
       // }
       dateInit$ = this.datesService.availableDates(this.mainLayer,endYear).pipe(
+        catchError(err=>this.datesService.availableDates(this.mainLayer,endYear-1)),
         tap(dates=>{
           // Select last...
           date = dates[dates.length-1]
