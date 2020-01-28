@@ -9,6 +9,7 @@ import {CsvService} from '../csv.service';
 import * as Plotly from 'plotly.js/dist/plotly-basic';
 import * as FileSaver from 'file-saver';
 import {VisibleLayer} from 'app/main-map/visible-layer';
+import { catchError } from 'rxjs/operators';
 
 const CHART_YEARS = 4;
 const ALICE = [-23.6980, 133.8807];
@@ -116,6 +117,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
 
     const host = this.layer.host;
     const baseFn = this.layer.layer.pathTimeSeries;
+    const baseFnFallback = this.layer.layer.path;
     const variable = this.layer.layer.variable_name;
 
     let timePeriod = this.layer.layer.timePeriod;
@@ -126,7 +128,13 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       const fn = InterpolationService.interpolate(baseFn, {
         year: yr
       });
-      const observable = this.timeseries.getTimeseries(host, fn, variable, this.coordinates, this.layer.layer.indexing);
+      const altFn = InterpolationService.interpolate(baseFnFallback, {
+        year: yr
+      });
+      const altObs = this.timeseries.getTimeseries(host, altFn, variable, this.coordinates, this.layer.layer.indexing);
+
+      const observable = this.timeseries.getTimeseries(host, fn, variable, this.coordinates, this.layer.layer.indexing).pipe(
+        catchError(_=>altObs));
 
       const newDataSeries = {
         year: yr,
