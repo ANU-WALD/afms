@@ -31,7 +31,7 @@
     "@ng-bootstrap/ng-bootstrap": "^4.0.3",
     "@types/googlemaps": "^3.26.7",
     "@types/proj4": "^2.3.4",
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.5.3",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.4.1",
     "dap-query-js": "github:flowmatters/dap-query-js",
@@ -48,7 +48,7 @@
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.802.2",
+    "@angular-devkit/build-angular": "^0.1100.5",
     "@angular/cli": "^8.2.2",
     "@types/file-saver": "0.0.1",
     "@types/geojson": "^1.0.3",
@@ -59,7 +59,7 @@
     "codelyzer": "^5.0.1",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
-    "karma": "~1.4.1",
+    "karma": "^1.7.1",
     "karma-chrome-launcher": "~2.0.0",
     "karma-cli": "~1.0.1",
     "karma-coverage-istanbul-reporter": "^0.2.0",
