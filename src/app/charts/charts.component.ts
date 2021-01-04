@@ -174,7 +174,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
               if(idx<0){
                 return '-';
               }
-              return data[idx].dates[i].getFullYear();
+              return data[idx].dates[i].getUTCFullYear();
             });
           };
           const minYears = findYears(minimums);

@@ -35,7 +35,7 @@ export class DatesService {
     return res$.pipe(
         map(dates=>{
           return dates.map(d=>{
-            let res = new Date(d);
+            let res = new Date(d.getTime());
             res.setUTCDate(d.getUTCDate()-layer.layer.timeshift*layer.layer.timestep);
             return res;
           });
