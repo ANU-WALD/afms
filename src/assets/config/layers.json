@@ -2,14 +2,14 @@
   "layers": [
     {
       "source": "tds",
-      "path": "ub8/au/FMC/c6/mosaics/fmc_c6_{{year}}.nc",
-      "pathTimeSeries": "ub8/au/FMC/c6/mosaics/perf_prof2/fmc_c6_{{year}}.nc",
+      "path": "ub8/au/FMC/mosaics/fmc_c6_{{year}}.nc",
+      "_pathTimeSeries": "ub8/au/FMC/median_LFMC/mosaics/perf_prof2/fmc_c6_{{year}}.nc",
       "name": "Live Fuel Moisture Content",
       "shortName":"FMC",
       "units": "%",
       "suffix": "%",
       "icon": "fa-tint",
-      "wms_layer": "fmc_mean",
+      "wms_layer": "lfmc_median",
       "palette": {
         "image": false,
         "name": "RdYlBu",
@@ -28,7 +28,7 @@
       },
       "timestepMultiplier": 4,
       "timestepReference": "{{year}}-01-01",
-      "timeshift":-2,
+      "timeshift":0,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_9",
         "colorscalerange": "0,153",
@@ -42,8 +42,8 @@
     },
     {
       "source": "tds",
-      "path": "ub8/au/FMC/c6/mosaics/flam_c6_{{year}}.nc",
-      "pathTimeSeries": "ub8/au/FMC/c6/mosaics/perf_prof2/flam_c6_{{year}}.nc",
+      "path": "ub8/au/FMC/mosaics/flam_c6_{{year}}.nc",
+      "_pathTimeSeries": "ub8/au/FMC/c6/mosaics/perf_prof2/flam_c6_{{year}}.nc",
       "name": "Flammability",
       "shortName":"FI",
       "units": "unitless",
@@ -67,7 +67,7 @@
       },
       "timestepMultiplier": 4,
       "timestepReference": "{{year}}-01-01",
-      "timeshift":-2,
+      "timeshift":0,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_11_rev",
         "colorscalerange": "0,0.99",
@@ -110,7 +110,7 @@
       },
       "timestepMultiplier": 4,
       "timestepReference": "{{year}}-01-01",
-      "timeshift":-2,
+      "timeshift":0,
       "wms_params": {
         "styles": "boxfill/anu_fmc_rdylbu_11_rev",
         "colorscalerange": "0,50",
@@ -120,7 +120,7 @@
     },
     {
       "source": "tds",
-      "host": "https://proxies.hydrograph.io/bom-dap/thredds",
+      "host": "https://proxies.hydrograph.io/bom-dap-orig/thredds",
       "realhost": "http://opendap.bom.gov.au/thredds",
       "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.vol.smc.{{year}}.nc",
       "patH": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/",
@@ -160,7 +160,7 @@
     },
     {
       "source": "tds",
-      "host": "https://proxies.hydrograph.io/bom-dap/thredds",
+      "host": "https://proxies.hydrograph.io/bom-dap-orig/thredds",
       "realhost": "http://opendap.bom.gov.au:8080/thredds",
       "path": "c35ee8d2a475e10ea06d0ad53b46ce2a/JASMIN_land_dryness/native/jasmin.vol.smc.{{year}}.nc",
       "":"     c35ee8d2a475e10ea06d0ad53b46ce2a",
@@ -239,7 +239,9 @@
   "incidents": {
     "NSW":{
       "format":"GeoJSON",
-      "url":"http://feeds.rfs.nsw.gov.au/majorincidents.json",
+      "cors":true,
+      "url":"https://proxies.hydrograph.io/incidents-nsw/majorincidents.json",
+      "urlOrig":"http://feeds.rfs.nsw.gov.au/majorincidents.json",
       "displayProperty":"description",
       "icon":{
         "property":"category",
@@ -253,7 +255,9 @@
     },
     "WA":{
       "format":"GeoJSON",
-      "url":"https://www.emergency.wa.gov.au/data/incident_FCAD.json",
+      "cors":true,
+      "url":"https://proxies.hydrograph.io/incidents-wa/data/incident_FCAD.json",
+      "urlOrig":"https://www.emergency.wa.gov.au/data/incident_FCAD.json",
       "displayProperty":"description",
       "icon":{
         "property":"type",
@@ -269,7 +273,9 @@
     },
     "VIC":{
       "format":"GeoJSON",
-      "url":"https://emergency.vic.gov.au/public/osom-geojson.json",
+      "cors":true,
+      "url":"https://proxies.hydrograph.io/incidents-vic/public/osom-geojson.json",
+      "urlOrig":"https://emergency.vic.gov.au/public/osom-geojson.json",
       "displayProperty":"category2",
       "icon":{
         "property":"category1",
@@ -295,7 +301,9 @@
     },
     "ACT":{
       "format":"Custom",
-      "url":"https://esa.act.gov.au/feeds/allincidents.json",
+      "cors":true,
+      "url":"https://proxies.hydrograph.io/incidents-act/feeds/allincidents.json",
+      "urlOrig":"https://esa.act.gov.au/feeds/allincidents.json",
       "displayProperty":"description",
       "icon":{
         "property":"icon",
@@ -317,7 +325,9 @@
     },
     "SA":{
       "format":"Custom",
-      "url":"https://data.eso.sa.gov.au/prod/cfs/criimson/cfs_current_incidents.json",
+      "cors":true,
+      "url":"https://proxies.hydrograph.io/incidents-sa/prod/cfs/criimson/cfs_current_incidents.json",
+      "urlOrig":"https://data.eso.sa.gov.au/prod/cfs/criimson/cfs_current_incidents.json",
       "displayProperty":"Type",
       "icon":{
         "property":"Type",
@@ -330,8 +340,11 @@
       }
     },
     "NT":{
+      "missing":true,
       "format":"Custom",
-      "url":"http://www.pfes.nt.gov.au/incidentmap/json/ntfrsincidents.json",
+      "cors":true,
+      "url":"https://proxies.hydrograph.io/incidents-nt/incidentmap/json/ntfrsincidents.json",
+      "urlOrig":"http://www.pfes.nt.gov.au/incidentmap/json/ntfrsincidents.json",
       "displayProperty":"eventtype",
       "icon":{
         "property":"category",
@@ -345,7 +358,9 @@
     },
     "TAS":{
       "format":"KML",
-      "url":"http://www.fire.tas.gov.au/Show?pageId=bfKml2",
+      "cors":true,
+      "url":"https://proxies.hydrograph.io/incidents-tas/Show?pageId=bfKml2",
+      "urlOrig":"http://www.fire.tas.gov.au/Show?pageId=bfKml2",
       "displayProperty":"description",
       "icon":{
         "property":"styleUrl",
@@ -362,7 +377,8 @@
     "QLD":{
       "format":"GeoRSS",
       "cors":true,
-      "url":"https://proxies.hydrograph.io/qld-qfes/data/alerts/bushfireAlert.xml",
+      "url":"https://publiccontent-gis-psba-qld-gov-au.s3.amazonaws.com/content/Feeds/BushfireCurrentIncidents/bushfireAlert.xml",
+      "urlProxy":"https://proxies.hydrograph.io/qld-qfes/data/alerts/bushfireAlert.xml",
       "urlOrig":"https://www.qfes.qld.gov.au/data/alerts/bushfireAlert.xml",
       "displayProperty":"description",
       "icon":{
