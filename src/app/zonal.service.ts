@@ -14,6 +14,8 @@ export const DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD=75;
 export const DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD_SINGLE_COVER=75;
 export const ZONAL_AVERAGE='nc_';
 export const ZONAL_RELATIVE='';
+const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+export const MAX_AGE = 4 * MILLISECONDS_PER_DAY;
 
 @Injectable({
   providedIn: 'root'
@@ -108,8 +110,10 @@ export class ZonalService {
           } else {
             timestep = deltas.indexOf(Math.min(...deltas));
           }
+          if(deltas[timestep]>MAX_AGE){
+            timestep = -1;
+          }
         }
-
 
         const result:any = {};
         const ids = <number[]>data.plg_id;
