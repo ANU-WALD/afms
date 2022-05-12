@@ -8,7 +8,7 @@ import { map, switchAll, shareReplay } from 'rxjs/operators';
 import { environment } from 'environments/environment';
 import { DapData } from 'dap-query-js/dist/dap-query';
 
-const ZONAL_URL='{{tds}}/dodsC/ub8/au/FMC/c6/mosaics/deciles/zonal_stats/{{vector_name}}_{{variable_name}}_{{mode}}zonal_stat.nc';
+const ZONAL_URL='{{tds}}/dodsC/ub8/au/FMC/stats/zonal_stats/{{vector_name}}_{{variable_name}}_{{mode}}zonal_stat.nc';
 const ZONAL_URL_CSV='assets/deciles/{{vector_name}}_{{variable_name}}.csv';
 export const DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD=75;
 export const DEFAULT_ZONAL_STATS_COVERAGE_THRESHOLD_SINGLE_COVER=75;
