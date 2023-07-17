@@ -346,9 +346,9 @@
       "url":"https://proxies.hydrograph.io/incidents-nt/incidentmap/json/incidents.json",
       "urlX":"https://pfes.nt.gov.au/incidentmap/json/incidents.json",
       "urlOld":"http://www.pfes.nt.gov.au/incidentmap/json/ntfrsincidents.json",
-      "displayProperty":"eventtype",
+      "displayProperty":"_eventtype",
       "icon":{
-        "property":"category",
+        "property":"_category",
         "translation":{
           "other":"NA",
           "fire":"Advice",
@@ -358,11 +358,13 @@
       }
     },
     "TAS":{
-      "format":"KML",
+      "format":"GeoJSON",
       "cors":true,
-      "url":"https://proxies.hydrograph.io/incidents-tas/Show?pageId=bfKml2",
+      "url": "https://proxies.hydrograph.io/incidents-tas/data/data.geojson",
+      "url_direct":"https://alert.tas.gov.au/data/data.geojson",
+      "url_deadproxy":"https://proxies.hydrograph.io/incidents-tas/Show?pageId=bfKml2",
       "urlOrig":"http://www.fire.tas.gov.au/Show?pageId=bfKml2",
-      "displayProperty":"description",
+      "displayProperty":"title",
       "icon":{
         "property":"styleUrl",
         "default":"#adviceStyle",
