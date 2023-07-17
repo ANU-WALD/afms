@@ -6,7 +6,7 @@ import {SelectionService} from '../selection.service';
 import {TimeseriesService} from '../../map-wald';
 import {LatLng} from '../latlng';
 import {CsvService} from '../csv.service';
-import * as Plotly from 'plotly.js/dist/plotly-basic';
+import * as Plotly from 'plotly.js-dist-min';
 import * as FileSaver from 'file-saver';
 import {VisibleLayer} from 'app/main-map/visible-layer';
 import { catchError } from 'rxjs/operators';
@@ -267,7 +267,7 @@ export class ChartsComponent implements AfterViewInit, OnChanges, OnInit {
       }
     }
 
-    Plotly.plot(this.node, series, {
+    Plotly.newPlot(this.node, series, {
         margin: {
           t: 30,
           l: 45,
