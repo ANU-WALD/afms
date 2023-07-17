@@ -343,8 +343,9 @@
       "missing":true,
       "format":"Custom",
       "cors":true,
-      "url":"https://proxies.hydrograph.io/incidents-nt/incidentmap/json/ntfrsincidents.json",
-      "urlOrig":"http://www.pfes.nt.gov.au/incidentmap/json/ntfrsincidents.json",
+      "url":"https://proxies.hydrograph.io/incidents-nt/incidentmap/json/incidents.json",
+      "urlX":"https://pfes.nt.gov.au/incidentmap/json/incidents.json",
+      "urlOld":"http://www.pfes.nt.gov.au/incidentmap/json/ntfrsincidents.json",
       "displayProperty":"eventtype",
       "icon":{
         "property":"category",
@@ -377,7 +378,8 @@
     "QLD":{
       "format":"GeoRSS",
       "cors":true,
-      "url":"https://publiccontent-gis-psba-qld-gov-au.s3.amazonaws.com/content/Feeds/BushfireCurrentIncidents/bushfireAlert.xml",
+      "url":"https://proxies.hydrograph.io/qld-qfes/content/Feeds/BushfireCurrentIncidents/bushfireAlert.xml",
+      "urlDirect":"https://publiccontent-gis-psba-qld-gov-au.s3.amazonaws.com/content/Feeds/BushfireCurrentIncidents/bushfireAlert.xml",
       "urlProxy":"https://proxies.hydrograph.io/qld-qfes/data/alerts/bushfireAlert.xml",
       "urlOrig":"https://www.qfes.qld.gov.au/data/alerts/bushfireAlert.xml",
       "displayProperty":"description",
