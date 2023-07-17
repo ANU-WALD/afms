@@ -8,8 +8,6 @@ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { AgmCoreModule } from '@agm/core';
-import { MapWaldCoreModule} from 'map-wald';
-import { MapWaldBootstrapModule } from 'map-wald-visual';
 
 import { SelectionService } from './selection.service';
 import { LayersService } from './layers.service';
@@ -26,7 +24,21 @@ import { AboutComponent } from './about/about.component';
 import { SplashModalComponent } from './splash-modal/splash-modal.component';
 import { BaseLayerService } from './base-layer.service';
 import { ContextualDataService } from './contextual-data.service';
+import { ButtonBarComponent, MapControlComponent, MapLegendComponent, MapViewParameterService, MetadataService, OpendapService, PaletteService, TimeUtilsService, TimeseriesService, WMSLayerComponent, WMSService } from 'map-wald';
 
+const services = [
+  SelectionService,
+  LayersService,
+  BaseLayerService,
+  ContextualDataService,
+  WMSService,
+  MapViewParameterService,
+  TimeUtilsService,
+  TimeseriesService,
+  MetadataService,
+  OpendapService,
+  PaletteService
+];
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +51,11 @@ import { ContextualDataService } from './contextual-data.service';
     BaseLayerSelectionComponent,
     LayerOpacitySelectorComponent,
     AboutComponent,
-    SplashModalComponent
+    SplashModalComponent,
+    WMSLayerComponent,
+    ButtonBarComponent,
+    MapLegendComponent,
+    MapControlComponent
   ],
   imports: [
     BrowserModule,
@@ -48,13 +64,14 @@ import { ContextualDataService } from './contextual-data.service';
     }),
     FormsModule,
     HttpClientModule,
-    NgbModule.forRoot(),
+    NgbModule,//.forRoot(),
     RouterModule.forRoot(routes,{ useHash: true }),
-    MapWaldCoreModule.forRoot({paths:routeParameters}),
-    MapWaldBootstrapModule
 ],
   entryComponents: [AboutComponent, SplashModalComponent],
-  providers: [SelectionService,LayersService,BaseLayerService,ContextualDataService],
+  providers: services,
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
+// TODO: routeParameters!

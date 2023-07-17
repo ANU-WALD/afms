@@ -1,4 +1,4 @@
-import {MapViewParameterService} from 'map-wald';
+import {MapViewParameterService} from '../map-wald';
 import { MainMapComponent } from './main-map/main-map.component';
 
 export const routeParameters = ['base_layer', 'layer','vector','lat','lng','zm','dd','mm','yyyy','coords'];

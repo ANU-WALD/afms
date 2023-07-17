@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseLayer } from 'map-wald-visual';
+import { BaseLayer } from '../map-wald';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()

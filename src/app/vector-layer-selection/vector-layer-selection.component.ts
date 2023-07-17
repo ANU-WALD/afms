@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import {MapViewParameterService} from 'map-wald';
+import {MapViewParameterService} from '../../map-wald';
 import { HttpClient } from '@angular/common/http';
 
 export class VectorLayer {

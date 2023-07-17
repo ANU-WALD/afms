@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {MapViewParameterService} from 'map-wald';
+import {MapViewParameterService} from '../../map-wald';
 import {LayersService} from '../layers.service';
 import {FMCLayer} from '../layer';
 

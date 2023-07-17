@@ -4,8 +4,8 @@ import {
   MapViewParameterService, TimeseriesService,
   WMSService, OpendapService, MetadataService,
   UTCDate, Bounds, PaletteService, ColourPalette
-} from 'map-wald';
-import { BaseLayer, WMSLayerComponent } from 'map-wald-visual';
+} from '../../map-wald';
+import { BaseLayer, WMSLayerComponent } from '../../map-wald';
 import { SelectionService } from '../selection.service';
 import { VectorLayer } from '../vector-layer-selection/vector-layer-selection.component';
 import { LatLng } from '../latlng';

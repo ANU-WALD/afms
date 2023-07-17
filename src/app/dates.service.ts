@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { VisibleLayer } from './main-map/visible-layer';
 import { Observable, forkJoin } from 'rxjs';
-import { UTCDate, MetadataService, InterpolationService } from 'map-wald';
+import { UTCDate, MetadataService, InterpolationService } from '../map-wald';
 import { map } from 'rxjs/operators';
 
 @Injectable({

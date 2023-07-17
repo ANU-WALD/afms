@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { BaseLayerService } from '../base-layer.service'
-import { MapViewParameterService } from 'map-wald';
-import { BaseLayer } from 'map-wald-visual';
+import { MapViewParameterService } from '../../map-wald';
+import { BaseLayer } from '../../map-wald';
 
 @Component({
   selector: 'fmc-base-layer-selection',

@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
-import { MapViewParameterService, TimeUtilsService, UTCDate, utcDateCopy } from 'map-wald';
+import { MapViewParameterService, TimeUtilsService, UTCDate, utcDateCopy } from '../map-wald';
 import {DateRange} from './layer';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import { VisibleLayer } from './main-map/visible-layer';

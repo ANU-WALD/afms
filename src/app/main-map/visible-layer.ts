@@ -1,4 +1,4 @@
-import {InterpolationService, CatalogHost, UTCDate} from 'map-wald';
+import {InterpolationService, CatalogHost, UTCDate} from '../../map-wald';
 import {FMCLayer} from '../layer';
 import {environment} from '../../environments/environment';
 

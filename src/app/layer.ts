@@ -1,4 +1,4 @@
-import { UTCDate, utcDate, utcDateCopy, InterpolationService } from 'map-wald';
+import { UTCDate, utcDate, utcDateCopy, InterpolationService } from '../map-wald';
 
 const MAXIMUM_DATE_SHIFT=60;
 

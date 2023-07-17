@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin, of } from 'rxjs';
 import { map, switchAll, tap } from 'rxjs/operators';
-import { MetadataService, OpendapService, InterpolationService, TimeseriesService, UTCDate } from 'map-wald';
+import { MetadataService, OpendapService, InterpolationService, TimeseriesService, UTCDate } from '../map-wald';
 import { LayersService, thredds } from './layers.service';
 import { MainMapComponent } from './main-map/main-map.component';
 import { DapDDX, DapDAS } from 'dap-query-js/dist/dap-query';

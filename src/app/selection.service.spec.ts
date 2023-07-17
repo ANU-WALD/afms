@@ -3,7 +3,7 @@
 import {Location} from '@angular/common';
 import { TestBed, inject } from '@angular/core/testing';
 import { SelectionService, mostRecentTimestep, previousTimeStep } from './selection.service';
-import {MapViewParameterService} from 'map-wald';
+import {MapViewParameterService} from '../map-wald';
 import {customMatchers} from '../testing/custom.matchers';
 
 describe('SelectionService', () => {

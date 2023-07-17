@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {publishReplay,map,refCount} from 'rxjs/operators';
 import {FMCLayer,DateRange} from './layer';
 import { HttpClient } from '@angular/common/http';
-import { CatalogHost } from 'map-wald';
+import { CatalogHost } from '../map-wald';
 import { environment } from '../environments/environment';
 
 const TDS_URL = environment.tds_server;

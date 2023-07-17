@@ -1,9 +1,9 @@
 // TODO: All plot generating code should be pulled out into a service (e.g., plotly.service)
 import {Component, ElementRef, AfterViewInit, Input, OnChanges, OnInit} from '@angular/core';
 import {Observable, forkJoin, Subscription} from 'rxjs';
-import {CatalogHost, InterpolationService, TimeSeries, UTCDate} from 'map-wald';
+import {CatalogHost, InterpolationService, TimeSeries, UTCDate} from '../../map-wald';
 import {SelectionService} from '../selection.service';
-import {TimeseriesService} from 'map-wald';
+import {TimeseriesService} from '../../map-wald';
 import {LatLng} from '../latlng';
 import {CsvService} from '../csv.service';
 import * as Plotly from 'plotly.js/dist/plotly-basic';

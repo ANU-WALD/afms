@@ -1,6 +1,6 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {GeocodingResult,GeocodingService} from 'map-wald-visual';
+import {GeocodingResult,GeocodingService} from '../../map-wald';
 import {LatLng} from '../latlng';
 import { debounceTime, distinctUntilChanged, filter, concatMap, tap } from 'rxjs/operators';
 

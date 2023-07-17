@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FMCLayer } from './layer';
 import { VectorLayer } from './vector-layer-selection/vector-layer-selection.component';
-import { UTCDate, InterpolationService, parseCSV, TableRow, MetadataService, OpendapService } from 'map-wald';
+import { UTCDate, InterpolationService, parseCSV, TableRow, MetadataService, OpendapService } from '../map-wald';
 import { Observable, of, forkJoin } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map, switchAll, shareReplay } from 'rxjs/operators';
