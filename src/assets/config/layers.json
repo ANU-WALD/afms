@@ -3,7 +3,7 @@
     {
       "source": "tds",
       "path": "ub8/au/FMC/mosaics/fmc_c6_{{year}}.nc",
-      "_pathTimeSeries": "ub8/au/FMC/median_LFMC/mosaics/perf_prof2/fmc_c6_{{year}}.nc",
+      "_pathTimeSeries": "ub8/au/FMC/mosaics/perf_prof2/fmc_c6_{{year}}.nc",
       "name": "Live Fuel Moisture Content",
       "shortName":"FMC",
       "units": "%",
@@ -43,7 +43,7 @@
     {
       "source": "tds",
       "path": "ub8/au/FMC/mosaics/flam_c6_{{year}}.nc",
-      "_pathTimeSeries": "ub8/au/FMC/c6/mosaics/perf_prof2/flam_c6_{{year}}.nc",
+      "_pathTimeSeries": "ub8/au/FMC/mosaics/perf_prof2/flam_c6_{{year}}.nc",
       "name": "Flammability",
       "shortName":"FI",
       "units": "unitless",
