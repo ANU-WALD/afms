@@ -52,10 +52,9 @@ export class IncidentsService {
       };
     },
     NT:(json:any)=>{
-      const incidents:any[] = json.incidents;
-      const features = incidents.map(entry=>simpleJSONTranslate(entry,'coordinate'));
+      const incidents:any = json.incidents;
       return {
-        features:features
+        features:incidents.features
       };
     },
     SA:(json:any[])=>{
