@@ -24,7 +24,10 @@ import { AboutComponent } from './about/about.component';
 import { SplashModalComponent } from './splash-modal/splash-modal.component';
 import { BaseLayerService } from './base-layer.service';
 import { ContextualDataService } from './contextual-data.service';
-import { ButtonBarComponent, MapControlComponent, MapLegendComponent, MapViewParameterService, MetadataService, OpendapService, PaletteService, TimeUtilsService, TimeseriesService, WMSLayerComponent, WMSService } from 'map-wald';
+import { ButtonBarComponent, MapControlComponent, MapLegendComponent, 
+         MapViewParameterService, MetadataService, OpendapService, PaletteService,
+         TimeUtilsService, TimeseriesService, WMSLayerComponent, WMSService,
+        GeocodingService } from 'map-wald';
 
 const services = [
   SelectionService,
@@ -37,7 +40,8 @@ const services = [
   TimeseriesService,
   MetadataService,
   OpendapService,
-  PaletteService
+  PaletteService,
+  GeocodingService
 ];
 @NgModule({
   declarations: [
